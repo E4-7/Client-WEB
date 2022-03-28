@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Base from '@/views/Layout/Base.vue';
 import Main from '@/views/Layout/MainPage.vue';
+import Student from '@/views/Layout/Student/VerifyIdentity.vue';
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes = [
   {
     path: '/',
     component: Main,
+  },
+  {
+    path: '/student',
+    name: 'Student',
+    component: Student,
   },
   {
     path: '/base',
