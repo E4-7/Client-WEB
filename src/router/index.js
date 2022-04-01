@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Base from '@/views/Layout/Base.vue';
 import Main from '@/views/Layout/MainPage.vue';
 import Student from '@/views/Layout/Student/VerifyIdentity.vue';
+import Professor from '@/views/Layout/Professor/LoginProfessor.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/student',
     name: 'Student',
     component: Student,
+  },
+  {
+    path: '/professor',
+    name: 'Professor',
+    component: Professor,
   },
   {
     path: '/base',

@@ -41,8 +41,11 @@
                         class="main-page-button"
                         rounded
                         text
+                        :to="{ name: 'SignupProcessor' }"
+                        @onclick.native="enterProfessorPage"
                         v-on:click="enterProfessorPage"
-                        >감독관 입장</v-btn
+                      >
+                        감독관 입장</v-btn
                       >
                     </v-row>
                   </v-col>
@@ -74,6 +77,7 @@ export default {
     },
     enterProfessorPage: function() {
       alert('Hello Professor !');
+      this.$http.post(this.$store.state.host + '/professor');
     },
   },
 };
