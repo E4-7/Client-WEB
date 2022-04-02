@@ -29,8 +29,6 @@
                       <v-btn
                         class="main-page-button"
                         rounded
-                        color="primary"
-                        dark
                         text
                         :to="{ name: 'Student' }"
                         >학생 입장</v-btn
@@ -41,9 +39,7 @@
                         class="main-page-button"
                         rounded
                         text
-                        :to="{ name: 'SignupProcessor' }"
-                        @onclick.native="enterProfessorPage"
-                        v-on:click="enterProfessorPage"
+                        :to="{ name: 'Professor' }"
                       >
                         감독관 입장</v-btn
                       >

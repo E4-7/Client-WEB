@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  name: 'SignupProcessor',
+  name: 'Professor',
   data() {
     return {
       email: '',
