@@ -10,7 +10,12 @@
             min-width="1200"
             min-height="700"
           >
-            <v-col class="main-page-image"></v-col>
+            <v-col class="main-page-image">
+              <img
+                calss="main-page-logo"
+                src="@/assets/images/e47_logo_blue.png"
+              />
+            </v-col>
             <v-col class="main-page-text">
               <v-row justify="center">
                 <v-card-text>
@@ -95,7 +100,7 @@ export default {
   flex-basis: 30%;
   display: flex;
   flex-direction: column;
-  background-color: blue;
+  background-color: #1187cf;
 }
 .main-page-text {
   float: none;
@@ -107,5 +112,9 @@ export default {
 }
 .main-page-button {
   font-size: 3ch;
+}
+.main-page-logo {
+  text-align: left;
+  vertical-align: top;
 }
 </style>
