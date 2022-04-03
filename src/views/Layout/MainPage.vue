@@ -33,7 +33,6 @@
                     <v-row class="main-page-button-row" justify="center">
                       <v-btn
                         class="main-page-button"
-                        rounded
                         text
                         :to="{ name: 'Student' }"
                         >학생 입장</v-btn
@@ -42,7 +41,6 @@
                     <v-row class="main-page-button-row" justify="center">
                       <v-btn
                         class="main-page-button"
-                        rounded
                         text
                         :to="{ name: 'Professor' }"
                       >
