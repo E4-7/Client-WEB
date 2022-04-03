@@ -25,21 +25,21 @@
               <br />
               <v-col>
                 <v-text-field
-                  v-model="email"
+                  v-model="user.email"
                   :rules="[rules.required, rules.email]"
-                  label="E-mail"
+                  label="아이디 or E-mail"
                   outlined
                 ></v-text-field>
               </v-col>
               <v-col>
                 <!--나중에 눈 아이콘 넣기-->
                 <v-text-field
+                  v-model="user.password"
                   :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                   :rules="[rules.required, rules.min]"
                   :type="show ? 'text' : 'password'"
-                  name="input-10-2"
                   label="비밀번호"
-                  hint="At least 8 characters"
+                  hint="input your password"
                   class="input-group--focused"
                   @click:append="show = !show"
                   outlined
@@ -48,6 +48,7 @@
               </v-col>
               <div v-show="!isloginpage">
                 <v-col cols="12" sm="6">
+                  <!-- <base-input v-model="name" label="성2함">??2</base-input> -->
                   <v-text-field
                     v-model="name"
                     label="성함"
@@ -58,7 +59,7 @@
               <div v-show="isloginpage">
                 <p class="text--primary">
                   혹시 아이디가 없으신가요?
-                  <v-btn @click="signup()" text>회원가입하기</v-btn>
+                  <v-btn @click="gosignup()" text>회원가입하기</v-btn>
                 </p>
               </div>
               <v-row justify="center">
@@ -66,7 +67,7 @@
                   <v-btn
                     v-if="!isloginpage"
                     class="main-page-button"
-                    @click="signin()"
+                    @click="gosignin()"
                   >
                     뒤로</v-btn
                   >
@@ -75,7 +76,7 @@
                       <v-btn
                         v-if="isloginpage"
                         class="main-page-button"
-                        :to="{ name: 'Manage' }"
+                        @click="goManagePage()"
                       >
                         로그인</v-btn
                       >
@@ -84,11 +85,35 @@
                         v-if="!isloginpage"
                         class="main-page-button"
                         primary
-                        :to="{ name: 'Manage' }"
+                        @click="submit()"
                       >
                         회원가입</v-btn
                       >
                     </v-row>
+                    
+  <v-row justify="space-around">
+
+    <v-col cols="auto">
+      <v-dialog transition="dialog-top-transition" max-width="600">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="primary" v-bind="attrs" v-on="on">From the top</v-btn>
+        </template>
+        <template v-slot:default="dialog">
+          <v-card>
+            <v-toolbar color="primary" dark>Opening from the top</v-toolbar>
+            <v-card-text>
+              <div class="text-h2 pa-12">Hello world!</div>
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn text @click="dialog.value = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
+    </v-col>
+  </v-row>
+
+
                   </v-col>
                 </v-card-actions>
               </v-row>
@@ -101,8 +126,13 @@
 </template>
 
 <script>
+import BaseInput from '../components/BaseInput.vue';
+
 export default {
   name: 'Professor',
+  compinents: {
+    'base-input': BaseInput,
+  },
   validations: {
     checkbox: {
       checked(val) {
@@ -111,14 +141,16 @@ export default {
     },
   },
   data: () => ({
+    user: {
+      email: '',
+      password: '',
+      name: '',
+    },
     information: '관리자 로그인',
     isloginpage: true,
     show: false,
-    name: '',
-    email: '',
     rules: {
       required: value => !!value || 'Required.',
-      counter: value => value.length <= 20 || 'Max 20 characters',
       email: value => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || 'Invalid e-mail.';
@@ -126,18 +158,6 @@ export default {
     },
   }),
   computed: {
-    checkboxErrors() {
-      const errors = [];
-      if (!this.$v.checkbox.$dirty) return errors;
-      !this.$v.checkbox.checked && errors.push('You must agree to continue!');
-      return errors;
-    },
-    selectErrors() {
-      const errors = [];
-      if (!this.$v.select.$dirty) return errors;
-      !this.$v.select.required && errors.push('Item is required');
-      return errors;
-    },
     nameErrors() {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
@@ -155,24 +175,37 @@ export default {
     },
   },
   methods: {
-    signup() {
+    onReset() {
+      this.user.email = '';
+      this.user.password = '';
+      this.user.name = '';
+    },
+    gosignup() {
+      this.onReset();
       this.isloginpage = false;
       this.information = '교수 회원가입';
     },
-    signin() {
+    gosignin() {
+      this.onReset();
       this.isloginpage = true;
       this.information = '관리자 로그인';
     },
-    required() {},
     submit() {
-      this.$v.$touch();
+      // 회원가입시 처리해줘야 하는 것
     },
-    clear() {
-      this.$v.$reset();
-      this.name = '';
-      this.email = '';
-      this.select = null;
-      this.checkbox = false;
+    goManagePage() {
+      // 로그인 되었을 시,
+      // 서버랑 통신하는 거
+      if (this.user.email) { //this.user.email == 'a@e4.seven'
+        if (this.user.password) {
+          alert('로그인 ok');
+          this.$router.push('/Main');
+        } else {
+          alert('비번 오류');
+        }
+      } else {
+        alert('존재하지 않는 아이디');
+      }
     },
   },
 };
