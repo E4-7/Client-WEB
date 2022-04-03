@@ -8,8 +8,8 @@
             class="main-page-cardview"
             elevation="2"
             outlined
-            min-width="1200"
-            min-height="700"
+            width="1200"
+            min-height="768"
           >
             <v-stepper-header>
               <v-stepper-step :complete="e1 > 1" step="1">
