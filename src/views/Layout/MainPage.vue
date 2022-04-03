@@ -7,8 +7,8 @@
             class="main-page-cardview"
             elevation="2"
             outlined
-            min-width="1200"
-            min-height="700"
+            width="1200"
+            min-height="768"
           >
             <v-col class="main-page-image">
               <img
@@ -42,7 +42,7 @@
                       <v-btn
                         class="main-page-button"
                         text
-                        :to="{ name: 'Professor' }"
+                        :to="{ name: 'Login' }"
                       >
                         감독관 입장</v-btn
                       >
@@ -76,7 +76,7 @@ export default {
     },
     enterProfessorPage: function() {
       alert('Hello Professor !');
-      this.$http.post(this.$store.state.host + '/professor');
+      this.$http.post(this.$store.state.host + '/login');
     },
   },
 };
@@ -97,7 +97,6 @@ export default {
 .main-page-image {
   flex-basis: 30%;
   display: flex;
-  flex-direction: column;
   background-color: #1187cf;
 }
 .main-page-text {

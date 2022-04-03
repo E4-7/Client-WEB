@@ -1,5 +1,6 @@
-<template>
+<template v-slot:activator="{ on, attrs }">
   <v-app>
+    <v-alert type="error">{{ errormessage }}</v-alert>
     <v-main class="main-page-cardview-layout">
       <v-container fill-height fluid>
         <v-row align-center justify="center">
@@ -48,7 +49,6 @@
               </v-col>
               <div v-show="!isloginpage">
                 <v-col cols="12" sm="6">
-                  <!-- <base-input v-model="name" label="성2함">??2</base-input> -->
                   <v-text-field
                     v-model="name"
                     label="성함"
@@ -90,30 +90,6 @@
                         회원가입</v-btn
                       >
                     </v-row>
-                    
-  <v-row justify="space-around">
-
-    <v-col cols="auto">
-      <v-dialog transition="dialog-top-transition" max-width="600">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" v-bind="attrs" v-on="on">From the top</v-btn>
-        </template>
-        <template v-slot:default="dialog">
-          <v-card>
-            <v-toolbar color="primary" dark>Opening from the top</v-toolbar>
-            <v-card-text>
-              <div class="text-h2 pa-12">Hello world!</div>
-            </v-card-text>
-            <v-card-actions class="justify-end">
-              <v-btn text @click="dialog.value = false">Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
-    </v-col>
-  </v-row>
-
-
                   </v-col>
                 </v-card-actions>
               </v-row>
@@ -126,12 +102,14 @@
 </template>
 
 <script>
-import BaseInput from '../components/BaseInput.vue';
+// import AlertTextDialog from '../components/AlertTextDialog.vue';
+//import Modal from '../components/Modal.vue';
 
 export default {
-  name: 'Professor',
-  compinents: {
-    'base-input': BaseInput,
+  name: 'Login',
+  components: {
+    //Modal,
+    // 'alert-text-dialog': AlertTextDialog,
   },
   validations: {
     checkbox: {
@@ -141,11 +119,21 @@ export default {
     },
   },
   data: () => ({
+    setDialog: {
+      dialog: false,
+      dialogTitle: '',
+      dialogMode: '',
+      set: {
+        _id: '',
+        name: '',
+      },
+    },
     user: {
       email: '',
       password: '',
       name: '',
     },
+    errormessage: '테스튼데 놀라지마세여.. 히히',
     information: '관리자 로그인',
     isloginpage: true,
     show: false,
@@ -158,14 +146,7 @@ export default {
     },
   }),
   computed: {
-    nameErrors() {
-      const errors = [];
-      if (!this.$v.name.$dirty) return errors;
-      !this.$v.name.maxLength &&
-        errors.push('Name must be at most 10 characters long');
-      !this.$v.name.required && errors.push('Name is required.');
-      return errors;
-    },
+    // vaildation 고민중,, 무거워지려나
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
@@ -175,6 +156,15 @@ export default {
     },
   },
   methods: {
+    showDialog(mode) {
+      console.log('다이알로그 열림');
+      this.setDialog.dialog = true;
+      this.setDialog.dialogMode = mode;
+    },
+    hideDialog() {
+      console.log('다이알로그 닫음');
+      this.setDialog.dialog = false;
+    },
     onReset() {
       this.user.email = '';
       this.user.password = '';
@@ -196,14 +186,19 @@ export default {
     goManagePage() {
       // 로그인 되었을 시,
       // 서버랑 통신하는 거
-      if (this.user.email) { //this.user.email == 'a@e4.seven'
+      if (this.user.email) {
+        //this.user.email == 'a@e4.seven'
         if (this.user.password) {
+          this.showDialog('Text');
           alert('로그인 ok');
-          this.$router.push('/Main');
+          this.$router.push('/professor');
         } else {
-          alert('비번 오류');
+          this.showDialog('Text');
+          alert('비번 틀림');
+          //showDialog;
         }
       } else {
+        this.showDialog('Text');
         alert('존재하지 않는 아이디');
       }
     },
