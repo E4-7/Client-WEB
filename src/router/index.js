@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Base from '@/views/Layout/Base.vue';
 import Main from '@/views/Layout/MainPage.vue';
+import MenuBar from '@/views/Layout/MenuBar.vue';
 import Student from '@/views/Layout/Student/VerifyIdentity.vue';
 import Login from '@/views/Layout/Professor/LoginProfessor.vue';
 import Professor from '@/views/Layout/Professor/MainManage.vue';
@@ -26,7 +27,10 @@ const routes = [
   {
     path: '/professor',
     name: 'Professor',
-    component: Professor,
+    components: {
+      menu: MenuBar,
+      content: Professor,
+    },
   },
   {
     path: '/base',
