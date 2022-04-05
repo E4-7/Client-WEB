@@ -1,89 +1,28 @@
 <template>
   <div>
-    <v-navigation-drawer
-      id="app-drawer"
-      v-model="drawer"
-      app
-      dark
-      :color="colors.menu_background_color"
-      floating
-      persistent
-      mobile-break-point="960"
-      width="280"
-    >
-      <div>
-        <v-layout class="fill-height" tag="v-list" column>
-          <v-list>
-            <v-list-item @click="movePage('')">
-              <v-toolbar-title
-                ><v-icon class="mr-2">home</v-icon>JoBlog</v-toolbar-title
-              >
-            </v-list-item>
-            <hr class="mt-2 mb-2" />
-            <v-list-item-group active-class="white--text">
-              <template v-for="menu in menus">
-                <template>
-                  <!-- 단일 메뉴일 경우 -->
-                  <v-list-item
-                    @click="movePage(menu.target)"
-                    :key="menu.id"
-                    :active-class="
-                      `${colors.menu_selected_color} accent-4 white--text`
-                    "
-                  >
-                    <v-list-item-icon>
-                      <v-icon>{{ menu.icon }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ menu.title }}</v-list-item-title>
-                  </v-list-item>
-                </template>
-              </template>
-            </v-list-item-group>
-          </v-list>
-        </v-layout>
-      </div>
-    </v-navigation-drawer>
+    <nav>
+      <v-toolbar class="primary" dark height="65">
+        <v-toolbar-title class="text-uppercase gray--text">
+          <span class="font-weight-light">E4/</span>
+          <span>7</span>
+        </v-toolbar-title>
+
+        <v-spacer></v-spacer>
+        <v-btn text color="black">
+          <span>Log Out</span>
+          <v-icon right>exit_to_app</v-icon>
+        </v-btn>
+      </v-toolbar>
+    </nav>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
-  components: {},
-  data: () => ({
-    drawer: null,
-    color: 'success',
-    responsive: false,
-  }),
-  computed: mapState(['menus', 'colors']),
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener('resize', this.onResponsiveInverted);
-  },
-  methods: {
-    movePage(target) {
-      //this.$router.push({ name: target });
-    },
-    onResponsiveInverted() {
-      if (window.innerWidth < 1000) {
-        this.responsive = true;
-      } else {
-        this.responsive = false;
-      }
-    },
+  data() {
+    return {};
   },
 };
 </script>
 
-<style lang="scss">
-#app-drawer {
-  .v-list__tile {
-    border-radius: 4px;
-    &--buy {
-      margin-top: auto;
-      margin-bottom: 17px;
-    }
-  }
-}
-</style>
+<style></style>

@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-main class="main-page-cardview-layout">
+      <menu-bar></menu-bar>
       <v-container fill-height fluid>
         <v-row align-center justify="center">
           <v-card
@@ -39,7 +40,6 @@
                     </router-link>
                   </v-card>
                 </div>
-
                 <v-card-actions>
                   <div class="page-content">
                     <hr />
@@ -56,7 +56,11 @@
 </template>
 
 <script>
+import MenuBar from '../MenuBar.vue';
+
 export default {
+  name: 'Professor',
+  components: { MenuBar },
   data() {
     return {
       jobPostings: [
