@@ -20,10 +20,21 @@
             <v-col class="main-page-text">
               <v-row justify="center">
                 <div style="display: flex">
-                  <v-card v-for="(jobPosting, id) in jobPostings" :key="id">
+                  <v-card v-for="(classCard, id) in classCards" :key="id">
+                   <v-toolbar class="professor-page-class-toolbar" 
+                    color="primary">
+                    <v-btn text>입장
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn icon
+                    @click="reveal = !reveal"
+                    >
+                      <v-icon>more_vert</v-icon>
+                    </v-btn>
+                  </v-toolbar>
                     <router-link
                       href="javascript:void(0)"
-                      :to="openJobPosting(jobPosting.id)"
+                      :to="openClassCard(classCard.id)"
                     >
                       <v-card
                         class="professor-page-cardview"
@@ -32,19 +43,32 @@
                         height="200"
                         width="190"
                       >
-                        <strong>{{ jobPosting.classname }}</strong>
+                    </v-btn>
+                        <strong>{{ classCard.classname }}</strong>
                         <br /><br />
-                        <p>{{ jobPosting.date }}</p>
-                        <p>{{ jobPosting.time }}</p>
+                        <p>{{ classCard.date }}</p>
+                        <p>{{ classCard.time }}</p>
                       </v-card>
                     </router-link>
+                    <v-expand-transition>
+      <v-card
+        v-if="reveal"
+        class="transition-fast-in-fast-out v-card--reveal"
+        style="height: 100%;"
+      >
+        <v-card-text class="pb-0">
+          <p class="text-h4 text--primary">
+            Origin
+          </p>
+          <p>late 16th century (as a noun denoting a pl from medieval Latin eleemosynarius, from late Latin eleemosyna ‘alms’, from Greek eleēmosunē ‘compassion’ </p>
+        </v-card-text>
+        <v-card-actions class="pt-0">
+        </v-card-actions>
+      </v-card>
+    </v-expand-transition>
+                   
                   </v-card>
                 </div>
-                <v-card-actions>
-                  <div class="page-content">
-                    <hr />
-                  </div>
-                </v-card-actions>
               </v-row>
               <br />
             </v-col>
@@ -63,7 +87,8 @@ export default {
   components: { MenuBar },
   data() {
     return {
-      jobPostings: [
+      reveal: false,
+      classCards: [
         {
           id: '1',
           classname: '운영체제',
@@ -80,7 +105,7 @@ export default {
     };
   },
   methods: {
-    openJobPosting: function(title) {
+    openClassCard: function(title) {
       return document.location.pathname + '/' + title;
     },
     getClassList() {
@@ -98,5 +123,15 @@ export default {
 .professor-page-cardview {
   justify-content: center;
   padding: 20%;
+}
+.professor-page-class-toolbar{
+    vertical-align: middle;
+
+}
+.v-card--reveal {
+  bottom: 0;
+  opacity: 1 !important;
+  position: absolute;
+  width: 70%;
 }
 </style>

@@ -74,6 +74,7 @@
                   <v-col class="main-page-buttons">
                     <v-row class="main-page-button-row" justify="center">
                       <v-btn
+                      :loading="loading"
                         v-if="isloginpage"
                         class="main-page-button"
                         @click="goManagePage()"
@@ -119,6 +120,7 @@ export default {
     },
   },
   data: () => ({
+    loading: false,
     setDialog: {
       dialog: false,
       dialogTitle: '',
@@ -193,13 +195,17 @@ export default {
           alert('로그인 ok');
           this.$router.push('/professor');
         } else {
+          this.loading = true;
           this.showDialog('Text');
           alert('비번 틀림');
+          this.loading = false;
           //showDialog;
         }
       } else {
+           this.loading = true;
         this.showDialog('Text');
         alert('존재하지 않는 아이디');
+          this.loading = false;
       }
     },
   },
