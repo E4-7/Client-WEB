@@ -16,32 +16,27 @@
                 src="@/assets/images/e47_logo_blue.png"
               />
             </v-col>
-            <v-col class="professor-page-text">
-              <v-row class="professor-page-card" justify="center">
+            <v-col class="main-page-text">
+              <v-row justify="center">
                 <div style="display: flex">
-                  <v-card
-                    class="professor-page-cardview"
-                    elevation="2"
-                    outlined
-                    height="200"
-                    width="190"
-                    v-for="(classCard, id) in classCard"
-                    :key="id"
-                  >
+                  <v-card v-for="(jobPosting, id) in jobPostings" :key="id">
                     <router-link
                       href="javascript:void(0)"
-                      :to="openClassCard(classCard.id)"
+                      :to="openJobPosting(jobPosting.id)"
                     >
-                      <strong>{{ classCard.classname }}</strong>
-                      <br /><br />
-                      <p>{{ classCard.date }}</p>
-                      <p>{{ classCard.time }}</p>
+                      <v-card
+                        class="professor-page-cardview"
+                        elevation="2"
+                        outlined
+                        height="200"
+                        width="190"
+                      >
+                        <strong>{{ jobPosting.classname }}</strong>
+                        <br /><br />
+                        <p>{{ jobPosting.date }}</p>
+                        <p>{{ jobPosting.time }}</p>
+                      </v-card>
                     </router-link>
-                    <v-card>
-                      <li v-for="item in items">
-                        {{ item.message }}
-                      </li>
-                    </v-card>
                   </v-card>
                 </div>
 
@@ -61,20 +56,10 @@
 </template>
 
 <script>
-import MenuBar from '../MenuBar.vue';
-
 export default {
   data() {
     return {
-      components: { MenuBar },
-      items: [
-        { message: '조교 관리' },
-        { message: '수험자 설정' },
-        { message: '시험지 관리' },
-        { message: '시험장 입장' },
-        { message: '삭제' },
-      ],
-      classCard: [
+      jobPostings: [
         {
           id: '1',
           classname: '운영체제',
@@ -91,7 +76,7 @@ export default {
     };
   },
   methods: {
-    openClassCard: function(title) {
+    openJobPosting: function(title) {
       return document.location.pathname + '/' + title;
     },
     getClassList() {
@@ -106,10 +91,8 @@ export default {
 </script>
 
 <style>
-@import '../../../assets/styles/reset.css';
-
 .professor-page-cardview {
   justify-content: center;
-  padding: 10%;
+  padding: 20%;
 }
 </style>

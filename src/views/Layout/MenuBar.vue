@@ -56,14 +56,14 @@ export default {
     color: 'success',
     responsive: false,
   }),
-  computed: _.extend(mapState(['menus', 'colors'])),
+  computed: mapState(['menus', 'colors']),
   mounted() {
     this.onResponsiveInverted();
     window.addEventListener('resize', this.onResponsiveInverted);
   },
   methods: {
     movePage(target) {
-      this.$router.push({ name: target });
+      //this.$router.push({ name: target });
     },
     onResponsiveInverted() {
       if (window.innerWidth < 1000) {
