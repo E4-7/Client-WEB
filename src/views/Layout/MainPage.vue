@@ -42,6 +42,7 @@
                       <v-btn
                         class="main-page-button"
                         text
+                        color="colors.menu_background_color"
                         :to="{ name: 'Login' }"
                       >
                         감독관 입장</v-btn
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 //import CardViewConponent from '@/components/CardViewComponent';
 
 export default {
@@ -69,6 +71,7 @@ export default {
   data: () => ({
     reveal: false,
   }),
+  computed: mapState(['menus', 'colors']),
   methods: {
     enterStudentPage: function() {
       alert('Hello !22');
