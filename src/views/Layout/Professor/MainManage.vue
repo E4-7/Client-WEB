@@ -20,18 +20,26 @@
             <v-col class="main-page-text">
               <v-row justify="center">
                 <div style="display: flex">
-                  <v-card v-for="(classCard, id) in classCards" :key="id">
-                   <v-toolbar class="professor-page-class-toolbar" 
-                    color="primary">
-                    <v-btn text>입장
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn icon
-                    @click="reveal = !reveal"
+                  <v-card
+                    max-width="190"
+                    v-for="(classCard, id) in classCards"
+                    :key="id"
+                  >
+                    <v-toolbar
+                      height="65"
+                      class="professor-page-class-toolbar"
+                      color="primary"
                     >
-                      <v-icon>more_vert</v-icon>
-                    </v-btn>
-                  </v-toolbar>
+                      <v-toolbar-title>
+                        <strong>{{
+                          classCard.classname
+                        }}</strong></v-toolbar-title
+                      >
+                      <v-spacer></v-spacer>
+                      <v-btn icon @click="reveal = !reveal">
+                        <v-icon>more_vert</v-icon>
+                      </v-btn>
+                    </v-toolbar>
                     <router-link
                       href="javascript:void(0)"
                       :to="openClassCard(classCard.id)"
@@ -43,32 +51,103 @@
                         height="200"
                         width="190"
                       >
-                    </v-btn>
-                        <strong>{{ classCard.classname }}</strong>
-                        <br /><br />
-                        <p>{{ classCard.date }}</p>
-                        <p>{{ classCard.time }}</p>
+                        <v-card-text>
+                          <strong class="professor-page-class-name">
+                            {{ classCard.classname }}
+                          </strong>
+                          <br />
+                          <br />
+                          <p>{{ classCard.date }}</p>
+                          <p>{{ classCard.time }}</p>
+                        </v-card-text>
                       </v-card>
                     </router-link>
                     <v-expand-transition>
-      <v-card
-        v-if="reveal"
-        class="transition-fast-in-fast-out v-card--reveal"
-        style="height: 100%;"
-      >
-        <v-card-text class="pb-0">
-          <p class="text-h4 text--primary">
-            Origin
-          </p>
-          <p>late 16th century (as a noun denoting a pl from medieval Latin eleemosynarius, from late Latin eleemosyna ‘alms’, from Greek eleēmosunē ‘compassion’ </p>
-        </v-card-text>
-        <v-card-actions class="pt-0">
-        </v-card-actions>
-      </v-card>
-    </v-expand-transition>
-                   
+                      <v-card
+                        v-if="reveal"
+                        class="transition-fast-in-fast-out v-card--reveal"
+                        style="height: 78%;"
+                      >
+                        <v-card-actions class="pt-0">
+                          <v-col justify="center" align-content-lg>
+                            <v-btn class="professor-page-card-button" block
+                              >조교 관리</v-btn
+                            >
+                            <v-btn
+                              class="professor-page-card-button"
+                              block
+                              color="primary"
+                              >수험자 설정</v-btn
+                            >
+                            <v-btn
+                              @click="openDialog()"
+                              class="professor-page-card-button"
+                              block
+                              >시험지 관리</v-btn
+                            >
+                            <v-btn
+                              class="professor-page-card-button"
+                              block
+                              color="primary"
+                              >시험장 수정</v-btn
+                            >
+                            <v-btn class="professor-page-card-button" block
+                              >삭제</v-btn
+                            >
+                          </v-col>
+                        </v-card-actions>
+                      </v-card>
+                    </v-expand-transition>
                   </v-card>
+                  <v-btn elevation="2" outlined height="265" width="190">
+                    <p class="text-h2">+</p>
+                  </v-btn>
                 </div>
+
+                <v-btn dark color="green" @click="showDialog('Text')">
+                  show Text dialog !
+                </v-btn>
+                <v-dialog
+                  transition="dialog-top-transition"
+                  max-width="600"
+                  v-model="baseTextDialog"
+                >
+                  <base-dialog
+                    toolbar-header-title="시험장 생성"
+                    header-title="하이이이이"
+                    @hide="hideDialog('Text')"
+                    @submit="submitDialog('Text')"
+                  >
+                    <template v-slot:body>
+
+
+<div v-if="type === 'A'">
+  A
+</div>
+<div v-else-if="type === 'B'">
+  B
+</div>
+<div v-else-if="type === 'C'">
+  C
+</div>
+<div v-else>
+  Not A/B/C
+</div>
+
+                      <v-icon style="margin-right:10px;" large color="#41B883"
+                        >cloud_upload</v-icon
+                      >
+                      <span class="headline" large>파일 업로드</span>
+                      <div class="text-h2 pa-12">Hello world!</div>
+                      <v-text-field placeholder="내용을 입력하세요" />
+                      <template v-if="ok">
+                        <h1>Title</h1>
+                        <p>Paragraph 1</p>
+                        <p>Paragraph 2</p>
+                      </template>
+                    </template>
+                  </base-dialog>
+                </v-dialog>
               </v-row>
               <br />
             </v-col>
@@ -81,12 +160,20 @@
 
 <script>
 import MenuBar from '../MenuBar.vue';
+import BaseDialog from '../components/BaseDialog.vue';
 
 export default {
   name: 'Professor',
-  components: { MenuBar },
+  components: { MenuBar, BaseDialog },
   data() {
     return {
+      baseTextDialog: false,
+      baseListDialog: false,
+      baseImageDialog: false,
+      item: 1,
+      items: [{ text: '피자' }, { text: '라떼' }, { text: '짜글이' }],
+      dialog: false, //true : Dialog열림, false : Dialog닫힘
+      visible: false,
       reveal: false,
       classCards: [
         {
@@ -97,7 +184,7 @@ export default {
         },
         {
           id: '2',
-          classname: '데이터베이스',
+          classname: '데이sadsadsad터베이스',
           date: '2022.04.16',
           time: '12:00',
         },
@@ -105,6 +192,24 @@ export default {
     };
   },
   methods: {
+    showDialog(type) {
+      this[`base${type}Dialog`] = true;
+    },
+    hideDialog(type) {
+      this[`base${type}Dialog`] = false;
+    },
+    submitDialog(type) {
+      console.log('submit 완료!');
+      this.hideDialog(type);
+    },
+    openDialog() {
+      //Dialog 열리는 동작
+      this.dialog = true;
+    },
+    closeDialog() {
+      //Dialog 닫히는 동작
+      this.dialog = false;
+    },
     openClassCard: function(title) {
       return document.location.pathname + '/' + title;
     },
@@ -124,14 +229,22 @@ export default {
   justify-content: center;
   padding: 20%;
 }
-.professor-page-class-toolbar{
-    vertical-align: middle;
-
+.professor-page-class-toolbar {
+  vertical-align: middle;
 }
 .v-card--reveal {
   bottom: 0;
   opacity: 1 !important;
   position: absolute;
-  width: 70%;
+  width: 100%;
+}
+.professor-page-card-button {
+  margin: 1%;
+}
+.professor-page-class-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100px;
 }
 </style>
