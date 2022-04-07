@@ -4,7 +4,6 @@ import Base from '@/views/Layout/Base.vue';
 import Main from '@/views/Layout/MainPage.vue';
 import Student from '@/views/Layout/Student/VerifyIdentity.vue';
 import Login from '@/views/Layout/Professor/LoginProfessor.vue';
-import Professor from '@/views/Layout/Professor/MainManage.vue';
 
 Vue.use(VueRouter);
 
@@ -26,7 +25,7 @@ const routes = [
   {
     path: '/professor',
     name: 'Professor',
-    component: Professor,
+    component: () => import('@/views/Layout/Professor/MainManage.vue'),
   },
   {
     path: '/base',
