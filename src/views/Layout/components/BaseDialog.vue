@@ -1,6 +1,13 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-toolbar color="primary" dark>
+      {{ toolbarHeaderTitle }}
+      <v-spacer></v-spacer>
+      <v-btn icon @click="dialog.value = false">
+        <v-icon>clear</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-card-title small>
       {{ headerTitle }}
     </v-card-title>
     <v-card-text>
@@ -9,11 +16,11 @@
       </slot>
     </v-card-text>
     <v-card-actions class="justify-end mr-2 pb-4">
-      <v-btn color="amber" dark rounded small @click="$emit('hide')">
+      <v-btn text rounded @click="$emit('hide')">
         {{ footerHideTitle }}
       </v-btn>
       <template v-if="footerSubmit">
-        <v-btn color="success" rounded small @click="$emit('submit')">
+        <v-btn color="success" text rounded @click="$emit('submit')">
           {{ footerSubmitTitle }}
         </v-btn>
       </template>
@@ -44,9 +51,13 @@ export default {
       type: Boolean,
       default: true,
     },
-    headerTitle: {
+    toolbarHeaderTitle: {
       type: String,
       default: '제목',
+    },
+    headerTitle: {
+      type: String,
+      default: '보조제목',
     },
     footerSubmitTitle: {
       type: String,
