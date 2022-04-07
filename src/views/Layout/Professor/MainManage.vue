@@ -3,6 +3,111 @@
     <v-main class="main-page-cardview-layout">
       <menu-bar></menu-bar>
       <v-container fill-height fluid>
+        <v-row dense>
+          <v-col
+            v-for="(classCard, id) in classCards"
+            :key="id"
+            cols="12"
+            md="3"
+            sm="6"
+          >
+            <v-card
+              class="pa-3"
+              outlined
+              tile
+              style="height: 300px;"
+              color="#1F7087"
+            >
+              <v-toolbar
+                height="65"
+                class="professor-page-class-toolbar"
+                color="primary"
+              >
+                <v-toolbar-title>
+                  <strong>{{ classCard.classname }}</strong></v-toolbar-title
+                >
+                <v-spacer></v-spacer>
+                <v-btn icon @click="reveal = !reveal">
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <router-link
+                href="javascript:void(0)"
+                :to="openClassCard(classCard.id)"
+              >
+                <v-card
+                  class="professor-page-cardview"
+                  elevation="2"
+                  outlined
+                  height="200"
+                >
+                  <v-card-text>
+                    <br />
+                    <strong class="professor-page-class-name">
+                      {{ classCard.classname }}
+                    </strong>
+                    <br />
+                    <br />
+                    <p>{{ classCard.date }}</p>
+                    <p>{{ classCard.time }}</p>
+                  </v-card-text>
+                </v-card>
+              </router-link>
+              <v-expand-transition>
+                <v-card
+                  v-if="reveal"
+                  class="transition-fast-in-fast-out v-card--reveal"
+                  style="height: 78%; width: auto;"
+                >
+                  <v-card-actions class="pt-0">
+                    <v-col justify="center" align-content-lg>
+                      <v-btn class="professor-page-card-button" block
+                        >조교 관리</v-btn
+                      >
+                      <v-btn
+                        class="professor-page-card-button"
+                        block
+                        color="primary"
+                        >수험자 설정</v-btn
+                      >
+                      <v-btn
+                        @click="openDialog()"
+                        class="professor-page-card-button"
+                        block
+                        >시험지 관리</v-btn
+                      >
+                      <v-btn
+                        class="professor-page-card-button"
+                        block
+                        color="primary"
+                        >시험장 수정</v-btn
+                      >
+                      <v-btn class="professor-page-card-button" block
+                        >삭제</v-btn
+                      >
+                    </v-col>
+                  </v-card-actions>
+                </v-card>
+              </v-expand-transition>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="3" sm="6">
+            <v-card outlined tile style="height: 300px;" color="#1F7087">
+              <v-btn
+                @click="
+                  showDialog('Text');
+                  what = 'A';
+                "
+                elevation="2"
+                outlined
+                height="300px"
+                width="460"
+              >
+                <p class="text-h2">+</p>
+              </v-btn>
+            </v-card>
+          </v-col>
+        </v-row>
         <!-- <v-row align-center justify="center">
           <v-card
             class="main-page-cardview"
@@ -17,6 +122,7 @@
                 src="@/assets/images/e47_logo_blue.png"
               />
             </v-col> -->
+        <!--
         <v-row dense class="main-page-text">
           <v-col>
             <div style="display: flex">
@@ -109,7 +215,7 @@
               >
                 <p class="text-h2">+</p>
               </v-btn>
-            </div>
+            </div>-->
             <v-dialog
               transition="dialog-top-transition"
               max-width="600"
@@ -238,11 +344,10 @@ export default {
         },
         {
           id: '2',
-          classname: '데이sadsadsad터베이스',
+          classname: '데이터베이스------------------',
           date: '2022.04.16',
           time: '12:00',
         },
-        
       ],
     };
   },
@@ -282,7 +387,7 @@ export default {
 <style>
 .professor-page-cardview {
   justify-content: center;
-  padding: 20%;
+  text-align: center;
 }
 .professor-page-class-toolbar {
   vertical-align: middle;
