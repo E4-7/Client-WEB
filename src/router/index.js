@@ -2,25 +2,28 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Base from '@/views/Layout/Base.vue';
 import Main from '@/views/Layout/MainPage.vue';
-import Student from '@/views/Layout/Student/VerifyIdentity.vue';
-import Login from '@/views/Layout/Professor/LoginProfessor.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
+    redirect: '/base',
+  },
+  {
+    path: '/base',
+    name: 'BaseMain',
     component: Main,
   },
   {
     path: '/student',
     name: 'Student',
-    component: Student,
+    component: () => import('@/views/Layout/Student/VerifyIdentity.vue'),
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login,
+    component: () => import('@/views/Layout/Professor/LoginProfessor.vue'),
   },
   {
     path: '/professor',
@@ -43,6 +46,10 @@ const routes = [
         component: () => import('@/views/About.vue'),
       },
     ],
+  },
+  {
+    path: '*',
+    component: () => import('@/views/NotFoundPage.vue'),
   },
 ];
 
