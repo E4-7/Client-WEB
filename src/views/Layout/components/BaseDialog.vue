@@ -7,8 +7,8 @@
         <v-icon>clear</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-card-title small>
-      {{ headerTitle }}
+    <v-card-title>
+      <h5>{{ headerTitle }}</h5>
     </v-card-title>
     <v-card-text>
       <slot name="body">

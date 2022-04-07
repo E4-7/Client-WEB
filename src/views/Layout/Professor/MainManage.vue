@@ -3,7 +3,7 @@
     <v-main class="main-page-cardview-layout">
       <menu-bar></menu-bar>
       <v-container fill-height fluid>
-        <v-row align-center justify="center">
+        <!-- <v-row align-center justify="center">
           <v-card
             class="main-page-cardview"
             elevation="2"
@@ -16,142 +16,195 @@
                 calss="main-page-logo"
                 src="@/assets/images/e47_logo_blue.png"
               />
-            </v-col>
-            <v-col class="main-page-text">
-              <v-row justify="center">
-                <div style="display: flex">
-                  <v-card
-                    max-width="190"
-                    v-for="(classCard, id) in classCards"
-                    :key="id"
-                  >
-                    <v-toolbar
-                      height="65"
-                      class="professor-page-class-toolbar"
-                      color="primary"
-                    >
-                      <v-toolbar-title>
-                        <strong>{{
-                          classCard.classname
-                        }}</strong></v-toolbar-title
-                      >
-                      <v-spacer></v-spacer>
-                      <v-btn icon @click="reveal = !reveal">
-                        <v-icon>more_vert</v-icon>
-                      </v-btn>
-                    </v-toolbar>
-                    <router-link
-                      href="javascript:void(0)"
-                      :to="openClassCard(classCard.id)"
-                    >
-                      <v-card
-                        class="professor-page-cardview"
-                        elevation="2"
-                        outlined
-                        height="200"
-                        width="190"
-                      >
-                        <v-card-text>
-                          <strong class="professor-page-class-name">
-                            {{ classCard.classname }}
-                          </strong>
-                          <br />
-                          <br />
-                          <p>{{ classCard.date }}</p>
-                          <p>{{ classCard.time }}</p>
-                        </v-card-text>
-                      </v-card>
-                    </router-link>
-                    <v-expand-transition>
-                      <v-card
-                        v-if="reveal"
-                        class="transition-fast-in-fast-out v-card--reveal"
-                        style="height: 78%;"
-                      >
-                        <v-card-actions class="pt-0">
-                          <v-col justify="center" align-content-lg>
-                            <v-btn class="professor-page-card-button" block
-                              >조교 관리</v-btn
-                            >
-                            <v-btn
-                              class="professor-page-card-button"
-                              block
-                              color="primary"
-                              >수험자 설정</v-btn
-                            >
-                            <v-btn
-                              @click="openDialog()"
-                              class="professor-page-card-button"
-                              block
-                              >시험지 관리</v-btn
-                            >
-                            <v-btn
-                              class="professor-page-card-button"
-                              block
-                              color="primary"
-                              >시험장 수정</v-btn
-                            >
-                            <v-btn class="professor-page-card-button" block
-                              >삭제</v-btn
-                            >
-                          </v-col>
-                        </v-card-actions>
-                      </v-card>
-                    </v-expand-transition>
-                  </v-card>
-                  <v-btn elevation="2" outlined height="265" width="190">
-                    <p class="text-h2">+</p>
-                  </v-btn>
-                </div>
-
-                <v-btn dark color="green" @click="showDialog('Text')">
-                  show Text dialog !
-                </v-btn>
-                <v-dialog
-                  transition="dialog-top-transition"
-                  max-width="600"
-                  v-model="baseTextDialog"
+            </v-col> -->
+        <v-row dense class="main-page-text">
+          <v-col>
+            <div style="display: flex">
+              <v-card
+                max-width="190"
+                v-for="(classCard, id) in classCards"
+                :key="id"
+              >
+                <v-toolbar
+                  height="65"
+                  class="professor-page-class-toolbar"
+                  color="primary"
                 >
-                  <base-dialog
-                    toolbar-header-title="시험장 생성"
-                    header-title="하이이이이"
-                    @hide="hideDialog('Text')"
-                    @submit="submitDialog('Text')"
+                  <v-toolbar-title>
+                    <strong>{{ classCard.classname }}</strong></v-toolbar-title
                   >
-                    <template v-slot:body>
+                  <v-spacer></v-spacer>
+                  <v-btn icon @click="reveal = !reveal">
+                    <v-icon>more_vert</v-icon>
+                  </v-btn>
+                </v-toolbar>
+                <router-link
+                  href="javascript:void(0)"
+                  :to="openClassCard(classCard.id)"
+                >
+                  <v-card
+                    class="professor-page-cardview"
+                    elevation="2"
+                    outlined
+                    height="200"
+                    width="190"
+                  >
+                    <v-card-text>
+                      <strong class="professor-page-class-name">
+                        {{ classCard.classname }}
+                      </strong>
+                      <br />
+                      <br />
+                      <p>{{ classCard.date }}</p>
+                      <p>{{ classCard.time }}</p>
+                    </v-card-text>
+                  </v-card>
+                </router-link>
+                <v-expand-transition>
+                  <v-card
+                    v-if="reveal"
+                    class="transition-fast-in-fast-out v-card--reveal"
+                    style="height: 78%;"
+                  >
+                    <v-card-actions class="pt-0">
+                      <v-col justify="center" align-content-lg>
+                        <v-btn class="professor-page-card-button" block
+                          >조교 관리</v-btn
+                        >
+                        <v-btn
+                          class="professor-page-card-button"
+                          block
+                          color="primary"
+                          >수험자 설정</v-btn
+                        >
+                        <v-btn
+                          @click="openDialog()"
+                          class="professor-page-card-button"
+                          block
+                          >시험지 관리</v-btn
+                        >
+                        <v-btn
+                          class="professor-page-card-button"
+                          block
+                          color="primary"
+                          >시험장 수정</v-btn
+                        >
+                        <v-btn class="professor-page-card-button" block
+                          >삭제</v-btn
+                        >
+                      </v-col>
+                    </v-card-actions>
+                  </v-card>
+                </v-expand-transition>
+              </v-card>
+              <v-btn
+                @click="
+                  showDialog('Text');
+                  what = 'A';
+                "
+                elevation="2"
+                outlined
+                height="265"
+                width="190"
+              >
+                <p class="text-h2">+</p>
+              </v-btn>
+            </div>
+            <v-dialog
+              transition="dialog-top-transition"
+              max-width="600"
+              v-model="baseTextDialog"
+            >
+              <base-dialog
+                v-if="what === 'A'"
+                toolbar-header-title="시험장 생성"
+                header-title="시험장을 생성해주세요."
+                @hide="hideDialog('Text')"
+                @submit="submitDialog('Text')"
+              >
+                <template v-slot:body>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field label="Filled" filled dense></v-text-field>
+                    </v-col>
 
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        label="Filled"
+                        placeholder="Dense & Rounded"
+                        filled
+                        rounded
+                        dense
+                      ></v-text-field>
+                    </v-col>
 
-<div v-if="type === 'A'">
-  A
-</div>
-<div v-else-if="type === 'B'">
-  B
-</div>
-<div v-else-if="type === 'C'">
-  C
-</div>
-<div v-else>
-  Not A/B/C
-</div>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field label="Solo" solo dense></v-text-field>
+                    </v-col>
 
-                      <v-icon style="margin-right:10px;" large color="#41B883"
-                        >cloud_upload</v-icon
-                      >
-                      <span class="headline" large>파일 업로드</span>
-                      <div class="text-h2 pa-12">Hello world!</div>
-                      <v-text-field placeholder="내용을 입력하세요" />
-                      <template v-if="ok">
-                        <h1>Title</h1>
-                        <p>Paragraph 1</p>
-                        <p>Paragraph 2</p>
-                      </template>
-                    </template>
-                  </base-dialog>
-                </v-dialog>
-              </v-row>
-              <br />
-            </v-col>
-          </v-card>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        label="Outlined"
+                        outlined
+                        dense
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        label="Outlined"
+                        placeholder="Placeholder"
+                        outlined
+                        dense
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </template>
+              </base-dialog>
+              <base-dialog
+                v-else-if="what === 'B'"
+                toolbar-header-title="시험장 생성"
+                header-title="시험장을 생성해주세요."
+                @hide="hideDialog('Text')"
+                @submit="submitDialog('Text')"
+              >
+                <template v-slot:body>
+                  <v-icon style="margin-right:10px;" large color="#41B883"
+                    >cloud_upload</v-icon
+                  >
+                  <span class="headline" large>파일 업로드</span>
+                  <div class="text-h2 pa-12">Hello world!</div>
+                  <v-text-field placeholder="내용을 입력하세요" />
+                  <template v-if="ok">
+                    <h1>Title</h1>
+                    <p>Paragraph 1</p>
+                    <p>Paragraph 2</p>
+                  </template>
+                </template>
+              </base-dialog>
+              <base-dialog
+                v-else
+                toolbar-header-title="시험장 생성"
+                header-title="시험장을 생성해주세요."
+                @hide="hideDialog('Text')"
+                @submit="submitDialog('Text')"
+              >
+                <template v-slot:body>
+                  <v-icon style="margin-right:10px;" large color="#41B883"
+                    >cloud_upload</v-icon
+                  >
+                  <span class="headline" large>파일 업로드</span>
+                  <div class="text-h2 pa-12">Hello world!</div>
+                  <v-text-field placeholder="내용을 입력하세요" />
+                  <template v-if="ok">
+                    <h1>Title</h1>
+                    <p>Paragraph 1</p>
+                    <p>Paragraph 2</p>
+                  </template>
+                </template>
+              </base-dialog>
+            </v-dialog>
+          </v-col>
         </v-row>
       </v-container>
     </v-main>
@@ -167,6 +220,7 @@ export default {
   components: { MenuBar, BaseDialog },
   data() {
     return {
+      what: 'B',
       baseTextDialog: false,
       baseListDialog: false,
       baseImageDialog: false,
@@ -188,6 +242,7 @@ export default {
           date: '2022.04.16',
           time: '12:00',
         },
+        
       ],
     };
   },
