@@ -101,224 +101,176 @@
                 elevation="2"
                 outlined
                 height="300px"
-                width=100%
+                width="100%"
               >
                 <p class="text-h2">+</p>
               </v-btn>
             </v-card>
           </v-col>
         </v-row>
-        <!-- <v-row align-center justify="center">
-          <v-card
-            class="main-page-cardview"
-            elevation="2"
-            outlined
-            width="1200"
-            min-height="768"
+        <v-dialog
+          transition="dialog-top-transition"
+          max-width="600"
+          v-model="baseTextDialog"
+        >
+          <base-dialog
+            v-if="what === 'A'"
+            toolbar-header-title="시험장 생성"
+            header-title="시험장을 생성해주세요."
+            @hide="hideDialog('Text')"
+            @submit="submitDialog('Text')"
           >
-            <v-col class="main-page-image">
-              <img
-                calss="main-page-logo"
-                src="@/assets/images/e47_logo_blue.png"
-              />
-            </v-col> -->
-        <!--
-        <v-row dense class="main-page-text">
-          <v-col>
-            <div style="display: flex">
-              <v-card
-                max-width="190"
-                v-for="(classCard, id) in classCards"
-                :key="id"
-              >
-                <v-toolbar
-                  height="65"
-                  class="professor-page-class-toolbar"
-                  color="primary"
-                >
-                  <v-toolbar-title>
-                    <strong>{{ classCard.classname }}</strong></v-toolbar-title
+            <template v-slot:body>
+              <br />
+              <br />
+              <v-row>
+                <h3>시험 과목 지정</h3>
+                <v-col cols="12" sm="6" md="12">
+                  <v-text-field label="과목명" filled dense></v-text-field>
+                </v-col>
+                <h3>시험 날짜와 시험 시작시각 지정</h3>
+                <v-col cols="12" sm="6" md="12">
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="time"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
                   >
-                  <v-spacer></v-spacer>
-                  <v-btn icon @click="reveal = !reveal">
-                    <v-icon>more_vert</v-icon>
-                  </v-btn>
-                </v-toolbar>
-                <router-link
-                  href="javascript:void(0)"
-                  :to="openClassCard(classCard.id)"
-                >
-                  <v-card
-                    class="professor-page-cardview"
-                    elevation="2"
-                    outlined
-                    height="200"
-                    width="190"
-                  >
-                    <v-card-text>
-                      <strong class="professor-page-class-name">
-                        {{ classCard.classname }}
-                      </strong>
-                      <br />
-                      <br />
-                      <p>{{ classCard.date }}</p>
-                      <p>{{ classCard.time }}</p>
-                    </v-card-text>
-                  </v-card>
-                </router-link>
-                <v-expand-transition>
-                  <v-card
-                    v-if="reveal"
-                    class="transition-fast-in-fast-out v-card--reveal"
-                    style="height: 78%;"
-                  >
-                    <v-card-actions class="pt-0">
-                      <v-col justify="center" align-content-lg>
-                        <v-btn class="professor-page-card-button" block
-                          >조교 관리</v-btn
-                        >
-                        <v-btn
-                          class="professor-page-card-button"
-                          block
-                          color="primary"
-                          >수험자 설정</v-btn
-                        >
-                        <v-btn
-                          @click="openDialog()"
-                          class="professor-page-card-button"
-                          block
-                          >시험지 관리</v-btn
-                        >
-                        <v-btn
-                          class="professor-page-card-button"
-                          block
-                          color="primary"
-                          >시험장 수정</v-btn
-                        >
-                        <v-btn class="professor-page-card-button" block
-                          >삭제</v-btn
-                        >
-                      </v-col>
-                    </v-card-actions>
-                  </v-card>
-                </v-expand-transition>
-              </v-card>
-              <v-btn
-                @click="
-                  showDialog('Text');
-                  what = 'A';
-                "
-                elevation="2"
-                outlined
-                height="265"
-                width="190"
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-row>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-menu
+                            ref="menu1"
+                            v-model="menu1"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
+                          >
+                            <!--:return-value.sync="date"-->
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                filled
+                                dense
+                                v-model="date"
+                                label="시험 날짜"
+                                prepend-icon="mdi-calendar"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="date"
+                              no-title
+                              @input="menu1 = false"
+                            >
+                              <v-spacer></v-spacer>
+                              <!-- <v-btn text color="primary" @click="menu1 = false">
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.menu.save(date)"
+                              >
+                                OK
+                              </v-btn> -->
+                            </v-date-picker>
+                          </v-menu>
+                        </v-col>
+                        <v-spacer></v-spacer>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-menu
+                            ref="menu2"
+                            v-model="menu2"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            transition="scale-transition"
+                            offset-y
+                            max-width="290px"
+                            min-width="290px"
+                          >
+                            <!-- :return-value.sync="time" -->
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="time"
+                                label="시험 시작 시각"
+                                prepend-icon="mdi-clock-time-four-outline"
+                                v-bind="attrs"
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-time-picker
+                              v-if="menu2"
+                              v-model="time"
+                              full-width
+                              @click:minute="$refs.menu.save(time)"
+                            ></v-time-picker>
+                          </v-menu>
+                        </v-col>
+                        <v-spacer></v-spacer>
+                      </v-row>
+                    </template>
+                  </v-menu>
+                </v-col>
+                <v-col cols="12" sm="6" md="12">
+                  <v-checkbox
+                    v-model="checkbox"
+                    :label="`오픈북 여부: ${checkbox.toString()}`"
+                  ></v-checkbox>
+                </v-col>
+              </v-row>
+            </template>
+          </base-dialog>
+          <base-dialog
+            v-else-if="what === 'B'"
+            toolbar-header-title="시험장 생성"
+            header-title="시험장을 생성해주세요."
+            @hide="hideDialog('Text')"
+            @submit="submitDialog('Text')"
+          >
+            <template v-slot:body>
+              <v-icon style="margin-right:10px;" large color="#41B883"
+                >cloud_upload</v-icon
               >
-                <p class="text-h2">+</p>
-              </v-btn>
-            </div>-->
-            <v-dialog
-              transition="dialog-top-transition"
-              max-width="600"
-              v-model="baseTextDialog"
-            >
-              <base-dialog
-                v-if="what === 'A'"
-                toolbar-header-title="시험장 생성"
-                header-title="시험장을 생성해주세요."
-                @hide="hideDialog('Text')"
-                @submit="submitDialog('Text')"
+              <span class="headline" large>파일 업로드</span>
+              <div class="text-h2 pa-12">Hello world!</div>
+              <v-text-field placeholder="내용을 입력하세요" />
+              <template v-if="ok">
+                <h1>Title</h1>
+                <p>Paragraph 1</p>
+                <p>Paragraph 2</p>
+              </template>
+            </template>
+          </base-dialog>
+          <base-dialog
+            v-else
+            toolbar-header-title="시험장 생성"
+            header-title="시험장을 생성해주세요."
+            @hide="hideDialog('Text')"
+            @submit="submitDialog('Text')"
+          >
+            <template v-slot:body>
+              <v-icon style="margin-right:10px;" large color="#41B883"
+                >cloud_upload</v-icon
               >
-                <template v-slot:body>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="12">
-                      <v-text-field label="과목명" filled dense></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="12">
-                      <v-menu
-        ref="menu"
-        v-model="menu2"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        :return-value.sync="time"
-        transition="scale-transition"
-        offset-y
-        max-width="290px"
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="time"
-            label="Picker in menu"
-            prepend-icon="mdi-clock-time-four-outline"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-time-picker
-          v-if="menu2"
-          elevation="15"
-          v-model="time"
-          full-width
-          @click:minute="$refs.menu.save(time)"
-        ></v-time-picker>
-      </v-menu>
-                      <v-text-field label="시험기간" filled dense></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="12">
-                      <v-checkbox
-                        v-model="checkbox"
-                        :label="`오픈북 여부: ${checkbox.toString()}`"
-                      ></v-checkbox>
-                    </v-col>
-                  </v-row>
-                </template>
-              </base-dialog>
-              <base-dialog
-                v-else-if="what === 'B'"
-                toolbar-header-title="시험장 생성"
-                header-title="시험장을 생성해주세요."
-                @hide="hideDialog('Text')"
-                @submit="submitDialog('Text')"
-              >
-                <template v-slot:body>
-                  <v-icon style="margin-right:10px;" large color="#41B883"
-                    >cloud_upload</v-icon
-                  >
-                  <span class="headline" large>파일 업로드</span>
-                  <div class="text-h2 pa-12">Hello world!</div>
-                  <v-text-field placeholder="내용을 입력하세요" />
-                  <template v-if="ok">
-                    <h1>Title</h1>
-                    <p>Paragraph 1</p>
-                    <p>Paragraph 2</p>
-                  </template>
-                </template>
-              </base-dialog>
-              <base-dialog
-                v-else
-                toolbar-header-title="시험장 생성"
-                header-title="시험장을 생성해주세요."
-                @hide="hideDialog('Text')"
-                @submit="submitDialog('Text')"
-              >
-                <template v-slot:body>
-                  <v-icon style="margin-right:10px;" large color="#41B883"
-                    >cloud_upload</v-icon
-                  >
-                  <span class="headline" large>파일 업로드</span>
-                  <div class="text-h2 pa-12">Hello world!</div>
-                  <v-text-field placeholder="내용을 입력하세요" />
-                  <template v-if="ok">
-                    <h1>Title</h1>
-                    <p>Paragraph 1</p>
-                    <p>Paragraph 2</p>
-                  </template>
-                </template>
-              </base-dialog>
-            </v-dialog>
-          </v-col>
-        </v-row>
+              <span class="headline" large>파일 업로드</span>
+              <div class="text-h2 pa-12">Hello world!</div>
+              <v-text-field placeholder="내용을 입력하세요" />
+              <template v-if="ok">
+                <h1>Title</h1>
+                <p>Paragraph 1</p>
+                <p>Paragraph 2</p>
+              </template>
+            </template>
+          </base-dialog>
+        </v-dialog>
       </v-container>
     </v-main>
   </v-app>
@@ -333,9 +285,14 @@ export default {
   components: { MenuBar, BaseDialog },
   data() {
     return {
-      time: null,
-        menu2: false,
-        modal2: false,
+      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
+      menu: false,
+      modal: false,
+      menu2: false,
+      time: '00:00',
+      modal2: false,
       what: 'B',
       checkbox: true,
       baseTextDialog: false,
