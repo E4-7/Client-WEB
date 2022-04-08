@@ -101,7 +101,7 @@
                 elevation="2"
                 outlined
                 height="300px"
-                width="460"
+                width=100%
               >
                 <p class="text-h2">+</p>
               </v-btn>
@@ -230,39 +230,46 @@
               >
                 <template v-slot:body>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field label="Filled" filled dense></v-text-field>
+                    <v-col cols="12" sm="6" md="12">
+                      <v-text-field label="과목명" filled dense></v-text-field>
                     </v-col>
-
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        label="Filled"
-                        placeholder="Dense & Rounded"
-                        filled
-                        rounded
-                        dense
-                      ></v-text-field>
+                    <v-col cols="12" sm="6" md="12">
+                      <v-menu
+        ref="menu"
+        v-model="menu2"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        :return-value.sync="time"
+        transition="scale-transition"
+        offset-y
+        max-width="290px"
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="time"
+            label="Picker in menu"
+            prepend-icon="mdi-clock-time-four-outline"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-time-picker
+          v-if="menu2"
+          elevation="15"
+          v-model="time"
+          full-width
+          @click:minute="$refs.menu.save(time)"
+        ></v-time-picker>
+      </v-menu>
+                      <v-text-field label="시험기간" filled dense></v-text-field>
                     </v-col>
-
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field label="Solo" solo dense></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        label="Outlined"
-                        outlined
-                        dense
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        label="Outlined"
-                        placeholder="Placeholder"
-                        outlined
-                        dense
-                      ></v-text-field>
+                    <v-col cols="12" sm="6" md="12">
+                      <v-checkbox
+                        v-model="checkbox"
+                        :label="`오픈북 여부: ${checkbox.toString()}`"
+                      ></v-checkbox>
                     </v-col>
                   </v-row>
                 </template>
@@ -326,7 +333,11 @@ export default {
   components: { MenuBar, BaseDialog },
   data() {
     return {
+      time: null,
+        menu2: false,
+        modal2: false,
       what: 'B',
+      checkbox: true,
       baseTextDialog: false,
       baseListDialog: false,
       baseImageDialog: false,
