@@ -50,6 +50,7 @@
                     <br />
                     <p>{{ classCard.date }}</p>
                     <p>{{ classCard.time }}</p>
+                    <p>[ 오픈북 여부 : {{ classCard.openbook }} ]</p>
                   </v-card-text>
                 </v-card>
               </router-link>
@@ -199,6 +200,8 @@
                             <!-- :return-value.sync="time" -->
                             <template v-slot:activator="{ on, attrs }">
                               <v-text-field
+                                filled
+                                dense
                                 v-model="time"
                                 label="시험 시작 시각"
                                 prepend-icon="mdi-clock-time-four-outline"
@@ -309,12 +312,14 @@ export default {
           classname: '운영체제',
           date: '2022.04.15',
           time: '16:00',
+          openbook: true,
         },
         {
           id: '2',
           classname: '데이터베이스------------------',
           date: '2022.04.16',
           time: '12:00',
+          openbook: false,
         },
       ],
     };
