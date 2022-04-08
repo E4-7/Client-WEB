@@ -3,7 +3,7 @@
     <v-toolbar color="primary" dark>
       {{ toolbarHeaderTitle }}
       <v-spacer></v-spacer>
-      <v-btn icon @click="dialog.value = false">
+      <v-btn icon @click="$emit('hide')">
         <v-icon>clear</v-icon>
       </v-btn>
     </v-toolbar>
@@ -20,7 +20,7 @@
         {{ footerHideTitle }}
       </v-btn>
       <template v-if="footerSubmit">
-        <v-btn color="success" text rounded @click="$emit('submit')">
+        <v-btn text rounded @click="$emit('submit')">
           {{ footerSubmitTitle }}
         </v-btn>
       </template>

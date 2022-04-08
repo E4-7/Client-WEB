@@ -27,7 +27,12 @@
                   <strong>{{ classCard.classname }}</strong></v-toolbar-title
                 >
                 <v-spacer></v-spacer>
-                <v-btn icon @click="reveal = !reveal">
+                <v-btn
+                  icon
+                  @click="
+                    reveal = !reveal
+                  "
+                >
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </v-toolbar>
@@ -62,19 +67,32 @@
                 >
                   <v-card-actions class="pt-0">
                     <v-col justify="center" align-content-lg>
-                      <v-btn class="professor-page-card-button" block
+                      <v-btn
+                        class="professor-page-card-button"
+                        block
+                        @click="
+                          showDialog('Text');
+                          what = 'B';
+                        "
                         >조교 관리</v-btn
                       >
                       <v-btn
                         class="professor-page-card-button"
                         block
                         color="primary"
+                        @click="
+                          showDialog('Text');
+                          what = 'C';
+                        "
                         >수험자 설정</v-btn
                       >
                       <v-btn
-                        @click="openDialog()"
                         class="professor-page-card-button"
                         block
+                        @click="
+                          showDialog('Text');
+                          what = 'D';
+                        "
                         >시험지 관리</v-btn
                       >
                       <v-btn
@@ -83,7 +101,13 @@
                         color="primary"
                         >시험장 수정</v-btn
                       >
-                      <v-btn class="professor-page-card-button" block
+                      <v-btn
+                        class="professor-page-card-button"
+                        block
+                        @click="
+                          showDialog('Text');
+                          what = 'E';
+                        "
                         >삭제</v-btn
                       >
                     </v-col>
@@ -172,16 +196,6 @@
                               @input="menu1 = false"
                             >
                               <v-spacer></v-spacer>
-                              <!-- <v-btn text color="primary" @click="menu1 = false">
-                                Cancel
-                              </v-btn>
-                              <v-btn
-                                text
-                                color="primary"
-                                @click="$refs.menu.save(date)"
-                              >
-                                OK
-                              </v-btn> -->
                             </v-date-picker>
                           </v-menu>
                         </v-col>
@@ -233,8 +247,30 @@
           </base-dialog>
           <base-dialog
             v-else-if="what === 'B'"
-            toolbar-header-title="시험장 생성"
-            header-title="시험장을 생성해주세요."
+            toolbar-header-title="조교 관리"
+            header-title="조교 계정 생성"
+            @hide="hideDialog('Text')"
+            @submit="submitDialog('Text')"
+          >
+            <template v-slot:body>
+            </template>
+          </base-dialog>
+          <base-dialog
+            v-else-if="what === 'C'"
+            toolbar-header-title="수험자 관리"
+            header-title="수험자 관리"
+            @hide="hideDialog('Text')"
+            @submit="submitDialog('Text')"
+          >
+            <template v-slot:body>
+              <v-text-field placeholder="내용을 입력하세요" />
+            </template>
+          </base-dialog>
+          <base-dialog
+            v-else-if="what === 'D'"
+            toolbar-header-title="시험지 관리"
+            header-title="시험지 업로드해주세요."
+            footer-hide-title="sadas"
             @hide="hideDialog('Text')"
             @submit="submitDialog('Text')"
           >
@@ -243,34 +279,18 @@
                 >cloud_upload</v-icon
               >
               <span class="headline" large>파일 업로드</span>
-              <div class="text-h2 pa-12">Hello world!</div>
-              <v-text-field placeholder="내용을 입력하세요" />
-              <template v-if="ok">
-                <h1>Title</h1>
-                <p>Paragraph 1</p>
-                <p>Paragraph 2</p>
-              </template>
             </template>
           </base-dialog>
           <base-dialog
             v-else
-            toolbar-header-title="시험장 생성"
-            header-title="시험장을 생성해주세요."
+            toolbar-header-title="삭제"
+            header-title=""
+            footer-submit-title="삭제하기"
             @hide="hideDialog('Text')"
             @submit="submitDialog('Text')"
           >
             <template v-slot:body>
-              <v-icon style="margin-right:10px;" large color="#41B883"
-                >cloud_upload</v-icon
-              >
-              <span class="headline" large>파일 업로드</span>
-              <div class="text-h2 pa-12">Hello world!</div>
-              <v-text-field placeholder="내용을 입력하세요" />
-              <template v-if="ok">
-                <h1>Title</h1>
-                <p>Paragraph 1</p>
-                <p>Paragraph 2</p>
-              </template>
+              <h2>정말로 시험장을 삭제하시겠습니까?</h2>
             </template>
           </base-dialog>
         </v-dialog>
