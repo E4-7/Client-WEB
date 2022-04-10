@@ -3,18 +3,9 @@
     <v-main class="main-page-cardview-layout">
       <v-container fill-height fluid>
         <v-row align-center justify="center">
-          <v-card
-            class="main-page-cardview"
-            elevation="2"
-            outlined
-            width="1200"
-            min-height="768"
-          >
+          <v-card class="main-page-cardview" elevation="2" outlined width="1200" min-height="768">
             <v-col class="main-page-image">
-              <img
-                calss="main-page-logo"
-                src="@/assets/images/e47_logo_blue.png"
-              />
+              <img calss="main-page-logo" src="@/assets/images/e47_logo_blue.png" />
             </v-col>
             <v-col class="main-page-text">
               <v-row justify="center">
@@ -31,22 +22,10 @@
                 <v-card-actions>
                   <v-col class="main-page-buttons">
                     <v-row class="main-page-button-row" justify="center">
-                      <v-btn
-                        class="main-page-button"
-                        text
-                        :to="{ name: 'Student' }"
-                        >학생 입장</v-btn
-                      >
+                      <v-btn class="main-page-button" text :to="{ name: 'Student' }">학생 입장</v-btn>
                     </v-row>
                     <v-row class="main-page-button-row" justify="center">
-                      <v-btn
-                        class="main-page-button"
-                        text
-                        color="colors.menu_background_color"
-                        :to="{ name: 'Login' }"
-                      >
-                        감독관 입장</v-btn
-                      >
+                      <v-btn class="main-page-button" text color="colors.menu_background_color" :to="{ name: 'Login' }"> 감독관 입장</v-btn>
                     </v-row>
                   </v-col>
                 </v-card-actions>

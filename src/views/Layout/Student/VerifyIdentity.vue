@@ -3,14 +3,7 @@
     <v-main class="main-page-cardview-layout">
       <v-container fill-height fluid>
         <v-row align-center justify="center">
-          <v-stepper
-            v-model="e1"
-            class="main-page-cardview"
-            elevation="2"
-            outlined
-            width="1200"
-            min-height="768"
-          >
+          <v-stepper v-model="e1" class="main-page-cardview" elevation="2" outlined width="1200" min-height="768">
             <v-stepper-header>
               <v-stepper-step :complete="e1 > 1" step="1">
                 입장코드
@@ -41,13 +34,7 @@
                       </p>
                       <br />
                       <br />
-                      <v-text-field
-                        placeholder="input code"
-                        outlined
-                        label="코드   "
-                        :rules="rules"
-                      >
-                      </v-text-field>
+                      <v-text-field placeholder="input code" outlined label="코드   " :rules="rules"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>
@@ -67,19 +54,12 @@
                         학번
                       </div>
                       <br />
-                      <v-text-field outlined label="학번" :rules="rules">
-                      </v-text-field>
+                      <v-text-field outlined label="학번" :rules="rules"> </v-text-field>
                       <div style="font-size: 30px">
                         이름
                       </div>
                       <br />
-                      <v-text-field
-                        placeholder="input your name"
-                        outlined
-                        label="이름"
-                        :rules="rules"
-                      >
-                      </v-text-field>
+                      <v-text-field placeholder="input your name" outlined label="이름" :rules="rules"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>
@@ -94,17 +74,8 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <v-card
-                  class="mb-12"
-                  color="grey lighten-1"
-                  height="500px"
-                ></v-card>
-                <v-btn
-                  class="verify-identity-button"
-                  rounded
-                  color="primary"
-                  @click="e1 = 1"
-                >
+                <v-card class="mb-12" color="grey lighten-1" height="500px"></v-card>
+                <v-btn class="verify-identity-button" rounded color="primary" @click="e1 = 1">
                   완료
                 </v-btn>
               </v-stepper-content>
@@ -123,10 +94,7 @@ export default {
   data: () => ({
     e1: 1,
     reveal: false,
-    rules: [
-      value => !!value || 'Required.',
-      value => (value && value.length >= 3) || 'Min 3 characters',
-    ],
+    rules: [value => !!value || 'Required.', value => (value && value.length >= 3) || 'Min 3 characters'],
   }),
   methods: {},
 };

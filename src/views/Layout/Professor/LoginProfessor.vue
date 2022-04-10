@@ -4,18 +4,9 @@
     <v-main class="main-page-cardview-layout">
       <v-container fill-height fluid>
         <v-row align-center justify="center">
-          <v-card
-            class="main-page-cardview"
-            elevation="2"
-            outlined
-            min-width="1200"
-            min-height="700"
-          >
+          <v-card class="main-page-cardview" elevation="2" outlined min-width="1200" min-height="700">
             <v-col class="main-page-image">
-              <img
-                calss="main-page-logo"
-                src="@/assets/images/e47_logo_blue.png"
-              />
+              <img calss="main-page-logo" src="@/assets/images/e47_logo_blue.png" />
             </v-col>
             <v-col class="main-page-text">
               <p class="text-h5 font-weight: bold">
@@ -25,12 +16,7 @@
               </p>
               <br />
               <v-col>
-                <v-text-field
-                  v-model="user.email"
-                  :rules="[rules.required, rules.email]"
-                  label="아이디 or E-mail"
-                  outlined
-                ></v-text-field>
+                <v-text-field v-model="user.email" :rules="[rules.required, rules.email]" label="아이디 or E-mail" outlined></v-text-field>
               </v-col>
               <v-col>
                 <!--나중에 눈 아이콘 넣기-->
@@ -49,11 +35,7 @@
               </v-col>
               <div v-show="!isloginpage">
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="name"
-                    label="성함"
-                    outlined
-                  ></v-text-field>
+                  <v-text-field v-model="name" label="성함" outlined></v-text-field>
                 </v-col>
               </div>
               <div v-show="isloginpage">
@@ -64,32 +46,12 @@
               </div>
               <v-row justify="center">
                 <v-card-actions>
-                  <v-btn
-                    v-if="!isloginpage"
-                    class="main-page-button"
-                    @click="gosignin()"
-                  >
-                    뒤로</v-btn
-                  >
+                  <v-btn v-if="!isloginpage" class="main-page-button" @click="gosignin()"> 뒤로</v-btn>
                   <v-col class="main-page-buttons">
                     <v-row class="main-page-button-row" justify="center">
-                      <v-btn
-                      :loading="loading"
-                        v-if="isloginpage"
-                        class="main-page-button"
-                        @click="goManagePage()"
-                      >
-                        로그인</v-btn
-                      >
+                      <v-btn :loading="loading" v-if="isloginpage" class="main-page-button" @click="goManagePage()"> 로그인</v-btn>
 
-                      <v-btn
-                        v-if="!isloginpage"
-                        class="main-page-button"
-                        primary
-                        @click="submit()"
-                      >
-                        회원가입</v-btn
-                      >
+                      <v-btn v-if="!isloginpage" class="main-page-button" primary @click="submit()"> 회원가입</v-btn>
                     </v-row>
                   </v-col>
                 </v-card-actions>
@@ -202,10 +164,10 @@ export default {
           //showDialog;
         }
       } else {
-           this.loading = true;
+        this.loading = true;
         this.showDialog('Text');
         alert('존재하지 않는 아이디');
-          this.loading = false;
+        this.loading = false;
       }
     },
   },

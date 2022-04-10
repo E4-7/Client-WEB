@@ -4,43 +4,25 @@
       <menu-bar></menu-bar>
       <v-container fill-height fluid>
         <v-row dense>
-          <v-col
-            v-for="(classCard, id) in classCards"
-            :key="id"
-            cols="12"
-            md="3"
-            sm="6"
-          >
-            <v-card
-              class="pa-3"
-              outlined
-              tile
-              style="height: 300px;"
-              color="#1F7087"
-            >
-              <v-toolbar
-                height="65"
-                class="professor-page-class-toolbar"
-                color="primary"
-              >
+          <v-col v-for="(classCard, id) in classCards" :key="id" cols="12" md="3" sm="6">
+            <v-card class="pa-3" outlined tile style="height: 300px;" color="#1F7087">
+              <v-toolbar height="65" class="professor-page-class-toolbar" color="primary">
                 <v-toolbar-title>
                   <strong>{{ classCard.classname }}</strong></v-toolbar-title
                 >
                 <v-spacer></v-spacer>
-                <v-btn icon @click="reveal = !reveal">
+                <v-btn
+                  icon
+                  @click="
+                    reveal = !reveal;
+                    openAlert();
+                  "
+                >
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </v-toolbar>
-              <router-link
-                href="javascript:void(0)"
-                :to="openClassCard(classCard.id)"
-              >
-                <v-card
-                  class="professor-page-cardview"
-                  elevation="2"
-                  outlined
-                  height="200"
-                >
+              <router-link href="javascript:void(0)" :to="openClassCard(classCard.id)">
+                <v-card class="professor-page-cardview" elevation="2" outlined height="200">
                   <v-card-text>
                     <br />
                     <strong class="professor-page-class-name">
@@ -55,11 +37,7 @@
                 </v-card>
               </router-link>
               <v-expand-transition>
-                <v-card
-                  v-if="reveal"
-                  class="transition-fast-in-fast-out v-card--reveal"
-                  style="height: 78%; width: auto;"
-                >
+                <v-card v-if="reveal" class="transition-fast-in-fast-out v-card--reveal" style="height: 78%; width: auto;">
                   <v-card-actions class="pt-0">
                     <v-col justify="center" align-content-lg>
                       <v-btn
@@ -132,18 +110,8 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-dialog
-          transition="dialog-top-transition"
-          max-width="600"
-          v-model="baseTextDialog"
-        >
-          <base-dialog
-            v-if="what === 'A'"
-            toolbar-header-title="시험장 생성"
-            header-title="시험장을 생성해주세요."
-            @hide="hideDialog('Text')"
-            @submit="submitDialog('Text')"
-          >
+        <v-dialog transition="dialog-top-transition" max-width="600" v-model="baseTextDialog">
+          <base-dialog v-if="what === 'A'" toolbar-header-title="시험장 생성" header-title="시험장을 생성해주세요." @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
               <br />
               <br />
@@ -168,66 +136,24 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-menu
-                            ref="menu1"
-                            v-model="menu1"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="auto"
-                          >
+                          <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
                             <!--:return-value.sync="date"-->
                             <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                filled
-                                dense
-                                v-model="date"
-                                label="시험 날짜"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
+                              <v-text-field filled dense v-model="date" label="시험 날짜" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                             </template>
-                            <v-date-picker
-                              v-model="date"
-                              no-title
-                              @input="menu1 = false"
-                            >
+                            <v-date-picker v-model="date" no-title @input="menu1 = false">
                               <v-spacer></v-spacer>
                             </v-date-picker>
                           </v-menu>
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-col cols="12" sm="6" md="4">
-                          <v-menu
-                            ref="menu2"
-                            v-model="menu2"
-                            :close-on-content-click="false"
-                            :nudge-right="40"
-                            transition="scale-transition"
-                            offset-y
-                            max-width="290px"
-                            min-width="290px"
-                          >
+                          <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                             <!-- :return-value.sync="time" -->
                             <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                filled
-                                dense
-                                v-model="time"
-                                label="시험 시작 시각"
-                                prepend-icon="mdi-clock-time-four-outline"
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
+                              <v-text-field filled dense v-model="time" label="시험 시작 시각" prepend-icon="mdi-clock-time-four-outline" v-bind="attrs" v-on="on"></v-text-field>
                             </template>
-                            <v-time-picker
-                              v-if="menu2"
-                              v-model="time"
-                              full-width
-                              @click:minute="$refs.menu.save(time)"
-                            ></v-time-picker>
+                            <v-time-picker v-if="menu2" v-model="time" full-width @click:minute="$refs.menu.save(time)"></v-time-picker>
                           </v-menu>
                         </v-col>
                         <v-spacer></v-spacer>
@@ -236,32 +162,17 @@
                   </v-menu>
                 </v-col>
                 <v-col cols="12" sm="6" md="12">
-                  <v-checkbox
-                    v-model="checkbox"
-                    :label="`오픈북 여부: ${checkbox.toString()}`"
-                  ></v-checkbox>
+                  <v-checkbox v-model="checkbox" :label="`오픈북 여부: ${checkbox.toString()}`"></v-checkbox>
                 </v-col>
               </v-row>
             </template>
           </base-dialog>
-          <base-dialog
-            v-else-if="what === 'B'"
-            toolbar-header-title="조교 관리"
-            header-title="조교 계정 생성"
-            @hide="hideDialog('Text')"
-            @submit="submitDialog('Text')"
-          >
+          <base-dialog v-else-if="what === 'B'" toolbar-header-title="조교 관리" header-title="조교 계정 생성" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
               <data-table></data-table>
-              </template>
+            </template>
           </base-dialog>
-          <base-dialog
-            v-else-if="what === 'C'"
-            toolbar-header-title="수험자 관리"
-            header-title="수험자 관리"
-            @hide="hideDialog('Text')"
-            @submit="submitDialog('Text')"
-          >
+          <base-dialog v-else-if="what === 'C'" toolbar-header-title="수험자 관리" header-title="수험자 관리" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
               <v-text-field placeholder="내용을 입력하세요" />
             </template>
@@ -275,9 +186,7 @@
             @submit="submitDialog('Text')"
           >
             <template v-slot:body>
-              <v-icon style="margin-right:10px;" large color="#41B883"
-                >cloud_upload</v-icon
-              >
+              <v-icon style="margin-right:10px;" large color="#41B883">cloud_upload</v-icon>
               <span class="headline" large>파일 업로드</span>
             </template>
           </base-dialog>
@@ -294,9 +203,7 @@
               <br />
               <h3>시험 과목 지정</h3>
               <v-col cols="12" sm="6" md="12">
-                <v-text-field filled dense>{{
-                  classCards[0].classname
-                }}</v-text-field>
+                <v-text-field filled dense>{{ classCards[0].classname }}</v-text-field>
               </v-col>
               <h3>시험 날짜와 시험 시작시각 지정</h3>
               <v-col cols="12" sm="6" md="12">
@@ -314,66 +221,24 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
-                        <v-menu
-                          ref="menu1"
-                          v-model="menu1"
-                          :close-on-content-click="false"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="auto"
-                        >
+                        <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
                           <!--:return-value.sync="date"-->
                           <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              filled
-                              dense
-                              v-model="date"
-                              label="시험 날짜"
-                              prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                            ></v-text-field>
+                            <v-text-field filled dense v-model="date" label="시험 날짜" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                           </template>
-                          <v-date-picker
-                            v-model="date"
-                            no-title
-                            @input="menu1 = false"
-                          >
+                          <v-date-picker v-model="date" no-title @input="menu1 = false">
                             <v-spacer></v-spacer>
                           </v-date-picker>
                         </v-menu>
                       </v-col>
                       <v-spacer></v-spacer>
                       <v-col cols="12" sm="6" md="4">
-                        <v-menu
-                          ref="menu2"
-                          v-model="menu2"
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          transition="scale-transition"
-                          offset-y
-                          max-width="290px"
-                          min-width="290px"
-                        >
+                        <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                           <!-- :return-value.sync="time" -->
                           <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              filled
-                              dense
-                              v-model="time"
-                              label="시험 시작 시각"
-                              prepend-icon="mdi-clock-time-four-outline"
-                              v-bind="attrs"
-                              v-on="on"
-                            ></v-text-field>
+                            <v-text-field filled dense v-model="time" label="시험 시작 시각" prepend-icon="mdi-clock-time-four-outline" v-bind="attrs" v-on="on"></v-text-field>
                           </template>
-                          <v-time-picker
-                            v-if="menu2"
-                            v-model="time"
-                            full-width
-                            @click:minute="$refs.menu.save(time)"
-                          ></v-time-picker>
+                          <v-time-picker v-if="menu2" v-model="time" full-width @click:minute="$refs.menu.save(time)"></v-time-picker>
                         </v-menu>
                       </v-col>
                       <v-spacer></v-spacer>
@@ -383,14 +248,7 @@
               </v-col>
             </template>
           </base-dialog>
-          <base-dialog
-            v-else
-            toolbar-header-title="삭제"
-            header-title=""
-            footer-submit-title="삭제하기"
-            @hide="hideDialog('Text')"
-            @submit="submitDialog('Text')"
-          >
+          <base-dialog v-else toolbar-header-title="삭제" header-title="" footer-submit-title="삭제하기" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
               <h2>정말로 시험장을 삭제하시겠습니까?</h2>
             </template>
@@ -404,17 +262,14 @@
 <script>
 import MenuBar from '../MenuBar.vue';
 import BaseDialog from '../components/BaseDialog.vue';
-import MemberTable from '../components/DataTable.vue'
-import DataTable from '../components/DataTable.vue'
+import DataTable from '../components/DataTable.vue';
 
 export default {
   name: 'Professor',
-  components: { MenuBar, BaseDialog, MemberTable, DataTable },
+  components: { MenuBar, BaseDialog, DataTable },
   data() {
     return {
-      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
+      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       menu: false,
       modal: false,
       menu2: false,
@@ -447,6 +302,9 @@ export default {
     };
   },
   methods: {
+    openAlert(e) {
+      console.log(e);
+    },
     showDialog(type) {
       this[`base${type}Dialog`] = true;
     },

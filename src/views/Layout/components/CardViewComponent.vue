@@ -2,8 +2,7 @@
   <v-main class="main-page-cardview-layout">
     <v-container fill-height fluid>
       <v-row align-center justify="center">
-        <v-card class="main-page-cardview" min-width="900" min-height="500">
-        </v-card>
+        <v-card class="main-page-cardview" min-width="900" min-height="500"> </v-card>
       </v-row>
     </v-container>
   </v-main>
