@@ -27,12 +27,7 @@
                   <strong>{{ classCard.classname }}</strong></v-toolbar-title
                 >
                 <v-spacer></v-spacer>
-                <v-btn
-                  icon
-                  @click="
-                    reveal = !reveal
-                  "
-                >
+                <v-btn icon @click="reveal = !reveal">
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </v-toolbar>
@@ -71,8 +66,8 @@
                         class="professor-page-card-button"
                         block
                         @click="
-                          showDialog('Text');
                           what = 'B';
+                          showDialog('Text');
                         "
                         >조교 관리</v-btn
                       >
@@ -81,8 +76,8 @@
                         block
                         color="primary"
                         @click="
-                          showDialog('Text');
                           what = 'C';
+                          showDialog('Text');
                         "
                         >수험자 설정</v-btn
                       >
@@ -90,8 +85,8 @@
                         class="professor-page-card-button"
                         block
                         @click="
-                          showDialog('Text');
                           what = 'D';
+                          showDialog('Text');
                         "
                         >시험지 관리</v-btn
                       >
@@ -99,14 +94,18 @@
                         class="professor-page-card-button"
                         block
                         color="primary"
+                        @click="
+                          what = 'F';
+                          showDialog('Text');
+                        "
                         >시험장 수정</v-btn
                       >
                       <v-btn
                         class="professor-page-card-button"
                         block
                         @click="
-                          showDialog('Text');
                           what = 'E';
+                          showDialog('Text');
                         "
                         >삭제</v-btn
                       >
@@ -120,8 +119,8 @@
             <v-card outlined tile style="height: 300px;" color="#1F7087">
               <v-btn
                 @click="
-                  showDialog('Text');
                   what = 'A';
+                  showDialog('Text');
                 "
                 elevation="2"
                 outlined
@@ -253,7 +252,8 @@
             @submit="submitDialog('Text')"
           >
             <template v-slot:body>
-            </template>
+              <data-table></data-table>
+              </template>
           </base-dialog>
           <base-dialog
             v-else-if="what === 'C'"
@@ -282,6 +282,108 @@
             </template>
           </base-dialog>
           <base-dialog
+            v-else-if="what === 'F'"
+            toolbar-header-title="수험장 수정"
+            header-title="수정하고 싶은 수험장 정보를 바꾼 후, 저장을 눌러주세요."
+            footer-hide-title="sadas"
+            @hide="hideDialog('Text')"
+            @submit="submitDialog('Text')"
+          >
+            <template v-slot:body>
+              <br />
+              <br />
+              <h3>시험 과목 지정</h3>
+              <v-col cols="12" sm="6" md="12">
+                <v-text-field filled dense>{{
+                  classCards[0].classname
+                }}</v-text-field>
+              </v-col>
+              <h3>시험 날짜와 시험 시작시각 지정</h3>
+              <v-col cols="12" sm="6" md="12">
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="time"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-menu
+                          ref="menu1"
+                          v-model="menu1"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto"
+                        >
+                          <!--:return-value.sync="date"-->
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              filled
+                              dense
+                              v-model="date"
+                              label="시험 날짜"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            v-model="date"
+                            no-title
+                            @input="menu1 = false"
+                          >
+                            <v-spacer></v-spacer>
+                          </v-date-picker>
+                        </v-menu>
+                      </v-col>
+                      <v-spacer></v-spacer>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-menu
+                          ref="menu2"
+                          v-model="menu2"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="290px"
+                          min-width="290px"
+                        >
+                          <!-- :return-value.sync="time" -->
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              filled
+                              dense
+                              v-model="time"
+                              label="시험 시작 시각"
+                              prepend-icon="mdi-clock-time-four-outline"
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-time-picker
+                            v-if="menu2"
+                            v-model="time"
+                            full-width
+                            @click:minute="$refs.menu.save(time)"
+                          ></v-time-picker>
+                        </v-menu>
+                      </v-col>
+                      <v-spacer></v-spacer>
+                    </v-row>
+                  </template>
+                </v-menu>
+              </v-col>
+            </template>
+          </base-dialog>
+          <base-dialog
             v-else
             toolbar-header-title="삭제"
             header-title=""
@@ -302,10 +404,12 @@
 <script>
 import MenuBar from '../MenuBar.vue';
 import BaseDialog from '../components/BaseDialog.vue';
+import MemberTable from '../components/DataTable.vue'
+import DataTable from '../components/DataTable.vue'
 
 export default {
   name: 'Professor',
-  components: { MenuBar, BaseDialog },
+  components: { MenuBar, BaseDialog, MemberTable, DataTable },
   data() {
     return {
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -321,8 +425,6 @@ export default {
       baseTextDialog: false,
       baseListDialog: false,
       baseImageDialog: false,
-      item: 1,
-      items: [{ text: '피자' }, { text: '라떼' }, { text: '짜글이' }],
       dialog: false, //true : Dialog열림, false : Dialog닫힘
       visible: false,
       reveal: false,
