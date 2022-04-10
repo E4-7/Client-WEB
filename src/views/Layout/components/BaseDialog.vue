@@ -26,21 +26,6 @@
       </template>
     </v-card-actions>
   </v-card>
-
-  <!-- <v-btn dark color="green" @click="showDialog('Text')">
-                      show Text dialog !
-                    </v-btn>
-                    <v-dialog max-width="500" v-model="alertTextDialog">
-                      <alert-dialog
-                        header-title="텍스트"
-                        @hide="hideDialog('Text')"
-                        @submit="submitDialog('Text')"
-                      >
-                        <template v-slot:body>
-                          <v-text-field placeholder="내용을 입력하세요" />
-                        </template>
-                      </alert-dialog>
-                    </v-dialog> -->
 </template>
 
 <script>
