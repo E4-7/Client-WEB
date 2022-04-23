@@ -8,7 +8,27 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
+    redirect: '/base',
+  },
+  {
+    path: '/base',
+    name: 'BaseMain',
     component: Main,
+  },
+  {
+    path: '/student',
+    name: 'Student',
+    component: () => import('@/views/Layout/Student/VerifyIdentity.vue'),
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Layout/Professor/LoginProfessor.vue'),
+  },
+  {
+    path: '/main',
+    name: 'Professor',
+    component: () => import('@/views/Layout/Professor/MainManage.vue'),
   },
   {
     path: '/base',
@@ -26,6 +46,10 @@ const routes = [
         component: () => import('@/views/About.vue'),
       },
     ],
+  },
+  {
+    path: '*',
+    component: () => import('@/views/NotFoundPage.vue'),
   },
 ];
 
