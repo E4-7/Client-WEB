@@ -26,7 +26,7 @@ const routes = [
     component: () => import('@/views/Layout/Professor/LoginProfessor.vue'),
   },
   {
-    path: '/professor',
+    path: '/main',
     name: 'Professor',
     component: () => import('@/views/Layout/Professor/MainManage.vue'),
   },

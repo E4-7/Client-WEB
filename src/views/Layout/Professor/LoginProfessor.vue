@@ -155,7 +155,7 @@ export default {
         if (this.user.password) {
           this.showDialog('Text');
           alert('로그인 ok');
-          this.$router.push('/professor');
+          this.$router.push('/main');
         } else {
           this.loading = true;
           this.showDialog('Text');
