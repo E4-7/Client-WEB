@@ -31,6 +31,11 @@ const routes = [
     component: () => import('@/views/Layout/Professor/MainManage.vue'),
   },
   {
+    path: '/main/:roomId',
+    name: 'ExamRoom',
+    component: () => import('@/views/Layout/ExamRoom.vue'),
+  },
+  {
     path: '/base',
     component: Base,
     meta: { requiresAuth: true },
