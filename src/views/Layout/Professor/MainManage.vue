@@ -11,13 +11,7 @@
                   <strong>{{ classCard.classname }}</strong></v-toolbar-title
                 >
                 <v-spacer></v-spacer>
-                <v-btn
-                  icon
-                  @click="
-                    reveal = !reveal;
-                    openAlert();
-                  "
-                >
+                <v-btn icon @click="openAlert(classCard)">
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </v-toolbar>
@@ -37,7 +31,7 @@
                 </v-card>
               </router-link>
               <v-expand-transition>
-                <v-card v-if="reveal" class="transition-fast-in-fast-out v-card--reveal" style="height: 78%; width: auto;">
+                <v-card v-if="reveal[classCard.id]" class="transition-fast-in-fast-out v-card--reveal" style="height: 78%; width: auto;">
                   <v-card-actions class="pt-0">
                     <v-col justify="center" align-content-lg>
                       <v-btn
@@ -169,7 +163,8 @@
           </base-dialog>
           <base-dialog v-else-if="what === 'B'" toolbar-header-title="조교 관리" header-title="조교 계정 생성" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
-              <data-table></data-table>
+              <v-text-field placeholder="내용을 입력하세요" />
+              <data-table>njknjk</data-table>
             </template>
           </base-dialog>
           <base-dialog v-else-if="what === 'C'" toolbar-header-title="수험자 관리" header-title="수험자 관리" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
@@ -263,6 +258,7 @@
 import MenuBar from '../MenuBar.vue';
 import BaseDialog from '../components/BaseDialog.vue';
 import DataTable from '../components/DataTable.vue';
+import Vue from 'vue';
 
 export default {
   name: 'Professor',
@@ -282,7 +278,7 @@ export default {
       baseImageDialog: false,
       dialog: false, //true : Dialog열림, false : Dialog닫힘
       visible: false,
-      reveal: false,
+      reveal: [true, false, true, false, true, false],
       classCards: [
         {
           id: '1',
@@ -302,8 +298,8 @@ export default {
     };
   },
   methods: {
-    openAlert(e) {
-      console.log(e);
+    openAlert(event) {
+      Vue.set(this.reveal, event.id, !this.reveal[event.id]);
     },
     showDialog(type) {
       this[`base${type}Dialog`] = true;
