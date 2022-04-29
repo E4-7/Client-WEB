@@ -21,6 +21,16 @@ const routes = [
     component: () => import('@/views/Layout/Student/VerifyIdentity.vue'),
   },
   {
+    path: '/set',
+    name: 'Set',
+    component: () => import('@/views/Layout/Student/SetStudent.vue'),
+  },
+  {
+    path: '/test',
+    name: 'StudentExam',
+    component: () => import('@/views/Layout/Student/TestRoom.vue'),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Layout/Professor/LoginProfessor.vue'),

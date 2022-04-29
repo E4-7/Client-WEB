@@ -74,8 +74,13 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
+                사각형에 맞춰 학생증을 맞추고 기다려주세요..
                 <v-card class="mb-12" color="grey lighten-1" height="500px"></v-card>
-                <v-btn class="verify-identity-button" rounded color="primary" @click="e1 = 1">
+
+                <v-btn text @click="e1 = 1">
+                  혹시 학생증이 없거나 인식이 안되나요?
+                </v-btn>
+                <v-btn class="verify-identity-button" rounded color="primary" @click="enterStudentSettingPage()">
                   완료
                 </v-btn>
               </v-stepper-content>
@@ -96,7 +101,12 @@ export default {
     reveal: false,
     rules: [value => !!value || 'Required.', value => (value && value.length >= 3) || 'Min 3 characters'],
   }),
-  methods: {},
+  methods: {
+    enterStudentSettingPage: function() {
+      alert('Hello !22');
+      this.$router.push('/set');
+    },
+  },
 };
 </script>
 
