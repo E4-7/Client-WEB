@@ -124,13 +124,6 @@ export default {
     //   }
     // },
   },
-  mounted() {
-    // 페이지 시작하면은 자동 함수 실행
-    // this.getjobInformation();
-    // this.$nextTick(() => {
-    //   this.currentTitle = this.$route.params.recrumentId;
-    // });
-  },
 };
 </script>
 
