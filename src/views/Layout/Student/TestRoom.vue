@@ -72,6 +72,8 @@
 export default {
   data() {
     return {
+      currentPage: 0,
+      pageCount: 0,
       image: 'test image',
       page: 1,
       msg: '',

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import router from '@/router';
 import createPersistedState from 'vuex-persistedstate';
 //import axios from 'axios';
 
@@ -17,10 +18,30 @@ export default new Vuex.Store({
   state: {
     host: 'http://localhost:8080/',
     databaseURL: 'http://34.64.135.58:3000/api/',
+    user: {
+      id: '1f948424-a1f8-447a-bfac-f66c2d7126f1',
+      email: 'a@e47.com',
+      name: '구나영',
+      status: 1,
+      type: 2,
+    },
   },
   // state 변경하는 유일한 방법이고 이벤트와 유사
   // 첫번째 인자 state / 두번째 인자 payload
-  mutations: {},
+  mutations: {
+    login: function(state, payload) {
+      state.user.id = payload.id;
+      state.user.name = payload.name;
+      state.user.type = payload.Role.type;
+    },
+    // loginCheck: function(state) {
+    //   if (!state.token) {
+    //     router.push({ name: 'login' }).catch(error => {
+    //       console.log(error);
+    //     });
+    //   }
+    // },
+  },
   // mutations와 비슷하지만 비동기 작업 가능
   // 첫번째 인자를 context, context에는 state, commit, dispatch, rootstate / 두번째 인자 payload
   actions: {},
