@@ -278,7 +278,7 @@ export default {
       baseImageDialog: false,
       dialog: false, //true : Dialog열림, false : Dialog닫힘
       visible: false,
-      reveal: [true, false, true, false, true, false],
+      reveal: [false, false, false, false, false, false],
       classCards: [
         {
           id: '1',

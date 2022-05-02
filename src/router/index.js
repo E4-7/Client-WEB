@@ -21,6 +21,16 @@ const routes = [
     component: () => import('@/views/Layout/Student/VerifyIdentity.vue'),
   },
   {
+    path: '/set',
+    name: 'Set',
+    component: () => import('@/views/Layout/Student/SetStudent.vue'),
+  },
+  {
+    path: '/test',
+    name: 'StudentExam',
+    component: () => import('@/views/Layout/Student/TestRoom.vue'),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Layout/Professor/LoginProfessor.vue'),
@@ -29,6 +39,11 @@ const routes = [
     path: '/main',
     name: 'Professor',
     component: () => import('@/views/Layout/Professor/MainManage.vue'),
+  },
+  {
+    path: '/main/:roomId',
+    name: 'ExamRoom',
+    component: () => import('@/views/Layout/ExamRoom.vue'),
   },
   {
     path: '/base',

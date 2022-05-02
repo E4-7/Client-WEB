@@ -35,7 +35,7 @@
               </v-col>
               <div v-show="!isloginpage">
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="name" label="성함" outlined></v-text-field>
+                  <v-text-field v-model="user.name" label="성함" outlined></v-text-field>
                 </v-col>
               </div>
               <div v-show="isloginpage">
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 // import AlertTextDialog from '../components/AlertTextDialog.vue';
 //import Modal from '../components/Modal.vue';
 
@@ -97,7 +98,7 @@ export default {
       password: '',
       name: '',
     },
-    errormessage: '테스튼데 놀라지마세여.. 히히',
+    errormessage: '테스튼',
     information: '관리자 로그인',
     isloginpage: true,
     show: false,
@@ -110,16 +111,22 @@ export default {
     },
   }),
   computed: {
+    ...mapState(['isLogin', 'isLoginError']),
     // vaildation 고민중,, 무거워지려나
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push('Must be valid e-mail');
-      !this.$v.email.required && errors.push('E-mail is required');
-      return errors;
-    },
+    // emailErrors() {
+    //   const errors = [];
+    //   if (!this.$v.email.$dirty) return errors;
+    //   !this.$v.email.email && errors.push('Must be valid e-mail');
+    //   !this.$v.email.required && errors.push('E-mail is required');
+    //   return errors;
+    // },
   },
   methods: {
+    ...mapActions(['loginStore']),
+    $_comm_checkEmail(email) {
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return pattern.test(email);
+    },
     showDialog(mode) {
       console.log('다이알로그 열림');
       this.setDialog.dialog = true;
@@ -146,6 +153,31 @@ export default {
     },
     submit() {
       // 회원가입시 처리해줘야 하는 것
+      // if (this.user.password.length <= 7 || this.user.password.length >= 20) {
+      //   alert('비밀번호는 8~20자로 입력해주세요.');
+      // } // 아이디 중복확인
+      // else {
+
+      //if (this.$_comm_checkEmail(this.user.email)) {}
+      this.$http
+        .post(this.$store.state.databaseURL + 'users', {
+          email: this.user.email,
+          password: this.user.password,
+          name: this.user.name,
+        })
+        .then(res => {
+          if (res.data.success) {
+            alert('회원가입 되셨습니다. 반갑습니다.', res.data);
+            this.gosignin();
+          } else {
+            //alert(res.data.data);
+          }
+        })
+        .catch(error => {
+          console.error('There', error.response.data.data);
+          alert(error.response.data.data);
+        });
+      // }
     },
     goManagePage() {
       // 로그인 되었을 시,
@@ -153,6 +185,19 @@ export default {
       if (this.user.email) {
         //this.user.email == 'a@e4.seven'
         if (this.user.password) {
+          this.$http
+            .post(this.$store.state.databaseURL + 'users/login', {
+              email: this.user.email,
+              password: this.user.password,
+            })
+            .then(res => {
+              if (res.data.success) {
+                alert('No', res.data);
+              } else {
+                alert('로그인 되셨습니다. 반갑습니다.', res.data);
+                this.$router.push('/login');
+              }
+            });
           this.showDialog('Text');
           alert('로그인 ok');
           this.$router.push('/main');
