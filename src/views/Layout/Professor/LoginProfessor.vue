@@ -178,6 +178,7 @@ export default {
             //this.showDialog('Text');
             console.log(res.data.data);
             this.$router.push('/main');
+            //res.cookie('session', this.email);
             this.$store.commit('login');
           }
         })
