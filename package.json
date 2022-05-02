@@ -10,10 +10,14 @@
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix"
   },
   "dependencies": {
+    "agora-rtc-sdk-ng": "^4.11.0",
+    "axios": "^0.27.2",
     "material-design-icons": "^3.0.1",
     "vite-plugin-components": "^0.13.2",
     "vite-plugin-vue2": "^1.4.0",
     "vue": "^2.6.12",
+    "vue-pdf": "^4.3.0",
+    "vue-pdf-app": "^2.1.0",
     "vue-router": "^3.5.2",
     "vuetify": "^2.5.8",
     "vuex": "^3.6.2"

@@ -16,7 +16,16 @@
           </v-col>
           <v-col>
             <v-card min-height="900" min-width="800">
+              <!-- <div style="height: 98vh">
+                <vue-pdf-app :pdf="pdfsrc"></vue-pdf-app>
+              </div> -->
+              <!-- <pdf src="./test.pdf" title="My Beautiful PDF File"></pdf> -->
               시험지
+              <div>
+                <Pdf file="/docs/test.pdf" title="My Beautiful PDF File"></Pdf>
+                <!-- {{ currentPage }} / {{ pageCount }}
+                <pdf src="./test.pdf" @num-pages="pageCount = $event" @page-loaded="currentPage = $event"></pdf> -->
+              </div>
             </v-card>
           </v-col>
           <v-col style="padding:10px;">
@@ -69,9 +78,19 @@
 </template>
 
 <script>
+//import VuePdfApp from 'vue-pdf-app';
+import Pdf from '@/components/Pdf.vue';
+//import pdf from 'vue-pdf';
 export default {
+  components: {
+    Pdf,
+    //VuePdfApp,
+  },
   data() {
     return {
+      pdfsrc: 'test.pdf',
+      currentPage: 0,
+      pageCount: 0,
       image: 'test image',
       page: 1,
       msg: '',
