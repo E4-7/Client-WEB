@@ -166,27 +166,25 @@ export default {
     },
     goManagePage() {
       //this.user.email == 'a@e4.seven'
-      // 로그인 되었을 시,
+      // 로그인,
       this.$http
         .post(this.$store.state.databaseURL + 'users/login', {
           email: this.user.email,
           password: this.user.password,
         })
         .then(res => {
-          if (res.data.success) {
+          if (res.data.data.name) {
             alert('로그인 되셨습니다. 반갑습니다.', res.data);
             //this.showDialog('Text');
             console.log(res.data.data);
-            this.$store.commit('login', res.data.data);
             this.$router.push('/main');
-          } else {
-            alert(res.data.data);
+            this.$store.commit('login');
           }
         })
         .catch(error => {
-          //console.error('There', error.response.data.data);
+          console.error('There', error.response.data.data);
           this.errormessage = error.response.data.data;
-          alert(error.response.data.data);
+          alert('??' + error.response.data.data);
         });
     },
   },

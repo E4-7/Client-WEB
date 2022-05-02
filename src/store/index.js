@@ -23,7 +23,9 @@ export default new Vuex.Store({
       email: 'a@e47.com',
       name: '구나영',
       status: 1,
-      type: 2,
+      rule: {
+        type: 2,
+      },
     },
   },
   // state 변경하는 유일한 방법이고 이벤트와 유사
@@ -33,6 +35,25 @@ export default new Vuex.Store({
       state.user.id = payload.id;
       state.user.name = payload.name;
       state.user.type = payload.Role.type;
+    },
+    logout: function(state) {
+      if (state.user) {
+        alert(state.user);
+        state.user.id = '';
+        state.user.email = '';
+        state.user.name = '';
+        state.user.status = '';
+        state.user.rule.type = '';
+
+        // state.user = {
+        //   id: '1f948424-a1f8-447a-bfac-f66c2d7126f1',
+        //   email: 'a@e47.com',
+        //   name: '구나영',
+        //   status: 1,
+        //   type: 2,
+        // };
+        alert('로그아웃 되었음');
+      }
     },
     // loginCheck: function(state) {
     //   if (!state.token) {
@@ -44,7 +65,13 @@ export default new Vuex.Store({
   },
   // mutations와 비슷하지만 비동기 작업 가능
   // 첫번째 인자를 context, context에는 state, commit, dispatch, rootstate / 두번째 인자 payload
-  actions: {},
+  actions: {
+    // signOut({ commit, state }) {
+    //   const mb_name = state.user.name;
+    //   commit(state.user, null);
+    //   return mb_name;
+    // },
+  },
   // Computed 라고 봄.
   modules: {},
 });

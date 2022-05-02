@@ -8,7 +8,7 @@
           <span>7</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn text color="black">
+        <v-btn @click="logout()" text color="black">
           <span>Log Out</span>
           <v-icon right>exit_to_app</v-icon>
         </v-btn>
@@ -18,13 +18,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {};
   },
-  computed: mapState(['menus', 'colors']),
+  methods: {
+    ...mapActions(['logout']),
+    logout() {
+      this.$store.commit('logout');
+      this.$router.push('/login');
+    },
+  },
 };
 </script>
 

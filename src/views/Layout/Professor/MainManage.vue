@@ -325,10 +325,27 @@ export default {
     getClassList() {
       // 데이터 가져오기
     },
+    getClassInformation() {
+      this.$http
+        .get(this.$store.state.databaseURL + 'exam/')
+        .then(Response => {
+          console.log('respnese');
+          console.log(Response.data);
+          this.classInformation = Response.data;
+        })
+        .catch(Error => {
+          console.log('Error');
+          console.log(Error);
+        });
+    },
   },
   mounted() {
     // 페이지 시작하면은 자동 함수 실행
-    this.getClassList();
+    this.getClassInformation();
+    console.log(this.$store.state.user);
+    // this.$nextTick(() => {
+    //   this.currentTitle = this.$route.params.recrumentId;
+    // });
   },
 };
 </script>
