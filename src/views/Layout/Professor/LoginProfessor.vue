@@ -112,14 +112,6 @@ export default {
   }),
   computed: {
     ...mapState(['isLogin', 'isLoginError']),
-    // vaildation 고민중,, 무거워지려나
-    // emailErrors() {
-    //   const errors = [];
-    //   if (!this.$v.email.$dirty) return errors;
-    //   !this.$v.email.email && errors.push('Must be valid e-mail');
-    //   !this.$v.email.required && errors.push('E-mail is required');
-    //   return errors;
-    // },
   },
   methods: {
     ...mapActions(['loginStore']),
@@ -152,13 +144,6 @@ export default {
       this.information = '관리자 로그인';
     },
     submit() {
-      // 회원가입시 처리해줘야 하는 것
-      // if (this.user.password.length <= 7 || this.user.password.length >= 20) {
-      //   alert('비밀번호는 8~20자로 입력해주세요.');
-      // } // 아이디 중복확인
-      // else {
-
-      //if (this.$_comm_checkEmail(this.user.email)) {}
       this.$http
         .post(this.$store.state.databaseURL + 'users', {
           email: this.user.email,
@@ -170,50 +155,37 @@ export default {
             alert('회원가입 되셨습니다. 반갑습니다.', res.data);
             this.gosignin();
           } else {
-            //alert(res.data.data);
+            alert(res.data.data);
+          }
+        })
+        .catch(error => {
+          //console.error('There', error.response.data.data);
+          this.errormessage = error.response.data.data;
+          //alert(error.response.data.data);
+        });
+    },
+    goManagePage() {
+      //this.user.email == 'a@e4.seven'
+      // 로그인,
+      this.$http
+        .post(this.$store.state.databaseURL + 'users/login', {
+          email: this.user.email,
+          password: this.user.password,
+        })
+        .then(res => {
+          if (res.data.data.name) {
+            alert('로그인 되셨습니다. 반갑습니다.', res.data);
+            //this.showDialog('Text');
+            console.log(res.data.data);
+            this.$router.push('/main');
+            this.$store.commit('login');
           }
         })
         .catch(error => {
           console.error('There', error.response.data.data);
-          alert(error.response.data.data);
+          this.errormessage = error.response.data.data;
+          alert('??' + error.response.data.data);
         });
-      // }
-    },
-    goManagePage() {
-      // 로그인 되었을 시,
-      // 서버랑 통신하는 거
-      if (this.user.email) {
-        //this.user.email == 'a@e4.seven'
-        if (this.user.password) {
-          this.$http
-            .post(this.$store.state.databaseURL + 'users/login', {
-              email: this.user.email,
-              password: this.user.password,
-            })
-            .then(res => {
-              if (res.data.success) {
-                alert('No', res.data);
-              } else {
-                alert('로그인 되셨습니다. 반갑습니다.', res.data);
-                this.$router.push('/login');
-              }
-            });
-          this.showDialog('Text');
-          alert('로그인 ok');
-          this.$router.push('/main');
-        } else {
-          this.loading = true;
-          this.showDialog('Text');
-          alert('비번 틀림');
-          this.loading = false;
-          //showDialog;
-        }
-      } else {
-        this.loading = true;
-        this.showDialog('Text');
-        alert('존재하지 않는 아이디');
-        this.loading = false;
-      }
     },
   },
 };

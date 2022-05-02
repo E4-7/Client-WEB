@@ -72,6 +72,8 @@
 export default {
   data() {
     return {
+      currentPage: 0,
+      pageCount: 0,
       image: 'test image',
       page: 1,
       msg: '',
@@ -121,13 +123,6 @@ export default {
     //     console.log(err);
     //   }
     // },
-  },
-  mounted() {
-    // 페이지 시작하면은 자동 함수 실행
-    // this.getjobInformation();
-    // this.$nextTick(() => {
-    //   this.currentTitle = this.$route.params.recrumentId;
-    // });
   },
 };
 </script>
