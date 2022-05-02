@@ -1,18 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import router from '@/router';
-import createPersistedState from 'vuex-persistedstate';
+//import router from '@/router';
+//import createPersistedState from 'vuex-persistedstate';
 //import axios from 'axios';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  plugins: [
-    createPersistedState({
-      storage: window.sessionStorage,
-      //sessionStorage.clear();사용자가 수동으로 로그 아웃 할 때 사용합니다 .
-    }),
-  ],
+  // plugins: [
+  //   createPersistedState({
+  //     storage: window.sessionStorage,
+  //     //sessionStorage.clear();사용자가 수동으로 로그 아웃 할 때 사용합니다 .
+  //   }),
+  // ],
   // 데이터, View와 직접적으로 연결되어 있는 Model
   // 변경 불가능하고 mutations을 통해서만 변경 가능, 반응적으로 View 업데이트
   state: {

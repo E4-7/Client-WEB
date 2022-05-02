@@ -182,6 +182,11 @@ export default {
           } else {
             alert(res.data.data);
           }
+        })
+        .catch(error => {
+          //console.error('There', error.response.data.data);
+          this.errormessage = error.response.data.data;
+          alert(error.response.data.data);
         });
     },
   },
