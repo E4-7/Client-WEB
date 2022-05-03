@@ -327,7 +327,7 @@ export default {
     },
     getClassInformation() {
       this.$http
-        .get(this.$store.state.databaseURL + 'exam/')
+        .get(this.$store.state.databaseURL + 'exams/')
         .then(Response => {
           console.log('respnese');
           console.log(Response.data);

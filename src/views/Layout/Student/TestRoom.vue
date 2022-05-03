@@ -17,6 +17,10 @@
           <v-col>
             <v-card min-height="900" min-width="800">
               시험지
+              <button ref="pdfRef" :disabled="page <= 1" @click="page--">❮</button>
+              {{ page }} / {{ pageCount }}
+              <button :disabled="page >= pageCount" @click="page++">❯</button>
+              <vue-pdf-embed ref="pdfRef" :page="page" @rendered="handleDocumentRender" :source="source1" />
             </v-card>
           </v-col>
           <v-col style="padding:10px;">
@@ -69,13 +73,19 @@
 </template>
 
 <script>
+import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
+
 export default {
+  components: {
+    VuePdfEmbed,
+  },
   data() {
     return {
-      currentPage: 0,
-      pageCount: 0,
-      image: 'test image',
       page: 1,
+      pageCount: 1,
+      source1: '/docs/a.pdf',
+      currentPage: 0,
+      image: 'test image',
       msg: '',
       classInformation: {
         title: '알고리즘',
@@ -96,6 +106,9 @@ export default {
     // this.path.current = document.location.pathname;
   },
   methods: {
+    handleDocumentRender() {
+      this.pageCount = this.$refs.pdfRef.pageCount;
+    },
     submitMessage() {
       if (this.msg) {
         this.$emit('submitMessage', this.msg);
