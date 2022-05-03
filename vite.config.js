@@ -6,6 +6,11 @@ import path from 'path';
  * @type {import('vite').UserConfig}
  */
 module.exports = {
+  pwa: {
+    workboxOptions: {
+      exclude: [/_redirects/],
+    },
+  },
   resolve: {
     alias: [
       {
