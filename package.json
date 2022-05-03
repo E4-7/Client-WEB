@@ -4,19 +4,23 @@
   "scripts": {
     "start:dev": "vite --mode development",
     "start:prod": "vite --mode production",
+    "build": "vite build",
     "build:dev": "vite build --mode development",
     "build:prod": "vite build --mode production",
     "preview": "vite preview",
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "material-design-icons": "^3.0.1",
     "vite-plugin-components": "^0.13.2",
     "vite-plugin-vue2": "^1.4.0",
     "vue": "^2.6.12",
+    "vue-pdf-embed": "^1.1.1",
     "vue-router": "^3.5.2",
     "vuetify": "^2.5.8",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@vue/eslint-config-prettier": "^5.0.0",
