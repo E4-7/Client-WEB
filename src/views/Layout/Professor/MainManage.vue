@@ -8,30 +8,29 @@
             <v-card class="pa-3" outlined tile style="height: 300px;" color="#1F7087">
               <v-toolbar height="65" class="professor-page-class-toolbar" color="primary">
                 <v-toolbar-title>
-                  <strong>{{ classCard.classname }}</strong></v-toolbar-title
+                  <strong>{{ classCard.Exam.name }}</strong></v-toolbar-title
                 >
                 <v-spacer></v-spacer>
-                <v-btn icon @click="openAlert(classCard)">
+                <v-btn icon @click="openAlert(classCard.Exam)">
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </v-toolbar>
-              <router-link href="javascript:void(0)" :to="openClassCard(classCard.id)">
+              <router-link href="javascript:void(0)" :to="openClassCard(classCard.Exam.id)">
                 <v-card class="professor-page-cardview" elevation="2" outlined height="200">
                   <v-card-text>
                     <br />
                     <strong class="professor-page-class-name">
-                      {{ classCard.classname }}
+                      {{ classCard.Exam.name }}
                     </strong>
                     <br />
                     <br />
-                    <p>{{ classCard.date }}</p>
-                    <p>{{ classCard.time }}</p>
-                    <p>[ 오픈북 여부 : {{ classCard.openbook }} ]</p>
+                    <p>{{ classCard.Exam.exam_time }}</p>
+                    <p>[ 오픈북 여부 : {{ classCard.Exam.is_openbook }} ]</p>
                   </v-card-text>
                 </v-card>
               </router-link>
               <v-expand-transition>
-                <v-card v-if="reveal[classCard.id]" class="transition-fast-in-fast-out v-card--reveal" style="height: 78%; width: auto;">
+                <v-card v-if="reveal[classCard.Exam.id]" class="transition-fast-in-fast-out v-card--reveal" style="height: 78%; width: auto;">
                   <v-card-actions class="pt-0">
                     <v-col justify="center" align-content-lg>
                       <v-btn
@@ -112,7 +111,7 @@
               <v-row>
                 <h3>시험 과목 지정</h3>
                 <v-col cols="12" sm="6" md="12">
-                  <v-text-field label="과목명" filled dense></v-text-field>
+                  <v-text-field v-model="input_class_name" label="과목명" filled dense></v-text-field>
                 </v-col>
                 <h3>시험 날짜와 시험 시작시각 지정</h3>
                 <v-col cols="12" sm="6" md="12">
@@ -267,8 +266,10 @@ export default {
     return {
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       menu: false,
+      menu1: false,
       modal: false,
       menu2: false,
+      input_class_name: '',
       time: '00:00',
       modal2: false,
       what: 'B',
@@ -278,27 +279,31 @@ export default {
       baseImageDialog: false,
       dialog: false, //true : Dialog열림, false : Dialog닫힘
       visible: false,
-      reveal: [false, false, false, false, false, false],
+      reveal: [],
       classCards: [
-        {
-          id: '1',
-          classname: '운영체제',
-          date: '2022.04.15',
-          time: '16:00',
-          openbook: true,
-        },
-        {
-          id: '2',
-          classname: '데이터베이스------------------',
-          date: '2022.04.16',
-          time: '12:00',
-          openbook: false,
-        },
+        // {
+        //   id: '1',
+        //   name: '운영체제',
+        //   date: '2022.04.15',
+        //   time: '16:00',
+        //   openbook: true,
+        // },
+        // {
+        //   id: '2',
+        //   name: '데이터베이스------------------',
+        //   date: '2022.04.16',
+        //   time: '12:00',
+        //   openbook: false,
+        // },
       ],
     };
   },
   methods: {
     openAlert(event) {
+      console.log('this.reveal');
+      console.log(this.reveal);
+      console.log('event.id');
+      console.log(event.id);
       Vue.set(this.reveal, event.id, !this.reveal[event.id]);
     },
     showDialog(type) {
@@ -309,6 +314,25 @@ export default {
     },
     submitDialog(type) {
       console.log('submit 완료!');
+      if (this.what === 'A') {
+        console.log('time');
+        console.log(this.date);
+        console.log(this.time);
+        this.$http
+          .post('exams', {
+            name: this.input_class_name,
+            exam_time: this.date + 'T' + this.time + ':00+09:00', //'2021-07-17T14:30:00+09:00',
+            is_openbook: this.checkbox,
+          })
+          .then(res => {
+            alert('시험장 추가 완료');
+            console.log(res);
+          })
+          .catch(error => {
+            alert(error.response.data.data);
+          });
+      }
+      this.getClassInformation();
       this.hideDialog(type);
     },
     openDialog() {
@@ -322,16 +346,32 @@ export default {
     openClassCard: function(title) {
       return document.location.pathname + '/' + title;
     },
-    getClassList() {
-      // 데이터 가져오기
+    initClassList() {
+      var aJson = new Object();
+
+      for (let i = 0; i < this.classCards.length; i++) {
+        aJson[this.classCards[i].Exam.id] = false;
+        this.reveal.push(JSON.stringify(aJson));
+        // this.reveal.push({
+        //   this.classCards[i].Exam.id = false
+        //   }
+        //   );
+      }
+      console.log(this.reveal);
     },
     getClassInformation() {
       this.$http
-        .get(this.$store.state.databaseURL + 'exams/')
+        .get('exams/')
         .then(Response => {
           console.log('respnese');
-          console.log(Response.data);
-          this.classInformation = Response.data;
+          console.log('this.classInformation');
+          console.log(this.classCards);
+          console.log(Response.data.data);
+          this.classCards = Response.data.data;
+          this.initClassList();
+
+          console.log('this.classCards');
+          console.log(this.classCards);
         })
         .catch(Error => {
           console.log('Error');
@@ -342,7 +382,6 @@ export default {
   mounted() {
     // 페이지 시작하면은 자동 함수 실행
     this.getClassInformation();
-    console.log(this.$store.state.user);
     // this.$nextTick(() => {
     //   this.currentTitle = this.$route.params.recrumentId;
     // });
