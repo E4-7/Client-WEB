@@ -315,9 +315,6 @@ export default {
     submitDialog(type) {
       console.log('submit 완료!');
       if (this.what === 'A') {
-        console.log('time');
-        console.log(this.date);
-        console.log(this.time);
         this.$http
           .post('exams', {
             name: this.input_class_name,
@@ -325,14 +322,17 @@ export default {
             is_openbook: this.checkbox,
           })
           .then(res => {
+            this.classCards.push({
+              Exam: res.data.data,
+              created_at: res.data.data.created_at,
+            });
             alert('시험장 추가 완료');
-            console.log(res);
           })
           .catch(error => {
             alert(error.response.data.data);
           });
       }
-      this.getClassInformation();
+      //this.getClassInformation();
       this.hideDialog(type);
     },
     openDialog() {
@@ -346,16 +346,17 @@ export default {
     openClassCard: function(title) {
       return document.location.pathname + '/' + title;
     },
-    initClassList() {
+    initClassList(response) {
       var aJson = new Object();
-
       for (let i = 0; i < this.classCards.length; i++) {
+        console.log('response');
+        console.log(response);
+        console.log('this._classCards');
+        console.log(this._classCards);
+        console.log(this.classCards);
+        Vue.set(this._classCards, i, response);
         aJson[this.classCards[i].Exam.id] = false;
         this.reveal.push(JSON.stringify(aJson));
-        // this.reveal.push({
-        //   this.classCards[i].Exam.id = false
-        //   }
-        //   );
       }
       console.log(this.reveal);
     },
@@ -368,10 +369,12 @@ export default {
           console.log(this.classCards);
           console.log(Response.data.data);
           this.classCards = Response.data.data;
-          this.initClassList();
+          this.initClassList(Response.data.data);
 
           console.log('this.classCards');
           console.log(this.classCards);
+
+          Vue.set(this.classCards, 'id', Response.data.data);
         })
         .catch(Error => {
           console.log('Error');
