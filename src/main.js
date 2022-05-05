@@ -5,7 +5,14 @@ import store from './store';
 import axios from 'axios';
 import vuetify from './plugins/vuetify';
 
-Vue.prototype.$http = axios;
+const apiBaseURL = 'https://api.e47app.click/api/';
+const instance = axios.create({
+  // .. congigure axios baseURL
+  baseURL: `${apiBaseURL}`,
+});
+instance.defaults.withCredentials = true;
+
+Vue.prototype.$http = instance;
 
 new Vue({
   vuetify,
