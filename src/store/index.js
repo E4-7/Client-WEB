@@ -17,7 +17,6 @@ export default new Vuex.Store({
   // 변경 불가능하고 mutations을 통해서만 변경 가능, 반응적으로 View 업데이트
   state: {
     host: 'http://localhost:8080/',
-    databaseURL: 'http://34.64.135.58:3000/api/',
     user: {
       id: '1f948424-a1f8-447a-bfac-f66c2d7126f1',
       email: 'a@e47.com',
@@ -32,9 +31,10 @@ export default new Vuex.Store({
   // 첫번째 인자 state / 두번째 인자 payload
   mutations: {
     login: function(state, payload) {
-      state.user.id = payload.id;
-      state.user.name = payload.name;
-      state.user.type = payload.Role.type;
+      state.user = payload;
+      // state.user.id = payload.id;
+      // state.user.name = payload.name;
+      // state.user.type = payload.Role.type;
     },
     logout: function(state) {
       if (state.user) {
