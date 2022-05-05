@@ -1,6 +1,5 @@
 <template v-slot:activator="{ on, attrs }">
   <v-app>
-    <v-alert type="error">{{ errormessage }}</v-alert>
     <v-main class="main-page-cardview-layout">
       <v-container fill-height fluid>
         <v-row align-center justify="center">
@@ -98,7 +97,6 @@ export default {
       password: '',
       name: '',
     },
-    errormessage: '테스튼',
     information: '관리자 로그인',
     isloginpage: true,
     show: false,
@@ -145,7 +143,7 @@ export default {
     },
     submit() {
       this.$http
-        .post(this.$store.state.databaseURL + 'users', {
+        .post('users', {
           email: this.user.email,
           password: this.user.password,
           name: this.user.name,
@@ -160,32 +158,30 @@ export default {
         })
         .catch(error => {
           //console.error('There', error.response.data.data);
-          this.errormessage = error.response.data.data;
-          //alert(error.response.data.data);
+          alert(error.response.data.data);
         });
     },
     goManagePage() {
       //this.user.email == 'a@e4.seven'
       // 로그인,
+      console.log('check');
       this.$http
-        .post(this.$store.state.databaseURL + 'users/login', {
+        .post('users/login', {
           email: this.user.email,
           password: this.user.password,
         })
         .then(res => {
           if (res.data.data.name) {
             alert('로그인 되셨습니다. 반갑습니다.', res.data);
-            //this.showDialog('Text');
-            console.log(res.data.data);
+            this.$store.commit('login', res.data.data);
             this.$router.push('/main');
             //res.cookie('session', this.email);
-            this.$store.commit('login');
           }
         })
         .catch(error => {
-          console.error('There', error.response.data.data);
-          this.errormessage = error.response.data.data;
-          alert('??' + error.response.data.data);
+          console.log(error);
+          console.error('error cat', error.response.data.data);
+          alert(error.response.data.data);
         });
     },
   },
