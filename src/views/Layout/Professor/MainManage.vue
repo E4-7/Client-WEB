@@ -111,7 +111,7 @@
               <v-row>
                 <h3>시험 과목 지정</h3>
                 <v-col cols="12" sm="6" md="12">
-                  <v-text-field label="과목명" filled dense></v-text-field>
+                  <v-text-field label="과목명" filled dense v-model="input_class_name"></v-text-field>
                 </v-col>
                 <h3>시험 날짜와 시험 시작시각 지정</h3>
                 <v-col cols="12" sm="6" md="12">
@@ -186,14 +186,18 @@
                   <v-spacer></v-spacer>
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="이름으로 검색" single-line hide-details></v-text-field>
                 </v-card-title>
-                <v-data-table :headers="headers" :items="datasets" :search="search"></v-data-table>
+                <v-data-table :headers="headers" :items="datasets" :search="search">
+                  <template v-slot:item.action="{ item }">
+                    <v-btn @click="deleteAssistant(item)">삭제하기</v-btn>
+                  </template>
+                </v-data-table>
               </v-card>
               <!-- <data-table>njknjk</data-table> -->
             </template>
           </base-dialog>
           <base-dialog v-else-if="what === 'C'" toolbar-header-title="수험자 관리" header-title="수험자 관리" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
-              <v-text-field placeholder="내용을 입력하세요" />
+              <input type="file" @change="getFile($event)" />
             </template>
           </base-dialog>
           <base-dialog
@@ -305,7 +309,7 @@ export default {
           value: 'name',
         },
         { text: '이메일', value: 'email' },
-        { text: '', value: '.', sortable: false },
+        { text: '', value: 'action', sortable: false },
       ],
       datasets: [],
       file: null,
@@ -341,6 +345,7 @@ export default {
         })
         .then(res => {
           this.datasets.push({
+            id: res.data.data.id,
             name: res.data.data.name,
             email: res.data.data.email,
           });
@@ -350,9 +355,26 @@ export default {
           alert(error.response.data.data);
         });
     },
+    deleteAssistant(item) {
+      console.log('item');
+      console.log(item.id);
+      const uuid = this.classCards[this.currentClassId].Exam.id;
+      this.$http
+        .delete(`exams/${uuid}/assistant/${item.id}`)
+        .then(res => {
+          console.log(res);
+          this.datasets.splice(item.id, 1);
+          alert('삭제완료');
+        })
+        .catch(error => {
+          alert(error);
+          alert(error.response.data.data);
+        });
+    },
     async getFile(event) {
       console.log(event);
       this.file = event.target.files[0];
+      console.log(this.file);
     },
     openAlert(event) {
       Vue.set(this.reveal, event.id, !this.reveal[event.id]);
@@ -365,30 +387,40 @@ export default {
       }
       if (this.what === 'B') {
         const uuid = this.classCards[this.currentClassId].Exam.id;
-        await this.$http
-          .get(`exams/${uuid}`)
-          .then(Response => {
-            this.datasets = [];
-            for (let i = 0; i < Response.data.data.length; i++) {
-              this.datasets.push({
-                name: Response.data.data[i].User.name,
-                email: Response.data.data[i].User.email,
-              });
-            }
-          })
-          .catch(Error => {
-            console.log(Error);
-          });
+        const response = await this.$http.get(`exams/${uuid}`);
+        this.datasets = [];
+        for (let i = 0; i < response.data.data.length; i++) {
+          if (response.data.data[i].User != null) {
+            this.datasets.push({
+              id: response.data.data[i].User.id,
+              name: response.data.data[i].User.name,
+              email: response.data.data[i].User.email,
+            });
+          }
+        }
+        // .then(Response => {
+        //   this.datasets = [];
+        //   console.log(Response);
+        //   for (let i = 0; i < Response.data.data.length; i++) {
+        //     this.datasets.push({
+        //       name: Response.data.data[i].User.name,
+        //       email: Response.data.data[i].User.email,
+        //     });
+        //   }
+        // })
+        // .catch(Error => {
+        //   console.log(Error);
+        // });
       }
     },
     hideDialog(type) {
       this[`base${type}Dialog`] = false;
     },
     async buttonClickCaseManage() {
-      const uuid = this.classCards[this.currentClassId].Exam.id;
       if (this.what === 'A') {
+        console.log(this.input_class_name);
         // 시험장 추가
-        this.$http
+        await this.$http
           .post('exams', {
             name: this.input_class_name,
             exam_time: this.date + 'T' + this.time + ':00+09:00', //'2021-07-17T14:30:00+09:00',
@@ -406,6 +438,8 @@ export default {
           });
       } else if (this.what === 'F') {
         // 시험장 수정
+
+        const uuid = this.classCards[this.currentClassId].Exam.id;
         this.$http
           .patch(`exams/${uuid}`, {
             name: this.input_class_name,
@@ -433,6 +467,7 @@ export default {
           const formData = new FormData();
           formData.append('file', this.file);
 
+          const uuid = this.classCards[this.currentClassId].Exam.id;
           //const uuid = this.classCards[this.currentClassId].Exam.id;
           await this.$http
             .post(`/exams/${uuid}/upload`, formData, {
@@ -458,7 +493,9 @@ export default {
             examId: this.input_class_name,
           })
           .then(_ => {
-            this.classCards.splice(this.currentClassId, 1);
+            console.log('.........................');
+            console.log(this.currentClassId);
+            this.classCards.splice(this.currentClassId);
             alert('시험장 삭제 완료');
           })
           .catch(error => {
