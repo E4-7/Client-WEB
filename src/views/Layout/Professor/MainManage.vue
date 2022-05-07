@@ -183,7 +183,6 @@
                     </v-col>
                   </v-row>
                   <h5>조교 계정 목록</h5>
-
                   <v-spacer></v-spacer>
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="이름으로 검색" single-line hide-details></v-text-field>
                 </v-card-title>
@@ -306,15 +305,9 @@ export default {
           value: 'name',
         },
         { text: '이메일', value: 'email' },
-        { text: '비밀번호', value: 'password', sortable: false },
+        { text: '', value: '.', sortable: false },
       ],
-      datasets: [
-        {
-          name: 'Frozen Yogurt',
-          email: 1549,
-          password: 6.0,
-        },
-      ],
+      datasets: [],
       file: null,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       menu: false,
@@ -350,7 +343,6 @@ export default {
           this.datasets.push({
             name: res.data.data.name,
             email: res.data.data.email,
-            password: this.inputForm.password,
           });
           console.log(res);
         })
@@ -365,11 +357,30 @@ export default {
     openAlert(event) {
       Vue.set(this.reveal, event.id, !this.reveal[event.id]);
     },
-    showDialog(type, id) {
+    async showDialog(type, id) {
       this[`base${type}Dialog`] = true;
       console.log(id);
       if (typeof id === 'number') {
         this.currentClassId = id;
+      }
+      if (this.what === 'B') {
+        const uuid = this.classCards[this.currentClassId].Exam.id;
+        await this.$http
+          .get(`exams/${uuid}`)
+          .then(Response => {
+            console.log(Response);
+
+            for (let i = 0; i < Response.data.data.length; i++) {
+              this.datasets.push({
+                name: Response.data.data[i].User.name,
+                email: Response.data.data[i].User.email,
+              });
+            }
+          })
+          .catch(Error => {
+            console.log('Error');
+            console.log(Error);
+          });
       }
     },
     hideDialog(type) {
@@ -461,14 +472,6 @@ export default {
       console.log('submit 완료!');
       this.buttonClickCaseManage(id);
       this.hideDialog(type);
-    },
-    openDialog() {
-      //Dialog 열리는 동작
-      this.dialog = true;
-    },
-    closeDialog() {
-      //Dialog 닫히는 동작
-      this.dialog = false;
     },
     openClassCard: function(title) {
       return document.location.pathname + '/' + title;
