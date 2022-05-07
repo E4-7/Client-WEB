@@ -162,8 +162,34 @@
           </base-dialog>
           <base-dialog v-else-if="what === 'B'" toolbar-header-title="조교 관리" header-title="조교 계정 생성" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
-              <v-text-field placeholder="내용을 입력하세요" />
-              <data-table>njknjk</data-table>
+              <v-card>
+                <v-card-title>
+                  <v-row>
+                    <v-col>
+                      <h5>이름</h5>
+                      <v-text-field v-model="inputForm.name" placeholder="조교 이름" />
+                    </v-col>
+                    <v-col>
+                      <h5>이메일</h5>
+                      <v-text-field v-model="inputForm.email" placeholder="조교 이메일" />
+                    </v-col>
+                    <v-col>
+                      <h5>비밀번호</h5>
+                      <v-text-field v-model="inputForm.password" placeholder="조교 비밀번호" />
+                    </v-col>
+                    <v-col>
+                      <h5>.</h5>
+                      <v-btn @click="saveAssistant()">추가하기</v-btn>
+                    </v-col>
+                  </v-row>
+                  <h5>조교 계정 목록</h5>
+
+                  <v-spacer></v-spacer>
+                  <v-text-field v-model="search" append-icon="mdi-magnify" label="이름으로 검색" single-line hide-details></v-text-field>
+                </v-card-title>
+                <v-data-table :headers="headers" :items="datasets" :search="search"></v-data-table>
+              </v-card>
+              <!-- <data-table>njknjk</data-table> -->
             </template>
           </base-dialog>
           <base-dialog v-else-if="what === 'C'" toolbar-header-title="수험자 관리" header-title="수험자 관리" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
@@ -181,7 +207,6 @@
           >
             <template v-slot:body>
               <v-icon style="margin-right:10px;" large color="#41B883">cloud_upload</v-icon>
-              <span class="headline" large>파일 업로드(PDF만 가능)</span>
               <input type="file" accept="application/pdf" @change="getFile($event)" />
             </template>
           </base-dialog>
@@ -260,14 +285,36 @@
 <script>
 import MenuBar from '../MenuBar.vue';
 import BaseDialog from '../components/BaseDialog.vue';
-import DataTable from '../components/DataTable.vue';
+//import DataTable from '../components/DataTable.vue';
 import Vue from 'vue';
 
 export default {
   name: 'Professor',
-  components: { MenuBar, BaseDialog, DataTable },
+  components: { MenuBar, BaseDialog }, //, DataTable },
   data() {
     return {
+      inputForm: {
+        name: '',
+        email: '',
+        password: '',
+      },
+      search: '',
+      headers: [
+        {
+          text: '이름',
+          align: 'start',
+          value: 'name',
+        },
+        { text: '이메일', value: 'email' },
+        { text: '비밀번호', value: 'password', sortable: false },
+      ],
+      datasets: [
+        {
+          name: 'Frozen Yogurt',
+          email: 1549,
+          password: 6.0,
+        },
+      ],
       file: null,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       menu: false,
@@ -291,6 +338,26 @@ export default {
     };
   },
   methods: {
+    async saveAssistant() {
+      const uuid = this.classCards[this.currentClassId].Exam.id;
+      this.$http
+        .post(`exams/${uuid}/assistant`, {
+          email: this.inputForm.email,
+          name: this.inputForm.name,
+          password: this.inputForm.password,
+        })
+        .then(res => {
+          this.datasets.push({
+            name: res.data.data.name,
+            email: res.data.data.email,
+            password: this.inputForm.password,
+          });
+          console.log(res);
+        })
+        .catch(error => {
+          alert(error.response.data.data);
+        });
+    },
     async getFile(event) {
       console.log(event);
       this.file = event.target.files[0];
@@ -309,6 +376,7 @@ export default {
       this[`base${type}Dialog`] = false;
     },
     async buttonClickCaseManage() {
+      const uuid = this.classCards[this.currentClassId].Exam.id;
       if (this.what === 'A') {
         // 시험장 추가
         this.$http
@@ -329,7 +397,6 @@ export default {
           });
       } else if (this.what === 'F') {
         // 시험장 수정
-        const uuid = this.classCards[this.currentClassId].Exam.id;
         this.$http
           .patch(`exams/${uuid}`, {
             name: this.input_class_name,
@@ -357,7 +424,7 @@ export default {
           const formData = new FormData();
           formData.append('file', this.file);
 
-          const uuid = this.classCards[this.currentClassId].Exam.id;
+          //const uuid = this.classCards[this.currentClassId].Exam.id;
           await this.$http
             .post(`/exams/${uuid}/upload`, formData, {
               Headers: {

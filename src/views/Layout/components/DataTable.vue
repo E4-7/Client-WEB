@@ -1,6 +1,31 @@
 <template>
+  <v-card>
+    <v-card-title>
+      조교 계정 생성
+      <v-row>
+        <v-col>
+          <v-text-field v-model="inputForm·name" placeholder="조교 이름" />
+        </v-col>
+        <v-col>
+          <v-text-field v-model="inputForm.email" placeholder="조교 이메일" />
+        </v-col>
+        <v-col>
+          <v-text-field v-model="inputForm.password" placeholder="조교 비밀번호" />
+        </v-col>
+        <v-col>
+          <v-btn @click="saveUser()">추가하기</v-btn>
+        </v-col>
+      </v-row>
+      조교 계정 목록
+      <v-spacer></v-spacer>
+      <v-text-field v-model="search" append-icon="mdi-magnify" label="이름으로 검색" single-line hide-details></v-text-field>
+    </v-card-title>
+    <v-data-table :headers="headers" :items="datasets" :search="search"></v-data-table>
+  </v-card>
+</template>
+<!--<template>
   <div>
-    <v-data-table :headers="headers" :items="desserts">
+    <v-data-table :headers="headers" :items="datasets">
       <template v-slot:item.name="props">
         <v-edit-dialog :return-value.sync="props.item.name" @save="save" @cancel="cancel" @open="open" @close="close">
           {{ props.item.name }}
@@ -9,10 +34,12 @@
           </template>
         </v-edit-dialog>
       </template>
+      <v-btn @click="showDialog(event)">ddd</v-btn>
       <template v-slot:item.iron="props">
         <v-edit-dialog :return-value.sync="props.item.iron" large persistent @save="save" @cancel="cancel" @open="open" @close="close">
           <div>{{ props.item.iron }}</div>
           <template v-slot:input>
+            sdsad
             <div class="mt-4 text-h6">
               Update Iron
             </div>
@@ -32,12 +59,18 @@
       </template>
     </v-snackbar>
   </div>
-</template>
+</template> -->
 
 <script>
 export default {
   data() {
     return {
+      inputForm: {
+        name: '',
+        email: '',
+        password: '',
+      },
+      search: '',
       snack: false,
       snackColor: '',
       snackText: '',
@@ -49,44 +82,45 @@ export default {
           align: 'start',
           value: 'name',
         },
-        { text: '아이디', value: 'id' },
+        { text: '이메일', value: 'email' },
         { text: '비밀번호', value: 'password', sortable: false },
       ],
-      desserts: [
+      datasets: [
         {
           name: 'Frozen Yogurt',
-          id: 159,
+          email: 1549,
+          password: 6.0,
+        },
+        {
+          name: 'Frozen Yogurt1',
+          email: 1559,
+          password: 6.0,
+        },
+        {
+          name: 'Frozen Yogurt2',
+          email: 1659,
           password: 6.0,
         },
         {
           name: 'Frozen Yogurt',
-          id: 159,
+          email: 1549,
           password: 6.0,
         },
         {
-          name: 'Frozen Yogurt',
-          id: 159,
+          name: 'Frozen Yogurt1',
+          email: 1559,
           password: 6.0,
         },
         {
-          name: 'Frozen Yogurt',
-          id: 159,
-          password: 6.0,
-        },
-        {
-          name: 'Frozen Yogurt',
-          id: 159,
-          password: 6.0,
-        },
-        {
-          name: 'Frozen Yogurt',
-          id: 159,
+          name: 'Frozen Yogurt2',
+          email: 1659,
           password: 6.0,
         },
       ],
     };
   },
   methods: {
+    saveUser() {},
     save() {
       this.snack = true;
       this.snackColor = 'success';
