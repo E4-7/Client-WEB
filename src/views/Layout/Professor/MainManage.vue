@@ -38,7 +38,7 @@
                         block
                         @click="
                           what = 'B';
-                          showDialog('Text');
+                          showDialog('Text', id);
                         "
                         >조교 관리</v-btn
                       >
@@ -48,7 +48,7 @@
                         color="primary"
                         @click="
                           what = 'C';
-                          showDialog('Text');
+                          showDialog('Text', id);
                         "
                         >수험자 설정</v-btn
                       >
@@ -57,7 +57,7 @@
                         block
                         @click="
                           what = 'D';
-                          showDialog('Text');
+                          showDialog('Text', id);
                         "
                         >시험지 관리</v-btn
                       >
@@ -67,7 +67,7 @@
                         color="primary"
                         @click="
                           what = 'F';
-                          showDialog('Text');
+                          showDialog('Text', id);
                         "
                         >시험장 수정</v-btn
                       >
@@ -76,7 +76,7 @@
                         block
                         @click="
                           what = 'E';
-                          showDialog('Text');
+                          showDialog('Text', id);
                         "
                         >삭제</v-btn
                       >
@@ -111,7 +111,7 @@
               <v-row>
                 <h3>시험 과목 지정</h3>
                 <v-col cols="12" sm="6" md="12">
-                  <v-text-field v-model="input_class_name" label="과목명" filled dense></v-text-field>
+                  <v-text-field label="과목명" filled dense></v-text-field>
                 </v-col>
                 <h3>시험 날짜와 시험 시작시각 지정</h3>
                 <v-col cols="12" sm="6" md="12">
@@ -181,7 +181,8 @@
           >
             <template v-slot:body>
               <v-icon style="margin-right:10px;" large color="#41B883">cloud_upload</v-icon>
-              <span class="headline" large>파일 업로드</span>
+              <span class="headline" large>파일 업로드(PDF만 가능)</span>
+              <input type="file" accept="application/pdf" @change="getFile($event)" />
             </template>
           </base-dialog>
           <base-dialog
@@ -197,7 +198,7 @@
               <br />
               <h3>시험 과목 지정</h3>
               <v-col cols="12" sm="6" md="12">
-                <v-text-field filled dense>{{ classCards[0].classname }}</v-text-field>
+                <v-text-field filled dense v-model="input_class_name"></v-text-field>
               </v-col>
               <h3>시험 날짜와 시험 시작시각 지정</h3>
               <v-col cols="12" sm="6" md="12">
@@ -240,6 +241,9 @@
                   </template>
                 </v-menu>
               </v-col>
+              <v-col cols="12" sm="6" md="12">
+                <v-checkbox v-model="checkbox" :label="`오픈북 여부: ${checkbox.toString()}`"></v-checkbox>
+              </v-col>
             </template>
           </base-dialog>
           <base-dialog v-else toolbar-header-title="삭제" header-title="" footer-submit-title="삭제하기" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
@@ -264,6 +268,7 @@ export default {
   components: { MenuBar, BaseDialog, DataTable },
   data() {
     return {
+      file: null,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       menu: false,
       menu1: false,
@@ -273,6 +278,7 @@ export default {
       time: '00:00',
       modal2: false,
       what: 'B',
+      editClassName: '',
       checkbox: true,
       baseTextDialog: false,
       baseListDialog: false,
@@ -280,41 +286,31 @@ export default {
       dialog: false, //true : Dialog열림, false : Dialog닫힘
       visible: false,
       reveal: [],
-      classCards: [
-        // {
-        //   id: '1',
-        //   name: '운영체제',
-        //   date: '2022.04.15',
-        //   time: '16:00',
-        //   openbook: true,
-        // },
-        // {
-        //   id: '2',
-        //   name: '데이터베이스------------------',
-        //   date: '2022.04.16',
-        //   time: '12:00',
-        //   openbook: false,
-        // },
-      ],
+      currentClassId: null,
+      classCards: [],
     };
   },
   methods: {
+    async getFile(event) {
+      console.log(event);
+      this.file = event.target.files[0];
+    },
     openAlert(event) {
-      console.log('this.reveal');
-      console.log(this.reveal);
-      console.log('event.id');
-      console.log(event.id);
       Vue.set(this.reveal, event.id, !this.reveal[event.id]);
     },
-    showDialog(type) {
+    showDialog(type, id) {
       this[`base${type}Dialog`] = true;
+      console.log(id);
+      if (typeof id === 'number') {
+        this.currentClassId = id;
+      }
     },
     hideDialog(type) {
       this[`base${type}Dialog`] = false;
     },
-    submitDialog(type) {
-      console.log('submit 완료!');
+    async buttonClickCaseManage() {
       if (this.what === 'A') {
+        // 시험장 추가
         this.$http
           .post('exams', {
             name: this.input_class_name,
@@ -331,8 +327,72 @@ export default {
           .catch(error => {
             alert(error.response.data.data);
           });
+      } else if (this.what === 'F') {
+        // 시험장 수정
+        const uuid = this.classCards[this.currentClassId].Exam.id;
+        this.$http
+          .patch(`exams/${uuid}`, {
+            name: this.input_class_name,
+            exam_time: this.date + 'T' + this.time + ':00+09:00', //'2021-07-17T14:30:00+09:00',
+            is_openbook: this.checkbox,
+          })
+          .then(res => {
+            const data = this.classCards[this.currentClassId];
+            const updatedData = Object.assign({}, data);
+            updatedData.Exam = Object.assign({}, data.Exam);
+            updatedData.Exam.name = this.input_class_name;
+            updatedData.Exam.exam_time = this.date + 'T' + this.time + ':00+09:00';
+            updatedData.Exam.is_openbook = this.checkbox;
+            Vue.set(this.classCards, this.currentClassId, updatedData);
+            alert('시험장 수정 완료');
+          })
+          .catch(error => {
+            alert(error.response.data.data);
+          });
+      } else if (this.what === 'D') {
+        // 시험지 등록
+        if (this.file == null) {
+          alert('문제가 생겼습니다. 다시 시도해주세요.');
+        } else {
+          const formData = new FormData();
+          formData.append('file', this.file);
+
+          const uuid = this.classCards[this.currentClassId].Exam.id;
+          await this.$http
+            .post(`/exams/${uuid}/upload`, formData, {
+              Headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            })
+            .then(res => {
+              console.log(res);
+              alert('시험지 등록 완료');
+            })
+            .catch(err => {
+              console.log(err);
+              console.log(err.response.data);
+              alert(err.response.data.data);
+            });
+        }
+      } else {
+        // 시험장 삭제
+        const uuid = this.classCards[this.currentClassId].Exam.id;
+        this.$http
+          .delete(`exams/${uuid}`, {
+            examId: this.input_class_name,
+          })
+          .then(_ => {
+            this.classCards.splice(this.currentClassId, 1);
+            alert('시험장 삭제 완료');
+          })
+          .catch(error => {
+            alert(error.response.data.data);
+          });
       }
-      //this.getClassInformation();
+    },
+    submitDialog(type, id) {
+      console.log('submit 완료!');
+      this.buttonClickCaseManage(id);
       this.hideDialog(type);
     },
     openDialog() {
@@ -374,7 +434,7 @@ export default {
           console.log('this.classCards');
           console.log(this.classCards);
 
-          Vue.set(this.classCards, 'id', Response.data.data);
+          //Vue.set(this.classCards, 'id', Response.data.data);
         })
         .catch(Error => {
           console.log('Error');
