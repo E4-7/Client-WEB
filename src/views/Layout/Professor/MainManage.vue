@@ -368,8 +368,7 @@ export default {
         await this.$http
           .get(`exams/${uuid}`)
           .then(Response => {
-            console.log(Response);
-
+            this.datasets = [];
             for (let i = 0; i < Response.data.data.length; i++) {
               this.datasets.push({
                 name: Response.data.data[i].User.name,
@@ -378,7 +377,6 @@ export default {
             }
           })
           .catch(Error => {
-            console.log('Error');
             console.log(Error);
           });
       }
