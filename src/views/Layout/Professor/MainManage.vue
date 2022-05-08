@@ -188,7 +188,7 @@
                 </v-card-title>
                 <v-data-table :headers="headers" :items="datasets" :search="search">
                   <template v-slot:item.action="{ item }">
-                    <v-btn @click="deleteAssistant(item)">삭제하기</v-btn>
+                    <v-btn @click="deleteAssistant(item, $event)">삭제하기</v-btn>
                   </template>
                 </v-data-table>
               </v-card>
@@ -226,7 +226,7 @@
               <br />
               <h3>시험 과목 지정</h3>
               <v-col cols="12" sm="6" md="12">
-                <v-text-field filled dense v-model="input_class_name"></v-text-field>
+                <v-text-field filled dense v-model="edit_class_name"></v-text-field>
               </v-col>
               <h3>시험 날짜와 시험 시작시각 지정</h3>
               <v-col cols="12" sm="6" md="12">
@@ -319,6 +319,7 @@ export default {
       modal: false,
       menu2: false,
       input_class_name: '',
+      edit_class_name: '',
       time: '00:00',
       modal2: false,
       what: 'B',
@@ -355,15 +356,18 @@ export default {
           alert(error.response.data.data);
         });
     },
-    deleteAssistant(item) {
+    deleteAssistant(item, event) {
+      console.log('event');
+      console.log(event.target);
       console.log('item');
       console.log(item.id);
+      const index = this.datasets.findIndex(dataset => dataset.id === item.id);
       const uuid = this.classCards[this.currentClassId].Exam.id;
       this.$http
         .delete(`exams/${uuid}/assistant/${item.id}`)
         .then(res => {
           console.log(res);
-          this.datasets.splice(item.id, 1);
+          this.datasets.splice(index, 1);
           alert('삭제완료');
         })
         .catch(error => {
@@ -381,7 +385,7 @@ export default {
     },
     async showDialog(type, id) {
       this[`base${type}Dialog`] = true;
-      console.log(id);
+      //console.log(id);
       if (typeof id === 'number') {
         this.currentClassId = id;
       }
@@ -417,6 +421,7 @@ export default {
       this[`base${type}Dialog`] = false;
     },
     async buttonClickCaseManage() {
+      console.log(this.input_class_name);
       if (this.what === 'A') {
         console.log(this.input_class_name);
         // 시험장 추가
@@ -442,7 +447,7 @@ export default {
         const uuid = this.classCards[this.currentClassId].Exam.id;
         this.$http
           .patch(`exams/${uuid}`, {
-            name: this.input_class_name,
+            name: this.edit_class_name,
             exam_time: this.date + 'T' + this.time + ':00+09:00', //'2021-07-17T14:30:00+09:00',
             is_openbook: this.checkbox,
           })
@@ -450,7 +455,7 @@ export default {
             const data = this.classCards[this.currentClassId];
             const updatedData = Object.assign({}, data);
             updatedData.Exam = Object.assign({}, data.Exam);
-            updatedData.Exam.name = this.input_class_name;
+            updatedData.Exam.name = this.edit_class_name;
             updatedData.Exam.exam_time = this.date + 'T' + this.time + ':00+09:00';
             updatedData.Exam.is_openbook = this.checkbox;
             Vue.set(this.classCards, this.currentClassId, updatedData);
@@ -489,13 +494,11 @@ export default {
         // 시험장 삭제
         const uuid = this.classCards[this.currentClassId].Exam.id;
         this.$http
-          .delete(`exams/${uuid}`, {
-            examId: this.input_class_name,
-          })
+          .delete(`exams/${uuid}`)
           .then(_ => {
             console.log('.........................');
             console.log(this.currentClassId);
-            this.classCards.splice(this.currentClassId);
+            this.classCards.splice(this.currentClassId, 1);
             alert('시험장 삭제 완료');
           })
           .catch(error => {
