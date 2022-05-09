@@ -34,7 +34,7 @@
                       </p>
                       <br />
                       <br />
-                      <v-text-field placeholder="input code" outlined label="코드   " :rules="rules"> </v-text-field>
+                      <v-text-field placeholder="input code" outlined label="코드" v-model="enterCode" :rules="rules"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>
@@ -54,12 +54,12 @@
                         학번
                       </div>
                       <br />
-                      <v-text-field outlined label="학번" :rules="rules"> </v-text-field>
+                      <v-text-field outlined label="학번" v-model="enterStudentId" :rules="rules"> </v-text-field>
                       <div style="font-size: 30px">
                         이름
                       </div>
                       <br />
-                      <v-text-field placeholder="input your name" outlined label="이름" :rules="rules"> </v-text-field>
+                      <v-text-field placeholder="input your name" outlined label="이름" v-model="enterName" :rules="rules"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>
@@ -67,7 +67,7 @@
                   <v-btn text @click="e1 = 1">
                     뒤로
                   </v-btn>
-                  <v-btn rounded color="primary" dark @click="e1 = 3">
+                  <v-btn rounded color="primary" dark @click="checkStudentIdentity">
                     다음
                   </v-btn>
                 </div>
@@ -97,11 +97,30 @@ export default {
   name: 'Student',
   components: {},
   data: () => ({
+    enterCode: '',
+    enterStudentId: '',
+    enterName: '',
     e1: 1,
     reveal: false,
     rules: [value => !!value || 'Required.', value => (value && value.length >= 3) || 'Min 3 characters'],
   }),
   methods: {
+    checkStudentIdentity: function() {
+      this.e1 = 3;
+
+      this.$http
+        .post(`exams/${this.enterCode}/students/authentic`, {
+          name: this.enterCode,
+          studentID: this.enterStudentId,
+        }) //065eef1e-28c7-4ed6-b70f-f9ea0753d0f6
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          alert(error);
+          alert(error.response.data.data);
+        });
+    },
     enterStudentSettingPage: function() {
       alert('Hello !22');
       this.$router.push('/set');
