@@ -22,7 +22,7 @@ export default new Vuex.Store({
       email: 'a@e47.com',
       name: '구나영',
       status: 1,
-      rule: {
+      Role: {
         type: 2,
       },
     },
@@ -32,6 +32,10 @@ export default new Vuex.Store({
   mutations: {
     login: function(state, payload) {
       state.user = payload;
+      console.log('payload');
+      console.log(payload);
+      console.log('state.user');
+      console.log(state.user);
       // state.user.id = payload.id;
       // state.user.name = payload.name;
       // state.user.type = payload.Role.type;
@@ -43,7 +47,7 @@ export default new Vuex.Store({
         state.user.email = '';
         state.user.name = '';
         state.user.status = '';
-        state.user.rule.type = '';
+        state.user.Role.type = 0;
 
         // state.user = {
         //   id: '1f948424-a1f8-447a-bfac-f66c2d7126f1',
