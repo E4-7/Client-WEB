@@ -18,7 +18,6 @@
                 <v-text-field v-model="user.email" :rules="[rules.required, rules.email]" label="아이디 or E-mail" outlined></v-text-field>
               </v-col>
               <v-col>
-                <!--나중에 눈 아이콘 넣기-->
                 <v-text-field
                   v-model="user.password"
                   :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -171,11 +170,18 @@ export default {
           password: this.user.password,
         })
         .then(res => {
-          if (res.data.data.name) {
-            alert('로그인 되셨습니다. 반갑습니다.', res.data);
+          if (res.data.data.Role.type == 2) {
+            // 교수
+            alert('로그인 되셨습니다. 교수님 반갑습니다.', res.data);
+            console.log(res.data);
+            console.log(res.data.data);
             this.$store.commit('login', res.data.data);
             this.$router.push('/main');
-            //res.cookie('session', this.email);
+          } else {
+            alert('로그인 되셨습니다. 조교님 반갑습니다.', res.data);
+            // 콘솔
+            this.$store.commit('login', res.data.data);
+            this.$router.push('/main');
           }
         })
         .catch(error => {
