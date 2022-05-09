@@ -20,7 +20,8 @@
     "vue-router": "^3.5.2",
     "vuetify": "^2.5.8",
     "vuex": "^3.6.2",
-    "vuex-persistedstate": "^4.1.0"
+    "vuex-persistedstate": "^4.1.0",
+    "xlsx": "^0.17.4"
   },
   "devDependencies": {
     "@vue/eslint-config-prettier": "^5.0.0",

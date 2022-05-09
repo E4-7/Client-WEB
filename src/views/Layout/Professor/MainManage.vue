@@ -30,7 +30,7 @@
                 </v-card>
               </router-link>
               <v-expand-transition>
-                <v-card v-if="reveal[classCard.Exam.id]" class="transition-fast-in-fast-out v-card--reveal" style="height: 78%; width: auto;">
+                <v-card v-if="reveal[classCard.Exam.id]" class="transition-fast-in-fast-out v-card--reveal" style="width: auto;">
                   <v-card-actions class="pt-0">
                     <v-col justify="center" align-content-lg>
                       <v-btn
@@ -53,6 +53,7 @@
                         >수험자 설정</v-btn
                       >
                       <v-btn
+                        v-if="roleType === 2"
                         class="professor-page-card-button"
                         block
                         @click="
@@ -72,6 +73,7 @@
                         >시험장 수정</v-btn
                       >
                       <v-btn
+                        v-if="roleType === 2"
                         class="professor-page-card-button"
                         block
                         @click="
@@ -86,7 +88,7 @@
               </v-expand-transition>
             </v-card>
           </v-col>
-          <v-col cols="12" md="3" sm="6">
+          <v-col v-if="roleType === 2" cols="12" md="3" sm="6">
             <v-card outlined tile style="height: 300px;" color="#1F7087">
               <v-btn
                 @click="
@@ -164,7 +166,7 @@
             <template v-slot:body>
               <v-card>
                 <v-card-title>
-                  <v-row>
+                  <v-row v-if="roleType === 2">
                     <v-col>
                       <h5>이름</h5>
                       <v-text-field v-model="inputForm.name" placeholder="조교 이름" />
@@ -187,7 +189,7 @@
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="이름으로 검색" single-line hide-details></v-text-field>
                 </v-card-title>
                 <v-data-table :headers="headers" :items="datasets" :search="search">
-                  <template v-slot:item.action="{ item }">
+                  <template v-if="roleType === 2" v-slot:item.action="{ item }">
                     <v-btn @click="deleteAssistant(item, $event)">삭제하기</v-btn>
                   </template>
                 </v-data-table>
@@ -197,7 +199,19 @@
           </base-dialog>
           <base-dialog v-else-if="what === 'C'" toolbar-header-title="수험자 관리" header-title="수험자 관리" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
-              <input type="file" @change="getFile($event)" />
+              <div v-if="memberList.length === 0"><label for="xlsxUpload">학생 목록 업로드: &nbsp;</label><input type="file" id="xlsxUpload" @change="getXlsxFile($event)" /></div>
+              <v-card>
+                <v-card-title>
+                  <h5>학생 계정 목록</h5>
+                  <v-spacer></v-spacer>
+                  <v-text-field v-model="search" append-icon="mdi-magnify" label="이름으로 검색" single-line hide-details></v-text-field>
+                </v-card-title>
+                <v-data-table :headers="headerMember" :items="memberList" :search="search">
+                  <template v-slot:item.action="{ item }">
+                    <v-btn @click="deleteAssistant(item, $event)">삭제하기</v-btn>
+                  </template>
+                </v-data-table>
+              </v-card>
             </template>
           </base-dialog>
           <base-dialog
@@ -286,6 +300,7 @@
 </template>
 
 <script>
+import XLSX from 'xlsx';
 import MenuBar from '../MenuBar.vue';
 import BaseDialog from '../components/BaseDialog.vue';
 //import DataTable from '../components/DataTable.vue';
@@ -311,7 +326,35 @@ export default {
         { text: '이메일', value: 'email' },
         { text: '', value: 'action', sortable: false },
       ],
+      headerMember: [
+        {
+          text: '이름',
+          align: 'start',
+          value: 'name',
+        },
+        {
+          text: '학번',
+          value: 'studentID',
+        },
+        {
+          text: '답안지',
+          value: 'AnswerId',
+        },
+        {
+          text: '인증 이미지',
+          value: 'CertificatedImageId',
+        },
+        {
+          text: '마지막 로그인',
+          value: 'lastLogin',
+        },
+        {
+          text: '인증 여부',
+          value: 'is_certified',
+        },
+      ],
       datasets: [],
+      roleType: 0,
       file: null,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
       menu: false,
@@ -333,6 +376,7 @@ export default {
       reveal: [],
       currentClassId: null,
       classCards: [],
+      memberList: [],
     };
   },
   methods: {
@@ -380,6 +424,23 @@ export default {
       this.file = event.target.files[0];
       console.log(this.file);
     },
+    async getXlsxFile(event) {
+      try {
+        const file = event.target.files[0];
+        let reader = new FileReader();
+        reader.onload = async () => {
+          let data2 = reader.result;
+          let workbook = XLSX.read(data2, { type: 'binary' });
+          const sheetName = workbook.SheetNames[0];
+          const roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+          this.memberList = roa;
+          console.log(this.memberList);
+        };
+        reader.readAsBinaryString(file);
+      } catch (err) {
+        alert('엑셀파일을 불러올 수 없습니다.');
+      }
+    },
     openAlert(event) {
       Vue.set(this.reveal, event.id, !this.reveal[event.id]);
     },
@@ -402,19 +463,20 @@ export default {
             });
           }
         }
-        // .then(Response => {
-        //   this.datasets = [];
-        //   console.log(Response);
-        //   for (let i = 0; i < Response.data.data.length; i++) {
-        //     this.datasets.push({
-        //       name: Response.data.data[i].User.name,
-        //       email: Response.data.data[i].User.email,
-        //     });
-        //   }
-        // })
-        // .catch(Error => {
-        //   console.log(Error);
-        // });
+      } else if (this.what === 'C') {
+        const uuid = this.classCards[this.currentClassId].Exam.id;
+        const response = await this.$http.get(`exams/${uuid}/students`);
+        this.memberList = [];
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.memberList.push({
+            AnswerId: response.data.data[i].AnswerId,
+            studentID: response.data.data[i].studentID,
+            name: response.data.data[i].name,
+            CertificatedImageId: response.data.data[i].CertificatedImageId,
+            lastLogin: response.data.data[i].lastLogin,
+            is_certified: response.data.data[i].is_certified,
+          });
+        }
       }
     },
     hideDialog(type) {
@@ -443,7 +505,6 @@ export default {
           });
       } else if (this.what === 'F') {
         // 시험장 수정
-
         const uuid = this.classCards[this.currentClassId].Exam.id;
         this.$http
           .patch(`exams/${uuid}`, {
@@ -490,6 +551,10 @@ export default {
               alert(err.response.data.data);
             });
         }
+      } else if (this.what === 'C') {
+        // 수험자 관리
+        //const fileName = this.file.name;
+        this.saveStudentData();
       } else {
         // 시험장 삭제
         const uuid = this.classCards[this.currentClassId].Exam.id;
@@ -506,6 +571,20 @@ export default {
           });
       }
     },
+    async saveStudentData() {
+      const uuid = this.classCards[this.currentClassId].Exam.id;
+      this.$http
+        .post(`exams/${uuid}/students`, {
+          students: this.memberList,
+        })
+        .then(res => {
+          console.log(res);
+          alert('시험장 수정 완료');
+        })
+        .catch(error => {
+          alert(error.response.data.data);
+        });
+    },
     submitDialog(type, id) {
       console.log('submit 완료!');
       this.buttonClickCaseManage(id);
@@ -517,42 +596,51 @@ export default {
     initClassList(response) {
       var aJson = new Object();
       for (let i = 0; i < this.classCards.length; i++) {
-        console.log('response');
-        console.log(response);
-        console.log('this._classCards');
-        console.log(this._classCards);
-        console.log(this.classCards);
-        Vue.set(this._classCards, i, response);
+        // console.log('this._classCards');
+        // console.log(this._classCards);
+        // console.log(this.classCards);
+        // Vue.set(this._classCards, i, response);
         aJson[this.classCards[i].Exam.id] = false;
         this.reveal.push(JSON.stringify(aJson));
       }
-      console.log(this.reveal);
+      //console.log(this.reveal);
     },
     getClassInformation() {
       this.$http
         .get('exams/')
         .then(Response => {
-          console.log('respnese');
-          console.log('this.classInformation');
-          console.log(this.classCards);
-          console.log(Response.data.data);
+          // console.log('respnese');
+          // console.log('this.classInformation');
+          // console.log(this.classCards);
+          // console.log(Response.data.data);
           this.classCards = Response.data.data;
           this.initClassList(Response.data.data);
 
-          console.log('this.classCards');
-          console.log(this.classCards);
+          // console.log('this.classCards');
+          // console.log(this.classCards);
 
           //Vue.set(this.classCards, 'id', Response.data.data);
         })
         .catch(Error => {
-          console.log('Error');
-          console.log(Error);
+          console.log(Error.message);
+        });
+    },
+    getClassInformationAssistant() {
+      this.$http
+        .get('exams/')
+        .then(Response => {
+          this.classCards = Response.data.data;
+          //this.classCards[0].Exam.id
+        })
+        .catch(Error => {
+          console.log(Error.message);
         });
     },
   },
   mounted() {
     // 페이지 시작하면은 자동 함수 실행
     this.getClassInformation();
+    this.roleType = this.$store.state.user.Role.type;
     // this.$nextTick(() => {
     //   this.currentTitle = this.$route.params.recrumentId;
     // });
