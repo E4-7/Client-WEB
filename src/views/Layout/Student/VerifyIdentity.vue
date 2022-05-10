@@ -74,10 +74,10 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                사각형에 맞춰 학생증을 맞추고 기다려주세요..
+                {{ infromessage }}
                 <v-card class="mb-12" color="grey lighten-1" height="500px"></v-card>
 
-                <v-btn text @click="e1 = 1">
+                <v-btn text @click="changeIdentity()">
                   혹시 학생증이 없거나 인식이 안되나요?
                 </v-btn>
                 <v-btn class="verify-identity-button" rounded color="primary" @click="enterStudentSettingPage()">
@@ -100,30 +100,38 @@ export default {
     enterCode: '',
     enterStudentId: '',
     enterName: '',
+    infromessage: '사각형에 맞춰 학생증을 맞추고 기다려주세요..',
     e1: 1,
     reveal: false,
-    rules: [value => !!value || 'Required.', value => (value && value.length >= 3) || 'Min 3 characters'],
+    rules: [value => !!value || 'Required.', value => (value && value.length >= 2) || 'Min 2 characters'],
   }),
   methods: {
     checkStudentIdentity: function() {
-      this.e1 = 3;
-
+      console.log(this.enterName);
+      console.log(this.enterCode);
+      console.log(this.enterStudentId);
       this.$http
         .post(`exams/${this.enterCode}/students/authentic`, {
-          name: this.enterCode,
+          name: this.enterName,
           studentID: this.enterStudentId,
         }) //065eef1e-28c7-4ed6-b70f-f9ea0753d0f6
         .then(res => {
           console.log(res);
+          this.e1 = 3;
         })
         .catch(error => {
-          alert(error);
-          alert(error.response.data.data);
+          console.log(error);
+          alert('올바르지 않은 사용자 입니다.');
+          this.e1 = 1;
         });
     },
     enterStudentSettingPage: function() {
       alert('Hello !22');
       this.$router.push('/set');
+    },
+    changeIdentity: function() {
+      // 신분증으로 신원확인하기
+      this.infromessage = '신분증을 얼굴 옆에 들어주고 기다려주세요.';
     },
   },
 };
