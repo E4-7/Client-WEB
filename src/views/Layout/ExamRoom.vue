@@ -30,39 +30,7 @@
               <v-col cols="2"><v-btn>시험 시작</v-btn></v-col>
               <v-col cols="2"><v-btn>시험 종료</v-btn></v-col>
             </v-row>
-            <v-row cols="12">
-              <v-card class="mx-auto" min-height="800" max-width="700" min-width="700">
-                <v-card-text>
-                  <div>채팅tddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddhe Day</div>
-                  <p class="text-h4 text--primary">
-                    채팅채팅채팅채팅채팅채팅채팅
-                  </p>
-                  <p>채팅채팅</p>
-                  <div class="text--primary">
-                    채팅채팅.<br />
-                    채팅채팅
-                  </div>
-                  <v-spacer></v-spacer>
-                </v-card-text>
-              </v-card>
-            </v-row>
-            <v-row cols="12" justify="center">
-              <v-toolbar dark max-width="700" min-width="700">
-                <v-text-field max-width="100" type="text" label="   " placeholder="메세지를 입력하세요." filled v-model.trim="msg" @keyup.enter="submitMessage"></v-text-field>
-                <v-card class="pa-2" tile>
-                  <div @click="submitMessage" class="form__submit">
-                    <svg width="30" height="30" viewBox="0 0 68 68" fill="#CCCCCC" xmlns="http://www.w3.org/2000/svg">
-                      <g clip-path="url(#clip0_26_10)">
-                        <path
-                          d="M48.0833 19.799C48.619 20.3347 48.806 21.127 48.5665 21.8457L35.8385 60.0294C35.5946 60.7614 34.9513 61.2877 34.1855 61.382C33.4198 61.4763 32.6681 61.1217 32.2539 60.4707L22.593 45.2893L7.41158 35.6285C6.76065 35.2142 6.40604 34.4625 6.50031 33.6968C6.59458 32.931 7.12092 32.2878 7.85287 32.0438L46.0366 19.3159C46.7553 19.0763 47.5476 19.2633 48.0833 19.799ZM26.5903 44.1204L33.3726 54.7782L42.0926 28.6181L26.5903 44.1204ZM39.2642 25.7897L23.7619 41.292L13.1041 34.5097L39.2642 25.7897Z"
-                          fill=""
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                </v-card>
-              </v-toolbar>
-            </v-row>
+            <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId"></Chatting>
           </v-col>
         </v-row>
         <router-view></router-view>
@@ -72,9 +40,27 @@
 </template>
 
 <script>
+const socketURL = 'http://34.64.196.237:3000';
+import io from 'socket.io-client';
+import Chatting from './components/Chatting.vue';
 export default {
+  components: { Chatting },
+  created() {
+    const examPayload = { roomId: this.examId };
+    const socket = io.connect(socketURL, {
+      transports: ['websocket'],
+    });
+    socket.on('connect', async () => {
+      this.socketRef = socket;
+      socket.emit('joinRoom', examPayload);
+    });
+  },
   data() {
     return {
+      examId: this.$route.params.roomId,
+      userId: '1234',
+      name: '구나영일이삼사',
+      socketRef: null,
       page: 1,
       msg: '',
       classInformation: {
@@ -90,15 +76,10 @@ export default {
       },
     };
   },
-  created() {
-    // this.path.companyId = this.$route.params.id;
-    // this.path.recrumentId = this.$route.params.recrumentId;
-    // this.path.current = document.location.pathname;
-  },
+
   methods: {
     submitMessage() {
       if (this.msg) {
-        this.$emit('submitMessage', this.msg);
         this.msg = '';
       }
       return;
