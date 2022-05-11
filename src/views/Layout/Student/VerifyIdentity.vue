@@ -75,7 +75,15 @@
 
               <v-stepper-content step="3">
                 {{ infromessage }}
-                <v-card class="mb-12" color="grey lighten-1" height="500px"></v-card>
+                <v-card class="mb-12" color="grey lighten-1" height="500px"
+                  ><div>
+                    <agora :channel="channel">
+                      <agora-audio-sender />
+                      <agora-audio-receiver />
+                      <agora-video-receiver />
+                      <agora-video-sender />
+                    </agora></div
+                ></v-card>
 
                 <v-btn text @click="changeIdentity()">
                   혹시 학생증이 없거나 인식이 안되나요?
@@ -97,6 +105,7 @@ export default {
   name: 'Student',
   components: {},
   data: () => ({
+    channel: '123111',
     enterCode: '',
     enterStudentId: '',
     enterName: '',

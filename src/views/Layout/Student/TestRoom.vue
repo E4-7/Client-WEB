@@ -11,6 +11,7 @@
             <v-row justify="center">
               <v-card min-height="450" min-width="400">
                 채팅
+                <Chatting></Chatting>
               </v-card>
             </v-row>
           </v-col>
@@ -74,10 +75,12 @@
 
 <script>
 import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
+import Chatting from '../components/Chatting.vue';
 
 export default {
   components: {
     VuePdfEmbed,
+    Chatting,
   },
   data() {
     return {
