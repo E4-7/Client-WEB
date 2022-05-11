@@ -16,7 +16,6 @@ export default new Vuex.Store({
   // 데이터, View와 직접적으로 연결되어 있는 Model
   // 변경 불가능하고 mutations을 통해서만 변경 가능, 반응적으로 View 업데이트
   state: {
-    host: 'http://localhost:8080/',
     user: {
       id: '1f948424-a1f8-447a-bfac-f66c2d7126f1',
       email: 'a@e47.com',
