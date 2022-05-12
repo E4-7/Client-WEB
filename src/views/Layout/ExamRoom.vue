@@ -31,6 +31,10 @@
               <v-col cols="2"><v-btn>시험 종료</v-btn></v-col>
             </v-row>
             <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId"></Chatting>
+            <div v-if="socketRef == null">
+              네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
+              다시 시도해주세요.
+            </div>
           </v-col>
         </v-row>
         <router-view></router-view>
@@ -58,8 +62,8 @@ export default {
   data() {
     return {
       examId: this.$route.params.roomId,
-      userId: '1234',
-      name: '구나영일이삼사',
+      userId: this.$store.state.user.id,
+      name: this.$store.state.user.name,
       socketRef: null,
       page: 1,
       msg: '',

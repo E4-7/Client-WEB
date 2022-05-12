@@ -3,15 +3,17 @@
     <v-content>
       <v-container>
         <v-row justify="center" style="padding:20px;">
-          <!-- style="padding:20px;" -->
           <v-col>
             <v-row justify="center" style="padding:15px;">
               <v-card min-height="400" min-width="400">얼굴</v-card>
             </v-row>
             <v-row justify="center">
               <v-card min-height="450" min-width="400">
-                채팅
-                <Chatting></Chatting>
+                <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId"></Chatting>
+                <div v-else>
+                  네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
+                  다시 시도해주세요.
+                </div>
               </v-card>
             </v-row>
           </v-col>
@@ -74,6 +76,8 @@
 </template>
 
 <script>
+const socketURL = 'http://34.64.196.237:3000';
+import io from 'socket.io-client';
 import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
 import Chatting from '../components/Chatting.vue';
 
@@ -84,6 +88,9 @@ export default {
   },
   data() {
     return {
+      examId: this.$route.params.roomId,
+      userId: this.$store.state.user.id,
+      name: this.$store.state.user.name,
       page: 1,
       pageCount: 1,
       source1: '/docs/a.pdf',
@@ -104,9 +111,14 @@ export default {
     };
   },
   created() {
-    // this.path.companyId = this.$route.params.id;
-    // this.path.recrumentId = this.$route.params.recrumentId;
-    // this.path.current = document.location.pathname;
+    const examPayload = { roomId: this.examId };
+    const socket = io.connect(socketURL, {
+      transports: ['websocket'],
+    });
+    socket.on('connect', async () => {
+      this.socketRef = socket;
+      socket.emit('joinRoom', examPayload);
+    });
   },
   methods: {
     handleDocumentRender() {
