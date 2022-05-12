@@ -75,7 +75,7 @@
 
               <v-stepper-content step="3">
                 {{ infromessage }}
-                <v-card class="mb-12" color="grey lighten-1" height="500px"
+                <!-- <v-card class="mb-12" color="grey lighten-1" height="500px"
                   ><div>
                     <agora :channel="channel">
                       <agora-audio-sender />
@@ -83,7 +83,7 @@
                       <agora-video-receiver />
                       <agora-video-sender />
                     </agora></div
-                ></v-card>
+                ></v-card> -->
 
                 <v-btn text @click="changeIdentity()">
                   혹시 학생증이 없거나 인식이 안되나요?
@@ -131,12 +131,14 @@ export default {
         .catch(error => {
           console.log(error);
           alert('올바르지 않은 사용자 입니다.');
-          this.e1 = 1;
         });
     },
     enterStudentSettingPage: function() {
       alert('Hello !22');
-      this.$router.push('/set');
+      this.$router.push('/set/' + this.enterCode);
+    },
+    addStudentExamId: function(id) {
+      return document.location.pathname + '/' + id;
     },
     changeIdentity: function() {
       // 신분증으로 신원확인하기

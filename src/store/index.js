@@ -19,7 +19,7 @@ export default new Vuex.Store({
     user: {
       id: '1f948424-a1f8-447a-bfac-f66c2d7126f1',
       email: 'a@e47.com',
-      name: '구나영',
+      name: '김나영',
       status: 1,
       Role: {
         type: 2,

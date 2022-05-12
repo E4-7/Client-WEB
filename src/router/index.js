@@ -21,12 +21,12 @@ const routes = [
     component: () => import('@/views/Layout/Student/VerifyIdentity.vue'),
   },
   {
-    path: '/set',
+    path: '/set/:roomId',
     name: 'Set',
     component: () => import('@/views/Layout/Student/SetStudent.vue'),
   },
   {
-    path: '/test',
+    path: '/test/:roomId',
     name: 'StudentExam',
     component: () => import('@/views/Layout/Student/TestRoom.vue'),
   },

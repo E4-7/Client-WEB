@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-card class="mx-auto" min-height="800" max-width="700" min-width="700">
+    <v-card style="overflow-y:scroll" min-height="820" max-width="820" class="mx-auto">
+      >
       <v-card-text style="text-align:right">
         <p v-for="message in messages" :key="message.id" class="text-h5 text--primary">
           {{ message }}
@@ -9,7 +10,8 @@
       </v-card-text>
     </v-card>
     <v-row cols="12" justify="center">
-      <v-toolbar dark max-width="700" min-width="700">
+      <v-toolbar dark>
+        <!--  max-width="700" min-width="700" -->
         <v-text-field max-width="100" type="text" label="   " placeholder="메세지를 입력하세요." filled v-model.trim="message" @keyup.enter="submitMessage"></v-text-field>
         <v-card class="pa-2" tile>
           <div @click="submitMessage" class="form__submit">

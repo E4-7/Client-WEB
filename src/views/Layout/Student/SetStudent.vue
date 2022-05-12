@@ -36,8 +36,7 @@ export default {
   }),
   methods: {
     goTestPage: function() {
-      alert('??');
-      this.$router.push('/test');
+      this.$router.push('/test/' + this.$route.params.roomId);
     },
   },
 };
