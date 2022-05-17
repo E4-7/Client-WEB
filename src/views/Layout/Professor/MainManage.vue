@@ -401,10 +401,6 @@ export default {
         });
     },
     deleteAssistant(item, event) {
-      console.log('event');
-      console.log(event.target);
-      console.log('item');
-      console.log(item.id);
       const index = this.datasets.findIndex(dataset => dataset.id === item.id);
       const uuid = this.classCards[this.currentClassId].Exam.id;
       this.$http
@@ -609,10 +605,6 @@ export default {
       this.$http
         .get('exams/')
         .then(Response => {
-          // console.log('respnese');
-          // console.log('this.classInformation');
-          // console.log(this.classCards);
-          // console.log(Response.data.data);
           this.classCards = Response.data.data;
           this.initClassList(Response.data.data);
 

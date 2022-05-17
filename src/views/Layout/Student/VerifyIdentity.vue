@@ -12,12 +12,11 @@
               <v-stepper-step :complete="e1 > 2" step="2">
                 학번, 이름
               </v-stepper-step>
-              <v-divider></v-divider>
+              <!-- <v-divider></v-divider>
               <v-stepper-step step="3">
                 본인인증(학생증)
-              </v-stepper-step>
+              </v-stepper-step> -->
             </v-stepper-header>
-
             <v-stepper-items>
               <v-stepper-content step="1">
                 <v-card class="mb-12" color="grey lighten-1" height="500px">
@@ -38,7 +37,6 @@
                     </v-card-text>
                   </v-row>
                 </v-card>
-
                 <div class="verify-identity-button">
                   <v-btn rounded color="primary" dark @click="e1 = 2">
                     다음
@@ -101,6 +99,8 @@
 </template>
 
 <script>
+//import Waiting from './WaitingRoom.vue';
+
 export default {
   name: 'Student',
   components: {},
@@ -126,7 +126,8 @@ export default {
         }) //065eef1e-28c7-4ed6-b70f-f9ea0753d0f6
         .then(res => {
           console.log(res);
-          this.e1 = 3;
+          this.enterStudentSettingPage();
+          //this.e1 = 3;
         })
         .catch(error => {
           console.log(error);
