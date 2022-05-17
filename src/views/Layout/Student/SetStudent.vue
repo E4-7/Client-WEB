@@ -28,17 +28,20 @@
 </template>
 
 <script>
-import Video from '../../../components/Video.vue';
-import setTimer from '@/plugins/setTimer';
+import Video from '../../../components/CommonVideo.vue';
+import setTimer from '../../../plugins/setTimer';
 
 export default {
   name: 'Set',
   components: { Video },
-  data: () => ({
-    reveal: false,
-    stream: null,
-    items: ['Programming', 'Design', 'Vue', 'Vuetify'],
-  }),
+  data: () => {
+    return {
+      reveal: false,
+      stream: null,
+      count: 0,
+      items: ['Programming', 'Design', 'Vue', 'Vuetify'],
+    };
+  },
   methods: {
     goTestPage: function() {
       this.$router.push('/test/' + this.$route.params.roomId);
@@ -61,6 +64,7 @@ export default {
       } catch (e) {
         console.log(e);
       }
+      console.log('check');
     },
     async goOCRCheck(id, name) {
       if (!this.stream) {
@@ -109,7 +113,7 @@ export default {
         alert('학번이나 이름을 입력해주세요.');
         return;
       }
-      //id와 name을 서버에 보내고 OCR해서 맞는지 확인하고 디비 통신해서 있는 사용자 확인하고 맞으면 true로 넘어감
+      //id와 name을 서버에 보내getMediaStream고 OCR해서 맞는지 확인하고 디비 통신해서 있는 사용자 확인하고 맞으면 true로 넘어감
       await this.goOCRCheck(id, name);
     },
   },
