@@ -22,8 +22,9 @@ const routes = [
   },
   {
     path: '/set/:roomId',
-    name: 'Set',
+    name: 'SetStudent',
     component: () => import('@/views/Layout/Student/SetStudent.vue'),
+    props: true,
   },
   {
     path: '/test/:roomId',

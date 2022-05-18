@@ -15,11 +15,11 @@
           </v-col>
           <v-col align-self="center" justify="center" col="2">
             <v-row justify="center" style="padding:20px;">
-              <v-btn @click="goTestPage()" x-large>입장하기</v-btn>
+              <v-btn :disabled="validated == 1" @click="goOCRCheck()" x-large>신원확인하기</v-btn>
             </v-row>
-            <v-row justify="center" style="padding:20px;">
-              <v-select :items="items" label="마이크 선택"></v-select>
-            </v-row>
+            <v-btn text @click="changeIdentity()">
+              혹시 학생증이 없거나 인식이 안되나요?
+            </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -29,17 +29,18 @@
 
 <script>
 import Video from '../../../components/CommonVideo.vue';
-import setTimer from '../../../plugins/setTimer';
 
 export default {
   name: 'Set',
   components: { Video },
   data: () => {
     return {
+      validated: 0,
       reveal: false,
       stream: null,
       count: 0,
       items: ['Programming', 'Design', 'Vue', 'Vuetify'],
+      check: false,
     };
   },
   methods: {
@@ -66,7 +67,7 @@ export default {
       }
       console.log('check');
     },
-    async goOCRCheck(id, name) {
+    async goOCRCheck() {
       if (!this.stream) {
         alert('캠을 켜고 다시 시도해주세요');
         return;
@@ -79,43 +80,49 @@ export default {
       //   id,
       //   name,
       // });
+      this.validated = 1;
       try {
         const myFile = new File([imageCapture], 'image.jpeg', {
           type: imageCapture.type,
         });
         const frm = new FormData();
-        frm.append('image', myFile);
-        frm.append('studentID', this.user.id);
-        frm.append('name', this.user.name);
+        frm.append('file', myFile);
+        frm.append('studentID', this.$route.query.id);
+        frm.append('name', this.$route.query.name);
 
-        const { data } = this.$http.post(`exams/${this.$route.params.roomId}/students/authentication`, frm);
+        const { data } = await this.$http.post(`exams/${this.$route.params.roomId}/students/authentication`, frm);
+
+        console.log('data');
+        console.log(data);
+        //{"code":200,"success":true,"data":{"student":{"created_at":"2022-05-17T05:11:09.740Z","updated_at":"2022-05-17T09:26:30.465Z","id":"1a417272-9e90-4801-b50a-b7eac1bea967","ExamId":"29af7b00-321c-48ef-8d48-41798294b5aa","name":"조찬민","studentID":17011604,"is_certified":false,"lastLogin":null,"deleted_at":null,"ExamAnswer":null,"CertificatedImage":null},"data":{"url":"http://naver.com"}}}
+
         if (data.success) {
-          alert('회원가입 되셨습니다. 반갑습니다.', data);
+          alert('성공', data);
+          this.goTestPage();
         }
       } catch (err) {
-        alert('에라 에라 에라');
+        console.log(err.message);
+        alert('인식이 안되었습니다. 다시 시도해주세요.');
       }
 
-      if (this.count >= 3) {
-        alert('학생증 인증 실패!\n인증버튼을 다시 눌러 진행해주세요!');
-      } else {
-        this.count++;
-        await setTimer(12000);
-        await this.goOCRCheck(id, name);
-      }
+      // if (this.count >= 3) {
+      //   alert('학생증 인증 실패!\n인증버튼을 다시 눌러 진행해주세요!');
+      // } else {
+      //   this.count++;
+      //   await this.goOCRCheck(this.$route.query.id, this.$route.query.name);
+      // }
     },
-    async goAuthentic() {
-      //계속해서
-      this.count = 0;
-      const id = this.user.id;
-      const name = this.user.name;
-      if (id === '' || name === '') {
-        alert('학번이나 이름을 입력해주세요.');
-        return;
-      }
-      //id와 name을 서버에 보내getMediaStream고 OCR해서 맞는지 확인하고 디비 통신해서 있는 사용자 확인하고 맞으면 true로 넘어감
-      await this.goOCRCheck(id, name);
-    },
+    // async goAuthentic() {
+    //   this.count = 0;
+    //   const id = this.user.id;
+    //   const name = this.user.name;
+    //   if (id === '' || name === '') {
+    //     alert('학번이나 이름을 입력해주세요.');
+    //     return;
+    //   }
+    //   //id와 name을 서버에 보내getMediaStream고 OCR해서 맞는지 확인하고 디비 통신해서 있는 사용자 확인하고 맞으면 true로 넘어감
+    //   await this.goOCRCheck(id, name);
+    // },
   },
   async created() {
     await this.getMediaStream();

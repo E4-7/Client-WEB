@@ -83,12 +83,12 @@
                     </agora></div
                 ></v-card> -->
 
-                <v-btn text @click="changeIdentity()">
+                <!-- <v-btn text @click="changeIdentity()">
                   혹시 학생증이 없거나 인식이 안되나요?
                 </v-btn>
                 <v-btn class="verify-identity-button" rounded color="primary" @click="enterStudentSettingPage()">
                   완료
-                </v-btn>
+                </v-btn> -->
               </v-stepper-content>
             </v-stepper-items>
           </v-stepper>
@@ -136,7 +136,9 @@ export default {
     },
     enterStudentSettingPage: function() {
       alert('Hello !22');
-      this.$router.push('/set/' + this.enterCode);
+      let p = '/set/' + this.enterCode;
+      this.$router.push({ path: p, query: { id: this.enterStudentId, name: this.enterName } }); // ,
+      // vuex로 바꾸기
     },
     addStudentExamId: function(id) {
       return document.location.pathname + '/' + id;
