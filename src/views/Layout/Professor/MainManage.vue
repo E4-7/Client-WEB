@@ -494,6 +494,7 @@ export default {
               Exam: res.data.data,
               created_at: res.data.data.created_at,
             });
+            console.log(res);
             alert('시험장 추가 완료');
           })
           .catch(error => {
@@ -586,8 +587,8 @@ export default {
       this.buttonClickCaseManage(id);
       this.hideDialog(type);
     },
-    openClassCard: function(title) {
-      return document.location.pathname + '/' + title;
+    openClassCard: function(examId) {
+      return document.location.pathname + '/' + examId;
     },
     initClassList(response) {
       var aJson = new Object();
