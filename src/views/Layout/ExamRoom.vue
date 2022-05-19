@@ -2,17 +2,9 @@
   <v-app>
     <v-content>
       <v-container fluid>
-        <!-- <AgoraVideoCall :videoProfile="videoProfile" :channel="channel" :transcode="transcode" :attendeeMode="attendeeMode" :baseMode="baseMode" :appId="appId" :uid="uid"></AgoraVideoCall>
-        <agora :appid="appId">
-          <agora-video-sender type="camera">
-            <div style="width:400px;height:300px"></div>
-          </agora-video-sender>
-        </agora> -->
         <div>
-          <agora :channel="channel">
+          <agora :appid="appid" :channel="channel" :token="token">
             <agora-audio-sender />
-            <agora-audio-receiver />
-            <agora-video-receiver />
             <agora-video-sender />
           </agora>
         </div>
@@ -25,8 +17,26 @@
               <v-btn text style="color: blue;">학생관리(35/37)</v-btn>
             </v-row>
             <v-row dense>
+              <!--이거 레이아웃 설정하기-->
+              <div>
+                <agora :appid="appid" :channel="channel" :token="token">
+                  <agora-audio-receiver />
+                  <agora-video-receiver />
+                </agora>
+              </div>
               <v-col v-for="n in 9" :key="n" cols="12" md="4" sm="4">
-                <v-card class="pa-3" outlined tile style="height: 350px;" color="#385F73"> Student #{{ n }} </v-card>
+                <v-card class="pa-3" outlined tile style="height: 350px;" color="#385F73">
+                  <div>
+                    <!-- <agora :appid="appid" :channel="channel" :token="token">
+                      <agora-audio-sender />
+                      <agora-audio-receiver />
+                      <agora-video-sender />
+                      <agora-video-receiver />
+                    </agora> -->
+                    <!-- <agora-video-receiver accept="[123]"></agora-video-receiver> -->
+                  </div>
+                  Student #{{ n }}
+                </v-card>
               </v-col>
             </v-row>
             <div class="text-center" style="padding: 20px;">
@@ -58,11 +68,10 @@
 </template>
 
 <script>
-//import AgoraRtcVue from 'agora-rtc-vue';
 const socketURL = 'http://34.64.196.237:3000';
 import io from 'socket.io-client';
 import Chatting from './components/Chatting.vue';
-//import AgoraVideoCall from './components/AgoraVideoCall.vue';
+
 export default {
   components: { Chatting },
   created() {
@@ -77,9 +86,10 @@ export default {
   },
   data() {
     return {
-      appId: '8bfce6e171ef47779ac175c6a9809767',
+      appid: 'f823987e32bd491d843459d5396eed2a',
       videoProfile: '480p_4',
-      channel: '1234',
+      channel: '68f7f8bb-d3a1-451e-9d1b-45478fb8956a',
+      token: '006f823987e32bd491d843459d5396eed2aIAAXMfNSxKPUbMg4j2hpgN2RQJtiAAblDG5yGCbEYfUrN1k0dKgAAAAAIgDy83IxOTCHYgQAAQA5MIdiAgA5MIdiAwA5MIdiBAA5MIdi',
       transcode: 'interop',
       attendeeMode: 'video',
       baseMode: 'avc',
