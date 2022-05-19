@@ -44,6 +44,9 @@ export default {
     };
   },
   methods: {
+    changeIdentity: function() {
+      this.goTestPage();
+    },
     goTestPage: function() {
       this.$router.push('/test/' + this.$route.params.roomId);
     },
@@ -80,7 +83,7 @@ export default {
       //   id,
       //   name,
       // });
-      this.validated = 1;
+      this.validated = 0; //1;
       try {
         const myFile = new File([imageCapture], 'image.jpeg', {
           type: imageCapture.type,
@@ -104,25 +107,7 @@ export default {
         console.log(err.message);
         alert('인식이 안되었습니다. 다시 시도해주세요.');
       }
-
-      // if (this.count >= 3) {
-      //   alert('학생증 인증 실패!\n인증버튼을 다시 눌러 진행해주세요!');
-      // } else {
-      //   this.count++;
-      //   await this.goOCRCheck(this.$route.query.id, this.$route.query.name);
-      // }
     },
-    // async goAuthentic() {
-    //   this.count = 0;
-    //   const id = this.user.id;
-    //   const name = this.user.name;
-    //   if (id === '' || name === '') {
-    //     alert('학번이나 이름을 입력해주세요.');
-    //     return;
-    //   }
-    //   //id와 name을 서버에 보내getMediaStream고 OCR해서 맞는지 확인하고 디비 통신해서 있는 사용자 확인하고 맞으면 true로 넘어감
-    //   await this.goOCRCheck(id, name);
-    // },
   },
   async created() {
     await this.getMediaStream();

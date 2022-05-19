@@ -35,9 +35,6 @@ export default new Vuex.Store({
       console.log(payload);
       console.log('state.user');
       console.log(state.user);
-      // state.user.id = payload.id;
-      // state.user.name = payload.name;
-      // state.user.type = payload.Role.type;
     },
     logout: function(state) {
       if (state.user) {
@@ -58,6 +55,27 @@ export default new Vuex.Store({
         alert('로그아웃 되었음');
       }
     },
+    //   SET_NOWROOMID(state, data) {
+    //     state.nowRoomId=data;
+    //  },
+
+    //  SET_NOWPASSWORD(state,data){
+    //     state.password=data;
+    //  },
+    //  SET_NOWMANGEROOMID(state,data){
+    //     state.nowManageRoomId.status=data.status;
+    //     state.nowManageRoomId.isOpenbook=data.isOpenbook;
+    //  },
+
+    //  SET_NOW_EXAM_STATE(state,data){
+    //     state.nowRoomId.status = data;
+    //  },
+    //  SET_OPENBOOK(state,data){
+    //     state.nowRoomId.isOpenBook=data;
+    //  },
+    //  SET_NOW_STUDENT_DATA(state,data){
+    //     state.nowStudentList=data;
+    //  }
     // loginCheck: function(state) {
     //   if (!state.token) {
     //     router.push({ name: 'login' }).catch(error => {
@@ -74,6 +92,44 @@ export default new Vuex.Store({
     //   commit(state.user, null);
     //   return mb_name;
     // },
+    // async CHECK_ROOM_VALID({ commit }, id){
+    //         try{
+    //             return await fetchIsValidRoom(id);
+    //         }catch(err){
+    //             throw new Error('failed to fetch new items');
+    //         }
+    //     },
+    //     async CHECK_ROOM_MANAGE_VALID({ commit }, data){
+    //         return await fetchIsValidRoomManager(data.id, data.password);
+    //     },
+    //     async CHECK_MANAGER_VALID({ commit }, data){
+    //         return await fetchIsValidManager(data.roomNumber,data.password);
+    //     },
+    //     async CHECK_STUDENT_BY_OCR({ commit }, data){
+    //         return await fetchStudentOCR(data.imageCapture,data.id,data.name);
+    //     },
+    //     async CREATE_HOST_ROOM({commit}, data){
+    //         return await fetchCreateHost(data.subjectName,data.hostName,data.password,data.openTime,data.isOpenbook);
+    //     },
+    //     //관리자 시험 시작/중지
+    //     async ONOFF_EXAM({commit}, data){
+    //         return await fetchONOFFExam(data.roomNumber,data.status);
+    //     },
+    //     //학생 목록 리스트 디비에 저장
+    //     async CREATE_GUEST_LIST({commit}, data){
+    //         return await fetchCreateGuestList(data.lists,data.roomNumber);
+    //     },
+    //     async CHECK_GUEST_LIST({commit}, data){
+    //         return await fetchGetGuestList(data.roomNumber);
+    //     },
+    //     // 학생 파일 업로드
+    //     async CREATE_GUEST_EXAM_FILE({commit}, data){
+    //         return await fetchCreateGuestExamFile(data.roomNumber,data.userName,data.file);
+    //     },
+    //     // 부정행위 인식
+    //     async CHECK_CAM_MOBILE({commit}, data){
+    //         return await fetchStudentMobileCam(data.imageCapture);
+    //     }
   },
   // Computed 라고 봄.
   modules: {},

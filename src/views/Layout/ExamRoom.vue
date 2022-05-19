@@ -2,6 +2,20 @@
   <v-app>
     <v-content>
       <v-container fluid>
+        <!-- <AgoraVideoCall :videoProfile="videoProfile" :channel="channel" :transcode="transcode" :attendeeMode="attendeeMode" :baseMode="baseMode" :appId="appId" :uid="uid"></AgoraVideoCall>
+        <agora :appid="appId">
+          <agora-video-sender type="camera">
+            <div style="width:400px;height:300px"></div>
+          </agora-video-sender>
+        </agora> -->
+        <div>
+          <agora :channel="channel">
+            <agora-audio-sender />
+            <agora-audio-receiver />
+            <agora-video-receiver />
+            <agora-video-sender />
+          </agora>
+        </div>
         <v-row justify="center" style="padding:20px; padding-left: 90px;">
           <v-col justify="center">
             <v-row justify="center" cols="12" class="text-center" style="padding: 20px;">
@@ -44,9 +58,11 @@
 </template>
 
 <script>
+//import AgoraRtcVue from 'agora-rtc-vue';
 const socketURL = 'http://34.64.196.237:3000';
 import io from 'socket.io-client';
 import Chatting from './components/Chatting.vue';
+//import AgoraVideoCall from './components/AgoraVideoCall.vue';
 export default {
   components: { Chatting },
   created() {
@@ -61,6 +77,13 @@ export default {
   },
   data() {
     return {
+      appId: '8bfce6e171ef47779ac175c6a9809767',
+      videoProfile: '480p_4',
+      channel: '1234',
+      transcode: 'interop',
+      attendeeMode: 'video',
+      baseMode: 'avc',
+      uid: undefined,
       examId: this.$route.params.roomId,
       userId: this.$store.state.user.id,
       name: this.$store.state.user.name,

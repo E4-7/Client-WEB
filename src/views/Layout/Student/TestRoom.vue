@@ -5,7 +5,35 @@
         <v-row justify="center" style="padding:20px;">
           <v-col>
             <v-row justify="center" style="padding:15px;">
-              <v-card min-height="400" min-width="400">얼굴</v-card>
+              <v-card min-height="400" min-width="400">
+                <div class="wrapper meeting">
+                  <div class="ag-main">
+                    <!-- <div class="ag-container">
+                      <AgoraVideoCall
+                        :videoProfile="videoProfile"
+                        :channel="channel"
+                        :transcode="transcode"
+                        :attendeeMode="attendeeMode"
+                        :baseMode="baseMode"
+                        :appId="appId"
+                        :uid="uid"
+                      ></AgoraVideoCall>
+                    </div> -->
+                  </div>
+                  <!-- <div class="ag-footer">
+                    <a class="ag-href" href="https://www.agora.io"><span>Powered By Agora</span></a>
+                    <span>Talk to Support: 400 632 6626</span>
+                  </div> -->
+                </div>
+                <!-- <div>
+                  <agora :appid="config.appid" :token="config.token"
+                    >
+                    <agora-audio-sender />
+                    <agora-audio-receiver />
+                    <agora-video-receiver />
+                    <agora-video-sender />
+                  </agora></div> -->
+              </v-card>
             </v-row>
             <v-row justify="center">
               <v-card min-height="450" min-width="400">
@@ -50,24 +78,6 @@
               <v-btn text @click="submit">시험 종료</v-btn>
             </v-row>
           </v-col>
-          <!-- <v-col>
-            <v-row cols="12">
-              <v-card class="mx-auto" min-height="800" max-width="700" min-width="700">
-                <v-card-text>
-                  <div>채팅tddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddhe Day</div>
-                  <p class="text-h4 text--primary">
-                    채팅채팅채팅채팅채팅채팅채팅
-                  </p>
-                  <p>채팅채팅</p>
-                  <div class="text--primary">
-                    채팅채팅.<br />
-                    채팅채팅
-                  </div>
-                  <v-spacer></v-spacer>
-                </v-card-text>
-              </v-card>
-            </v-row>
-          </v-col> -->
         </v-row>
         <router-view></router-view>
       </v-container>
@@ -79,7 +89,19 @@
 const socketURL = 'http://34.64.196.237:3000';
 import io from 'socket.io-client';
 import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
+//import AgoraVideoCall from '@/components/AgoraVideoCall';
 import Chatting from '../components/Chatting.vue';
+
+//import AgoraRtcVue from 'agora-rtc-vue';
+//import 'agora-rtc-vue/lib/agora-rtc-vue.css';
+
+//8bfce6e171ef47779ac175c6a9809767
+//244b84aba3ed484f99eb7b72a0a9136d
+
+// Vue.use(AgoraRtcVue, {
+//   appid: 'f823987e32bd491d843459d5396eed2a',
+//   token: '244b84aba3ed484f99eb7b72a0a9136d',
+// });
 
 export default {
   components: {
@@ -88,6 +110,16 @@ export default {
   },
   data() {
     return {
+      appId: 'f823987e32bd491d843459d5396eed2a',
+      //videoProfile: //Cookies.get("videoProfile").split(",")[0] || "480p_4",
+      channel: '29af7b00-321c-48ef-8d48-41798294b5aa',
+      token: '244b84aba3ed484f99eb7b72a0a9136d',
+      //channel: Cookies.get("channel") || "test",
+      //transcode: Cookies.get("transcode") || "interop",
+      //attendeeMode: Cookies.get("attendeeMode") || "video",
+      //baseMode: Cookies.get("baseMode") || "avc",
+      //uid: undefined,
+      socketRef: null,
       examId: this.$route.params.roomId,
       userId: this.$store.state.user.id,
       name: this.$store.state.user.name,
