@@ -15,7 +15,7 @@
           </v-col>
           <v-col align-self="center" justify="center" col="2">
             <v-row justify="center" style="padding:20px;">
-              <v-btn :disabled="validated == 1" @click="goOCRCheck()" x-large>신원확인하기</v-btn>
+              <v-btn :disabled="validated == 1" @click="goOCRCheck()" x-large>{{ buttonMessage }}</v-btn>
             </v-row>
             <v-btn text @click="changeIdentity()">
               혹시 학생증이 없거나 인식이 안되나요?
@@ -35,6 +35,7 @@ export default {
   components: { Video },
   data: () => {
     return {
+      buttonMessage: '신원확인하기',
       validated: 0,
       reveal: false,
       stream: null,
@@ -83,7 +84,8 @@ export default {
       //   id,
       //   name,
       // });
-      this.validated = 0; //1;
+      this.validated = 1;
+      this.buttonMessage = '신원확인 중,, 잠시만 기다려주세요.';
       try {
         const myFile = new File([imageCapture], 'image.jpeg', {
           type: imageCapture.type,
@@ -102,10 +104,13 @@ export default {
         if (data.success) {
           alert('성공', data);
           this.goTestPage();
+          this.$store.commit('enterRoom', data.data.room);
         }
       } catch (err) {
         console.log(err.message);
         alert('인식이 안되었습니다. 다시 시도해주세요.');
+        this.validated = 0;
+        this.buttonMessage = '신원확인';
       }
     },
   },

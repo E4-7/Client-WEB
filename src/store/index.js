@@ -25,6 +25,7 @@ export default new Vuex.Store({
         type: 2,
       },
     },
+    room: {},
   },
   // state 변경하는 유일한 방법이고 이벤트와 유사
   // 첫번째 인자 state / 두번째 인자 payload
@@ -54,6 +55,13 @@ export default new Vuex.Store({
         // };
         alert('로그아웃 되었음');
       }
+    },
+    enterRoom: function(state, payload) {
+      state.room = payload;
+      console.log('payload');
+      console.log(payload);
+      console.log('state.room');
+      console.log(state.room);
     },
     //   SET_NOWROOMID(state, data) {
     //     state.nowRoomId=data;
@@ -133,4 +141,9 @@ export default new Vuex.Store({
   },
   // Computed 라고 봄.
   modules: {},
+  getters: {
+    getRoomId: function(state) {
+      return (state.count = state.count + 1);
+    },
+  },
 });
