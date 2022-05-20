@@ -103,8 +103,8 @@ export default {
 
         if (data.success) {
           alert('성공', data);
+          this.$store.commit('SET_STUDENT_ROOM', data.data.room);
           this.goTestPage();
-          this.$store.commit('enterRoom', data.data.room);
         }
       } catch (err) {
         console.log(err.message);

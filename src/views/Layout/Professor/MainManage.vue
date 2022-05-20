@@ -381,6 +381,7 @@ export default {
   },
   methods: {
     async saveAssistant() {
+      // 조교 추가하기
       const uuid = this.classCards[this.currentClassId].Exam.id;
       this.$http
         .post(`exams/${uuid}/assistant`, {
@@ -607,12 +608,8 @@ export default {
         .get('exams/')
         .then(Response => {
           this.classCards = Response.data.data;
-          this.initClassList(Response.data.data);
-
-          // console.log('this.classCards');
-          // console.log(this.classCards);
-
-          //Vue.set(this.classCards, 'id', Response.data.data);
+          this.initClassList(this.classCards);
+          this.$store.commit('SET_ROOMLIST', this.classCards); // 처음 roomList vuex 저장
         })
         .catch(Error => {
           console.log(Error.message);
@@ -631,12 +628,14 @@ export default {
     },
   },
   mounted() {
-    // 페이지 시작하면은 자동 함수 실행
-    this.getClassInformation();
-    this.roleType = this.$store.state.user.Role.type;
     // this.$nextTick(() => {
     //   this.currentTitle = this.$route.params.recrumentId;
     // });
+  },
+  created() {
+    // 페이지 시작하면은 자동 함수 실행
+    this.getClassInformation();
+    this.roleType = this.$store.state.user.Role.type;
   },
 };
 </script>

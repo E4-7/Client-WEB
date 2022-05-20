@@ -8,7 +8,8 @@
               <v-card min-height="400" min-width="400">
                 <div>
                   <!--<agora :appid="appid" :channel="channel" :token="token">-->
-                  <agora :appid="this.$store.state.room.agoraAppId" :channel="this.$store.state.room.ExamId" :token="this.$store.state.room.agoraToken">
+                  <agora :appid="this.$store.state.room.agoraAppId" :channel="this.$store.state.room.id" :token="this.$store.state.room.agoraToken">
+                    33333333333333333{{ this.$store.state.room.agoraAppId }}
                     <agora-audio-sender />
                     <agora-audio-receiver />
                     <agora-video-sender />
@@ -113,6 +114,9 @@ export default {
   created() {
     console.log('this.$store.state.room');
     console.log(this.$store.state.room);
+    console.log('this.$store.state.user');
+    console.log(this.$store.state.user);
+
     const examPayload = { roomId: this.examId };
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
