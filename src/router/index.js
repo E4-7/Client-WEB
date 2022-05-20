@@ -44,7 +44,7 @@ const routes = [
   {
     path: '/main/:roomId',
     name: 'ExamRoom',
-    component: () => import('@/views/Layout/ExamRoom.vue'),
+    component: () => import('@/views/Layout/ProfessorExamRoom.vue'),
   },
   {
     path: '/base',

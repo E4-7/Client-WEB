@@ -3,7 +3,8 @@
     <v-content>
       <v-container fluid>
         <div>
-          <agora :appid="appid" :channel="channel" :token="token">
+          <agora :appid="this.room.Exam.agoraAppId" :channel="this.room.Exam.id" :token="this.room.Exam.agoraToken">
+            33333333333333333{{ this.room.agoraAppId }}
             <agora-audio-sender />
             <agora-video-sender />
           </agora>
@@ -19,7 +20,7 @@
             <v-row dense>
               <!--이거 레이아웃 설정하기-->
               <div>
-                <agora :appid="appid" :channel="channel" :token="token">
+                <agora :appid="this.room.Exam.agoraAppId" :channel="this.room.Exam.id" :token="this.room.Exam.agoraToken">
                   <agora-audio-receiver />
                   <agora-video-receiver />
                 </agora>
@@ -75,6 +76,29 @@ import Chatting from './components/Chatting.vue';
 export default {
   components: { Chatting },
   created() {
+    console.log('this.$store.getters.getRoomId(this.$store.state.room.ExamId');
+    console.log(this.$route.params.roomId);
+    let tmpRoom = this.$store.getters.getRoomId(this.$route.params.roomId);
+
+    this.room = tmpRoom;
+
+    console.log('this.$store.state.room');
+    console.log(this.room);
+    console.log('this.room.agoraAppId');
+    console.log(this.room.Exam.agoraAppId);
+
+    // OwnerId: "574581e5-50b2-4aa7-8b69-b893f05e8221"
+    // agoraAppId: "f823987e32bd491d843459d5396eed2a"
+    // agoraToken: "006f823987e32bd491d843459d5396eed2aIADRYxFzSL8IX5oWlN7P/9ki6D/zvvfAzjhCcKfL3aDREa1JzVcAAAAAIgDy83Ixp42IYgQAAQCnjYhiAgCnjYhiAwCnjYhiBACnjYhi"
+    // created_at: "2022-05-20T06:58:47.841Z"
+    // deleted_at: null
+    // exam_time: "2022-05-19T15:00:00.000Z"
+    // id: "9fa83f7d-c566-4dfe-a641-1444b15aa18f"
+    // is_openbook: true
+    // name: "운영체제1"
+    // status: 1
+    // updated_at: "2022-05-20T06:58:47.841Z"
+
     const examPayload = { roomId: this.examId };
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
@@ -86,10 +110,12 @@ export default {
   },
   data() {
     return {
-      appid: 'f823987e32bd491d843459d5396eed2a',
+      room: {
+        appid: 'f823987e32bd491d843459d5396eed2a',
+        channel: '9fa83f7d-c566-4dfe-a641-1444b15aa18f',
+        token: '006f823987e32bd491d843459d5396eed2aIADRYxFzSL8IX5oWlN7P/9ki6D/zvvfAzjhCcKfL3aDREa1JzVcAAAAAIgDy83Ixp42IYgQAAQCnjYhiAgCnjYhiAwCnjYhiBACnjYhi',
+      },
       videoProfile: '480p_4',
-      channel: '68f7f8bb-d3a1-451e-9d1b-45478fb8956a',
-      token: '006f823987e32bd491d843459d5396eed2aIAAXMfNSxKPUbMg4j2hpgN2RQJtiAAblDG5yGCbEYfUrN1k0dKgAAAAAIgDy83IxOTCHYgQAAQA5MIdiAgA5MIdiAwA5MIdiBAA5MIdi',
       transcode: 'interop',
       attendeeMode: 'video',
       baseMode: 'avc',
