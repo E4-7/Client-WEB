@@ -25,6 +25,7 @@ export default new Vuex.Store({
         type: 2,
       },
     },
+    student: {},
     room: {},
     roomList: [],
   },
@@ -57,17 +58,14 @@ export default new Vuex.Store({
         alert('로그아웃 되었음');
       }
     },
+    SET_STUDENT_INFORMATION: function(state, payload) {
+      state.student = payload;
+    },
     SET_STUDENT_ROOM: function(state, payload) {
       state.room = payload;
-      console.log('payload');
-      console.log(payload);
-      console.log('state.room');
-      console.log(state.room);
     },
     SET_ROOMLIST(state, data) {
       state.roomList = data;
-      console.log('roomList');
-      console.log(state.roomList);
     },
 
     //  SET_NOWPASSWORD(state,data){
