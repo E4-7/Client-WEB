@@ -33,7 +33,7 @@
                       </p>
                       <br />
                       <br />
-                      <v-text-field placeholder="input code" outlined label="코드" v-model="enterCode" :rules="rules"> </v-text-field>
+                      <v-text-field placeholder="input code" @keyup.enter="e1 = 2" outlined label="코드" v-model="enterCode" :rules="rules"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>
@@ -52,12 +52,12 @@
                         학번
                       </div>
                       <br />
-                      <v-text-field outlined label="학번" v-model="enterStudentId" :rules="rules"> </v-text-field>
+                      <v-text-field outlined label="학번" v-model="enterStudentId" :rules="rules" @keyup.enter="checkStudentIdentity"> </v-text-field>
                       <div style="font-size: 30px">
                         이름
                       </div>
                       <br />
-                      <v-text-field placeholder="input your name" outlined label="이름" v-model="enterName" :rules="rules"> </v-text-field>
+                      <v-text-field placeholder="input your name" outlined label="이름" v-model="enterName" :rules="rules" @keyup.enter="checkStudentIdentity"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>
@@ -116,9 +116,6 @@ export default {
   }),
   methods: {
     checkStudentIdentity: function() {
-      console.log(this.enterName);
-      console.log(this.enterCode);
-      console.log(this.enterStudentId);
       this.$http
         .post(`exams/${this.enterCode}/students/authentic`, {
           name: this.enterName,
