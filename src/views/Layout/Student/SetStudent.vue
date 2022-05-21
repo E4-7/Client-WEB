@@ -150,7 +150,13 @@ export default {
     this.preInformationButton = this.StudentIdCardButtonMessage;
     await this.getMediaStream();
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => {
+        track.stop();
+      });
+    }
+  },
 };
 </script>
 
