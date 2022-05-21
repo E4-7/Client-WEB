@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-card style="overflow-y:scroll" min-height="820" max-width="820" class="mx-auto">
-      >
       <v-card-text style="text-align:right">
         <p v-for="message in messages" :key="message.id" class="text-h5 text--primary">
           {{ message }}
