@@ -15,7 +15,7 @@
               </p>
               <br />
               <v-col>
-                <v-text-field v-model="user.email" :rules="[rules.required, rules.email]" label="아이디 or E-mail" outlined></v-text-field>
+                <v-text-field v-model="user.email" @keyup.enter="goManagePage()" :rules="[rules.required, rules.email]" label="아이디 or E-mail" outlined></v-text-field>
               </v-col>
               <v-col>
                 <v-text-field
@@ -24,6 +24,7 @@
                   :rules="[rules.required, rules.min]"
                   :type="show ? 'text' : 'password'"
                   label="비밀번호"
+                  @keyup.enter="goManagePage()"
                   hint="input your password"
                   class="input-group--focused"
                   @click:append="show = !show"
