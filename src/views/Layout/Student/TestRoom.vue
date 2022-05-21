@@ -7,13 +7,14 @@
             <v-row justify="center" style="padding:15px;">
               <v-card min-height="400" min-width="400">
                 <div>
-                  <!--<agora :appid="appid" :channel="channel" :token="token">-->
-                  <agora :appid="this.$store.state.room.agoraAppId" :channel="this.$store.state.room.id" :token="this.$store.state.room.agoraToken">
-                    33333333333333333{{ this.$store.state.room.agoraAppId }}
+                  <agora :appid="this.$store.state.room.agoraAppId" :channel="this.$store.state.room.id" :token="this.$store.state.room.agoraToken" :clientConfig="{ codec: 'vp8' }">
                     <agora-audio-sender />
                     <agora-audio-receiver />
                     <agora-video-sender />
                   </agora>
+                  <v-btn @click="mic = !mic">
+                    <v-img max-height="25" max-width="25" :src="mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
+                  </v-btn>
                 </div>
               </v-card>
             </v-row>
@@ -56,9 +57,9 @@
             <v-row justify="center" style="padding-top:40px; justify-content: flex-end;">
               <v-btn text @click="submit()">파일 업로드</v-btn>
             </v-row>
-            <v-row justify="center" style="padding-top:40px;">
+            <!-- <v-row justify="center" style="padding-top:40px;">
               <v-btn text @click="submit">시험 종료</v-btn>
-            </v-row>
+            </v-row> -->
           </v-col>
         </v-row>
         <router-view></router-view>
@@ -80,35 +81,21 @@ export default {
   },
   data() {
     return {
-      appid: '',
-      channel: '',
-      token: '',
+      mic: true,
       videoProfile: '480p_4',
       transcode: 'interop',
       attendeeMode: 'video',
       baseMode: 'avc',
-      uid: 0,
       socketRef: null,
       examId: this.$route.params.roomId,
       userId: this.$store.state.user.id,
       name: this.$store.state.user.name,
       page: 1,
       pageCount: 1,
-      source1: '/docs/a.pdf',
+      source1: this.$store.state.room.ExamPaper.url,
       currentPage: 0,
-      image: 'test image',
+      image: '',
       msg: '',
-      classInformation: {
-        title: '알고리즘',
-        kind: '오픈북',
-        state: '진행중',
-        time: '??',
-      },
-      path: {
-        recrumentId: '',
-        companyId: '',
-        current: '',
-      },
     };
   },
   created() {
@@ -140,23 +127,27 @@ export default {
     // 파일 변경 시 이벤트 핸들러
     selectFile(file) {
       this.image = file;
+      console.log(this.image);
     },
-    submit() {},
-    // async submit() {
-    //   const formData = new FormData();
-    //   formData.append('image', this.image);
+    async submit() {
+      const formData = new FormData();
+      formData.append('file', this.image);
+      formData.append('name', this.$store.state.student.name);
+      formData.append('studentID', this.$store.state.student.studentID);
 
-    //   try {
-    //     const { data } = await axios.post('http://127.0.0.1:3000/product/create', formData, {
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data',
-    //       },
-    //     });
-    //     console.log(data);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
+      try {
+        const { data } = await this.$http.post(`exams/${this.$store.state.room.id}/students/upload/answer`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log(data);
+        alert('시험지 제출 완료');
+      } catch (err) {
+        console.log(err);
+        alert('시험지 제출 실패!!!');
+      }
+    },
   },
 };
 </script>
