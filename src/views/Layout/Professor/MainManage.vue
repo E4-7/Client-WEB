@@ -303,12 +303,11 @@
 import XLSX from 'xlsx';
 import MenuBar from '../MenuBar.vue';
 import BaseDialog from '../components/BaseDialog.vue';
-//import DataTable from '../components/DataTable.vue';
 import Vue from 'vue';
 
 export default {
   name: 'Professor',
-  components: { MenuBar, BaseDialog }, //, DataTable },
+  components: { MenuBar, BaseDialog },
   data() {
     return {
       inputForm: {
@@ -412,7 +411,6 @@ export default {
           alert('삭제완료');
         })
         .catch(error => {
-          alert(error);
           alert(error.response.data.data);
         });
     },

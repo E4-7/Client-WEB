@@ -4,7 +4,6 @@ import router from './router';
 import store from './store';
 import axios from 'axios';
 import vuetify from './plugins/vuetify';
-import 'agora-rtc-vue/lib/agora-rtc-vue.css';
 const apiBaseURL = 'https://api.e47app.click/api/';
 
 const instance = axios.create({
@@ -16,6 +15,7 @@ instance.defaults.withCredentials = true;
 Vue.prototype.$http = instance;
 
 import AgoraRtcVue from 'agora-rtc-vue';
+import 'agora-rtc-vue/lib/agora-rtc-vue.css';
 Vue.use(AgoraRtcVue, {});
 
 new Vue({
