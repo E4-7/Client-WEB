@@ -85,6 +85,10 @@ export default {
     socket.on('connect', async () => {
       this.socketRef = socket;
       socket.emit('joinRoom', examPayload);
+      //socket on sengMsgToManager
+      // socket.on('sengMsgToManager',data=>{
+      //   데이터 받고 교수에게 뿌려주기
+      // })
     });
   },
   data() {
