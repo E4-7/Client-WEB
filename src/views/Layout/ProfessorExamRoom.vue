@@ -48,11 +48,11 @@
           <v-col cols="4">
             <v-row cols="12" justify="center" style="padding: 20px; padding-top: 70px;">
               <!--시험상태 : {{ 진행중 }}-->
-              <h1>오픈북 여부 :{{ this.room.Exam.is_openbook }}</h1>
+              <h2>[{{ this.examStatus }}]오픈북 여부 :{{ this.room.Exam.is_openbook }}</h2>
             </v-row>
-            <v-row justify="center" style="padding: 20px;">
-              <v-col cols="2"><v-btn>시험 시작</v-btn></v-col>
-              <v-col cols="2"><v-btn>시험 종료</v-btn></v-col>
+            <v-row justify="center" style="padding: 10px;">
+              <v-col cols="3"><v-btn @click="startExam()">시험 시작</v-btn></v-col>
+              <v-col cols="3"><v-btn @click="stopExam()">시험 종료</v-btn></v-col>
             </v-row>
             <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId"></Chatting>
             <div v-if="socketRef == null">
@@ -94,6 +94,7 @@ export default {
         channel: '9fa83f7d-c566-4dfe-a641-1444b15aa18f',
         token: '006f823987e32bd491d843459d5396eed2aIADRYxFzSL8IX5oWlN7P/9ki6D/zvvfAzjhCcKfL3aDREa1JzVcAAAAAIgDy83Ixp42IYgQAAQCnjYhiAgCnjYhiAwCnjYhiBACnjYhi',
       },
+      examStatus: '시험 대기 중',
       search: '',
       baseTextDialog: false,
       mic: true,
@@ -140,6 +141,26 @@ export default {
     },
     hideDialog(type) {
       this[`base${type}Dialog`] = false;
+    },
+    startExam() {
+      if (this.socketRef) {
+        this.socketRef.emit('startRoom', {
+          sender: this.userId,
+          name: this.name,
+          roomId: this.examId,
+        });
+        this.examStatus = '시험 중';
+      }
+    },
+    stopExam() {
+      if (this.socketRef) {
+        this.socketRef.emit('exitRoom', {
+          sender: this.userId,
+          name: this.name,
+          roomId: this.examId,
+        });
+        this.examStatus = '시험 종료';
+      }
     },
     async getStudentTable() {
       const response = await this.$http.get(`exams/${this.$route.params.roomId}/students`);
