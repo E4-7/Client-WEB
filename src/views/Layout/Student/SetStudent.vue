@@ -3,8 +3,7 @@
     <v-main>
       <v-container fill-height>
         <v-row>
-          [안내] 어쩌구어쩌구 녹화는 되고, 부정행위 의심 모션을 취했을때는 채팅으로 경고를 주고, 동영상이 저장되어 검토가 이루어집니다. 질문이 있을때는 손버튼을 클릭하시거나 손을 드시면 됩니다??
-          채팅기능 가능합니다 고사장 비디오 오디오 장치 변경하거나 끌 수있다. 등등 설명
+          {{ preInformation }}
         </v-row>
         <v-row justify="center">
           <v-col col="2">
@@ -18,7 +17,7 @@
               <v-btn :disabled="validated == 1" @click="goOCRCheck()" x-large>{{ buttonMessage }}</v-btn>
             </v-row>
             <v-btn text @click="changeIdentity()">
-              혹시 학생증이 없거나 인식이 안되나요?
+              {{ preInformationButton }}
             </v-btn>
           </v-col>
         </v-row>
@@ -42,11 +41,37 @@ export default {
       count: 0,
       items: ['Programming', 'Design', 'Vue', 'Vuetify'],
       check: false,
+      urlappend: '',
+      preInformation: '',
+      preInformationButton: '',
+      isIdentityStudentIDCard: true,
+      studentIdCardInformationMessage:
+        '[안내] 부정행위 의심 행동이 발각될 시에는 감독관에게 안내가 갑니다. \
+      채팅 기능으로 실시간 감독관에게 연락할 수 있습니다. \
+      신원확인은 화면에 학생증을 대고 버튼을 눌러주세요. \
+      약 5초 뒤에 신원인증이 완료된다면, 시험장 화면으로 넘어갑니다. \
+      만일, 학생증이 없거나 인식이 안된다면, "신원확인하기" 버튼 \
+      아래의 "혹시 학생증이 없거나 인식이 안되나요?" 버튼을 클릭해주세요.',
+      identityInformationMessage: '[안내] 카메라에 신분증을 얼굴 옆에 들고 신원확인하기 버튼을 눌러주세요. 아래와 같이 사진을 찍어주세요 (예시사진)',
+      StudentIdCardButtonMessage: '혹시 학생증이 없거나 인식이 안되나요?',
+      IdentityButtonMessage: '학생증으로 인증하고 싶어요!',
     };
   },
   methods: {
     changeIdentity: function() {
-      this.goTestPage();
+      if (this.isIdentityStudentIDCard) {
+        // 학생증 -> 신분증으로 인증 버튼 누름
+        this.isIdentityStudentIDCard = false;
+        this.preInformation = this.identityInformationMessage;
+        this.preInformationButton = this.IdentityButtonMessage;
+      } else {
+        // 학생증으로 인증할래요
+        this.isIdentityStudentIDCard = true;
+        this.preInformation = this.studentIdCardInformationMessage;
+        this.preInformationButton = this.StudentIdCardButtonMessage;
+      }
+
+      //this.goTestPage();
     },
     goTestPage: function() {
       this.$router.push('/test/' + this.$route.params.roomId);
@@ -95,7 +120,12 @@ export default {
         frm.append('studentID', this.$route.query.id);
         frm.append('name', this.$route.query.name);
 
-        const { data } = await this.$http.post(`exams/${this.$route.params.roomId}/students/authentication`, frm);
+        if (this.isIdentityStudentIDCard) {
+          this.urlappend = '';
+        } else {
+          this.urlappend = '/image';
+        }
+        const { data } = await this.$http.post(`exams/${this.$route.params.roomId}/students/authentication` + this.urlappend, frm);
 
         console.log('data');
         console.log(data);
@@ -103,6 +133,7 @@ export default {
 
         if (data.success) {
           alert('성공', data);
+          this.$store.commit('SET_STUDENT_INFORMATION', data.data.student);
           this.$store.commit('SET_STUDENT_ROOM', data.data.room);
           this.goTestPage();
         }
@@ -115,8 +146,11 @@ export default {
     },
   },
   async created() {
+    this.preInformation = this.studentIdCardInformationMessage;
+    this.preInformationButton = this.StudentIdCardButtonMessage;
     await this.getMediaStream();
   },
+  beforeDestroy() {},
 };
 </script>
 
