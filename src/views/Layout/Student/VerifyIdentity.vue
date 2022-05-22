@@ -33,7 +33,7 @@
                       </p>
                       <br />
                       <br />
-                      <v-text-field placeholder="input code" @keyup.enter="e1 = 2" outlined label="코드" v-model="enterCode" :rules="rules"> </v-text-field>
+                      <v-text-field placeholder="input code" autofocus @keyup.enter="e1 = 2" outlined label="코드" v-model="enterCode" :rules="rules"> </v-text-field>
                     </v-card-text>
                   </v-row>
                 </v-card>

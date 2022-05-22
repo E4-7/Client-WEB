@@ -52,6 +52,7 @@ export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
 
   // console.log('adjacentKeyPoints');
   // console.log(adjacentKeyPoints);
+  console.log(keypoints);
   console.log(adjacentKeyPoints);
   adjacentKeyPoints.forEach(keypoints => {
     drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
@@ -62,16 +63,20 @@ export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
  * Draw pose keypoints onto a canvas
  */
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
+  const arr = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
   for (let i = 0; i < keypoints.length; i++) {
     const keypoint = keypoints[i];
 
     if (keypoint.score < minConfidence) {
       continue;
     }
-
-    const { y, x } = keypoint.position;
-    drawPoint(ctx, y * scale, x * scale, 3, color);
+    arr[i] = true;
+    //console.log(keypoints[0], keypoints[1], keypoints[2], keypoints[9], keypoints[10]);
   }
+  if (arr[0] && arr[1] && arr[2] && arr[9] && arr[10]) {
+    return true;
+  }
+  return false;
 }
 
 /**
