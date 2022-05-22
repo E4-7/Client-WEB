@@ -15,6 +15,9 @@
                   <v-btn @click="mic = !mic">
                     <v-img max-height="25" max-width="25" :src="mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
                   </v-btn>
+                  <v-btn @click="play()">
+                    자세요
+                  </v-btn>
                 </div>
               </v-card>
             </v-row>
@@ -73,6 +76,8 @@ const socketURL = 'http://34.64.196.237:3000';
 import io from 'socket.io-client';
 import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
 import Chatting from '../components/Chatting.vue';
+import * as posenet from '@tensorflow-models/posenet';
+import * as utils from '../../../utils/utils';
 
 export default {
   components: {
@@ -96,14 +101,17 @@ export default {
       currentPage: 0,
       image: '',
       msg: '',
+      net: '',
+      ctx: '',
+      canvas: document.createElement('canvas'),
+      video: '',
+      pose: [],
+      count: 0,
+      isPlay: false,
     };
   },
-  created() {
-    console.log('this.$store.state.room');
-    console.log(this.$store.state.room);
-    console.log('this.$store.state.user');
-    console.log(this.$store.state.user);
 
+  created() {
     const examPayload = { roomId: this.examId };
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
@@ -114,6 +122,29 @@ export default {
     });
   },
   methods: {
+    async play() {
+      this.video = document.getElementsByClassName('agora_video_player')[0];
+      this.net = await posenet.load(); // es6 모듈 불러오기
+      this.isPlay = true;
+      requestAnimationFrame(this.draw);
+    },
+    async draw() {
+      this.pose = await this.net.estimateSinglePose(this.video, 0.5, false, 32);
+      const returnedValue = utils.drawKeypoints(this.pose.keypoints, 0.7, this.ctx);
+      console.log(returnedValue);
+      if (returnedValue) {
+        this.count++;
+        if (this.count > 30) {
+          console.log('에러 ㅋ');
+        }
+      } else this.count = 0;
+      if (this.isPlay) {
+        requestAnimationFrame(this.drawPerFrame);
+      }
+    },
+    drawPerFrame() {
+      this.draw();
+    },
     handleDocumentRender() {
       this.pageCount = this.$refs.pdfRef.pageCount;
     },
