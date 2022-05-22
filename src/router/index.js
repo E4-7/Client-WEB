@@ -27,6 +27,11 @@ const routes = [
     props: true,
   },
   {
+    path: '/tensorflow',
+    name: 'Tensorflow',
+    component: () => import('@/views/Layout/test/MoviePage.vue'),
+  },
+  {
     path: '/test/:roomId',
     name: 'StudentExam',
     component: () => import('@/views/Layout/Student/TestRoom.vue'),
