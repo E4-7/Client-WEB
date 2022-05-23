@@ -148,6 +148,7 @@ export default {
     },
     startExam() {
       if (this.socketRef) {
+        console.log('startRoom');
         this.socketRef.emit('startRoom', {
           sender: this.userId,
           name: this.name,

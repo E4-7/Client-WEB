@@ -15,9 +15,6 @@
                   <v-btn @click="mic = !mic">
                     <v-img max-height="25" max-width="25" :src="mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
                   </v-btn>
-                  <v-btn @click="play()">
-                    자세요
-                  </v-btn>
                 </div>
               </v-card>
             </v-row>
@@ -41,12 +38,6 @@
             </v-card>
           </v-col>
           <v-col style="padding:10px;">
-            <v-row justify="center" style="padding-top:50px;">
-              <v-btn @click="submit()"
-                >손들기
-                <h1>🖐</h1></v-btn
-              >
-            </v-row>
             <v-row justify="center" style="padding:30px;">
               <h4 class="display-2 font-weight-bold mb-3">42:44</h4>
             </v-row>
@@ -118,7 +109,13 @@ export default {
     });
     socket.on('connect', async () => {
       this.socketRef = socket;
-      socket.emit('joinRoom', examPayload);
+      this.socketRef.on('startRoom', () => {
+        this.play();
+      });
+      this.socketRef.on('exitRoom', () => {
+        this.isPlay = false;
+      });
+      this.socketRef.emit('joinRoom', examPayload);
     });
   },
   methods: {
@@ -135,7 +132,7 @@ export default {
       if (returnedValue) {
         this.count++;
         if (this.count > 30) {
-          console.log('에러 ㅋ');
+          console.log('부정행위 검출');
         }
       } else this.count = 0;
       if (this.isPlay) {
