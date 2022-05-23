@@ -20,7 +20,7 @@
             </v-row>
             <v-row justify="center">
               <v-card min-height="450" min-width="400">
-                <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId"></Chatting>
+                <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId" manager="s"></Chatting>
                 <div v-else>
                   네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
                   다시 시도해주세요.
@@ -110,6 +110,7 @@ export default {
     socket.on('connect', async () => {
       this.socketRef = socket;
       this.socketRef.on('startRoom', () => {
+        this.isPlay = true;
         this.play();
       });
       this.socketRef.on('exitRoom', () => {
@@ -129,10 +130,17 @@ export default {
       this.pose = await this.net.estimateSinglePose(this.video, 0.5, false, 32);
       const returnedValue = utils.drawKeypoints(this.pose.keypoints, 0.7, this.ctx);
       console.log(returnedValue);
-      if (returnedValue) {
+      if (!returnedValue) {
         this.count++;
         if (this.count > 30) {
-          console.log('부정행위 검출');
+          const payload = {
+            roomId: this.examId,
+            msg: `${this.name}님의 부정행위가 감지되었습니다.`,
+            receiver: this.userId,
+          };
+          console.log(payload);
+          this.socketRef.emit('sengMsgToManager', payload);
+          this.count = 0;
         }
       } else this.count = 0;
       if (this.isPlay) {

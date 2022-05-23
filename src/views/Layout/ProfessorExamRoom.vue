@@ -54,7 +54,7 @@
               <v-col cols="3"><v-btn @click="startExam()">시험 시작</v-btn></v-col>
               <v-col cols="3"><v-btn @click="stopExam()">시험 종료</v-btn></v-col>
             </v-row>
-            <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId"></Chatting>
+            <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId" manager="p"></Chatting>
             <div v-if="socketRef == null">
               네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
               다시 시도해주세요.
@@ -86,9 +86,6 @@ export default {
       this.socketRef = socket;
       socket.emit('joinRoom', examPayload);
       //socket on sengMsgToManager
-      // socket.on('sengMsgToManager',data=>{
-      //   데이터 받고 교수에게 뿌려주기
-      // })
     });
   },
   data() {

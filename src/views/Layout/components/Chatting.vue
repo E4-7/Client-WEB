@@ -36,8 +36,15 @@ export default {
     this.socket.on('sendMsgToAll', data => {
       this.messages.push(`${data.name}: ${data.msg}`);
     });
+    console.log(this.manager);
+    if (this.manager === 'p') {
+      this.socket.on('sengMsgToManager', data => {
+        this.messages.push(`${data.msg}`);
+      });
+    }
+    this.socket.on;
   },
-  props: ['socket', 'examId', 'userId', 'name'],
+  props: ['socket', 'examId', 'userId', 'name', 'manager'],
   created() {},
   data() {
     return {
