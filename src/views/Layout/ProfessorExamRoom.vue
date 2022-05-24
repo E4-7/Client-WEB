@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-content>
+  <v-app v-if="this.room">
+    <v-main>
       <v-container fluid>
         <v-row justify="center" style="padding:20px; padding-left: 90px;">
           <v-col justify="center">
@@ -63,7 +63,7 @@
         </v-row>
         <router-view></router-view>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -77,11 +77,10 @@ export default {
   components: { Chatting, BaseDialog },
   async created() {
     this.getStudentTable();
-    if (this.$store.state.roomList.length === 0) {
+    if (this.$store.state.roomList.length !== 0) {
       this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
     } else {
       // undefined
-      console.log(this.room != null);
       const response = await this.$http.get(`exams/${this.$route.params.roomId}`);
       this.room = response.data.data;
       console.log(this.room);
@@ -98,14 +97,7 @@ export default {
   },
   data() {
     return {
-      room: {
-        // Exam: {
-        //   name: '',
-        // },
-        // appid: 'f823987e32bd491d843459d5396eed2a',
-        // channel: '9fa83f7d-c566-4dfe-a641-1444b15aa18f',
-        // token: '06f823987e32bd491d843459d5396eed2aIADRYxFzSi',
-      },
+      room: null,
       examStatus: '시험 대기 중',
       roleType: this.$store.state.user.Role.type,
       search: '',
