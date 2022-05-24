@@ -1,6 +1,6 @@
 <template>
-  <v-app v-if="this.room">
-    <v-main>
+  <v-app>
+    <v-main v-if="this.room">
       <v-container fluid>
         <v-row justify="center" style="padding:20px; padding-left: 90px;">
           <v-col justify="center">
