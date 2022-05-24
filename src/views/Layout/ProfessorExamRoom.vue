@@ -50,7 +50,7 @@
               <!--시험상태 : {{ 진행중 }}-->
               <h2>[{{ this.examStatus }}]오픈북 여부 :{{ this.room.Exam.is_openbook }}</h2>
             </v-row>
-            <v-row justify="center" style="padding: 10px;">
+            <v-row v-if="roleType == 2" justify="center" style="padding: 10px;">
               <v-col cols="3"><v-btn @click="startExam()">시험 시작</v-btn></v-col>
               <v-col cols="3"><v-btn @click="stopExam()">시험 종료</v-btn></v-col>
             </v-row>
@@ -77,14 +77,11 @@ export default {
   components: { Chatting, BaseDialog },
   async created() {
     this.getStudentTable();
-    console.log('this.$store.state.room');
-    console.log(this.$store.state.room);
-    console.log(this.$store.state.roomList);
-    this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
-    console.log('this.room');
-    console.log(this.room);
-    console.log(this.room != null);
-    if (this.room == null) {
+    console.log('this.$store.state.user.Role.type');
+    console.log(this.$store.state.user);
+    if (this.$store.state.roomList.length === 0) {
+      this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
+    } else {
       // undefined
       console.log(this.room != null);
       const response = await this.$http.get(`exams/${this.$route.params.roomId}`);
@@ -92,8 +89,6 @@ export default {
       console.log(this.room);
     }
     const examPayload = { roomId: this.examId };
-    console.log('examPayload');
-    console.log(examPayload);
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
     });
@@ -106,17 +101,15 @@ export default {
   data() {
     return {
       room: {
-        Exam: {
-          name: '',
-          agoraAppId: '',
-          id: '',
-          agoraToken: '',
-        },
+        // Exam: {
+        //   name: '',
+        // },
         // appid: 'f823987e32bd491d843459d5396eed2a',
         // channel: '9fa83f7d-c566-4dfe-a641-1444b15aa18f',
         // token: '06f823987e32bd491d843459d5396eed2aIADRYxFzSi',
       },
       examStatus: '시험 대기 중',
+      roleType: this.$store.state.user.Role.type,
       search: '',
       baseTextDialog: false,
       mic: true,
