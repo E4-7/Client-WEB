@@ -162,7 +162,7 @@
               </v-row>
             </template>
           </base-dialog>
-          <base-dialog v-else-if="what === 'B'" toolbar-header-title="조교 관리" header-title="조교 계정 생성" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
+          <base-dialog v-else-if="what === 'B'" toolbar-header-title="조교 관리" header-title="조교 계정 생성" @hide="hideDialog('Text')" :footerSubmit="false">
             <template v-slot:body>
               <v-card>
                 <v-card-title>
@@ -447,7 +447,7 @@ export default {
       }
       if (this.what === 'B') {
         const uuid = this.classCards[this.currentClassId].Exam.id;
-        const response = await this.$http.get(`exams/${uuid}`);
+        const response = await this.$http.get(`exams/${uuid}/assistant`);
         this.datasets = [];
         for (let i = 0; i < response.data.data.length; i++) {
           if (response.data.data[i].User != null) {
