@@ -64,6 +64,11 @@ const routes = [
     ],
   },
   {
+    path: '/score',
+    name: 'ScoreRoom',
+    component: () => import('@/views/Layout/Professor/AutomaticScoring.vue'),
+  },
+  {
     path: '*',
     component: () => import('@/views/NotFoundPage.vue'),
   },

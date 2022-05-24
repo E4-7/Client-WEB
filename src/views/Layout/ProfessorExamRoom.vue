@@ -37,9 +37,9 @@
                   <agora-video-receiver />
                 </agora>
               </div>
-              <v-col v-for="n in 9" :key="n" cols="12" md="4" sm="4">
+              <!-- <v-col v-for="n in 9" :key="n" cols="12" md="4" sm="4">
                 <v-card class="pa-3" outlined tile style="height: 350px;" color="#385F73"> Student #{{ n }} </v-card>
-              </v-col>
+              </v-col> -->
             </v-row>
             <div class="text-center" style="padding: 20px;">
               <v-pagination v-model="page" :length="6"></v-pagination>
@@ -77,8 +77,6 @@ export default {
   components: { Chatting, BaseDialog },
   async created() {
     this.getStudentTable();
-    console.log('this.$store.state.user.Role.type');
-    console.log(this.$store.state.user);
     if (this.$store.state.roomList.length === 0) {
       this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
     } else {
@@ -175,6 +173,8 @@ export default {
           roomId: this.examId,
         });
         this.examStatus = '시험 종료';
+
+        this.$router.push('/score');
       }
     },
     async getStudentTable() {
