@@ -75,10 +75,25 @@ import BaseDialog from './components/BaseDialog.vue';
 
 export default {
   components: { Chatting, BaseDialog },
-  created() {
+  async created() {
     this.getStudentTable();
+    console.log('this.$store.state.room');
+    console.log(this.$store.state.room);
+    console.log(this.$store.state.roomList);
     this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
+    console.log('this.room');
+    console.log(this.room);
+    console.log(this.room != null);
+    if (this.room == null) {
+      // undefined
+      console.log(this.room != null);
+      const response = await this.$http.get(`exams/${this.$route.params.roomId}`);
+      this.room = response.data.data;
+      console.log(this.room);
+    }
     const examPayload = { roomId: this.examId };
+    console.log('examPayload');
+    console.log(examPayload);
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
     });
@@ -91,9 +106,15 @@ export default {
   data() {
     return {
       room: {
-        appid: 'f823987e32bd491d843459d5396eed2a',
-        channel: '9fa83f7d-c566-4dfe-a641-1444b15aa18f',
-        token: '006f823987e32bd491d843459d5396eed2aIADRYxFzSL8IX5oWlN7P/9ki6D/zvvfAzjhCcKfL3aDREa1JzVcAAAAAIgDy83Ixp42IYgQAAQCnjYhiAgCnjYhiAwCnjYhiBACnjYhi',
+        Exam: {
+          name: '',
+          agoraAppId: '',
+          id: '',
+          agoraToken: '',
+        },
+        // appid: 'f823987e32bd491d843459d5396eed2a',
+        // channel: '9fa83f7d-c566-4dfe-a641-1444b15aa18f',
+        // token: '06f823987e32bd491d843459d5396eed2aIADRYxFzSi',
       },
       examStatus: '시험 대기 중',
       search: '',
@@ -134,7 +155,6 @@ export default {
       ],
     };
   },
-  computed: {},
   methods: {
     async showDialog(type) {
       this.getStudentTable();
