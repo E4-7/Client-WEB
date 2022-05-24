@@ -1,5 +1,7 @@
 <template>
-  <v-app>
+  <v-app v-if="this.$store.state.room">
+    {{ this.$store.state }}
+    새로 고침 하지마세요.
     <v-content>
       <v-container>
         <v-row justify="center" style="padding:20px;">
@@ -12,8 +14,8 @@
                     <agora-audio-receiver />
                     <agora-video-sender />
                   </agora>
-                  <v-btn @click="mic = !mic">
-                    <v-img max-height="25" max-width="25" :src="mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
+                  <v-btn @click="this.mic = !this.mic">
+                    <v-img max-height="25" max-width="25" :src="this.mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
                   </v-btn>
                 </div>
               </v-card>
@@ -28,7 +30,8 @@
               </v-card>
             </v-row>
           </v-col>
-          <v-col>
+          source1 [{{ this.source1 }}]
+          <v-col v-if="source1">
             <v-card min-height="900" min-width="800">
               시험지
               <button ref="pdfRef" :disabled="page <= 1" @click="page--">❮</button>
@@ -77,6 +80,7 @@ export default {
   },
   data() {
     return {
+      agoraAppId: '',
       mic: true,
       videoProfile: '480p_4',
       transcode: 'interop',
@@ -84,11 +88,12 @@ export default {
       baseMode: 'avc',
       socketRef: null,
       examId: this.$route.params.roomId,
-      userId: this.$store.state.user.id,
-      name: this.$store.state.user.name,
+      userId: this.$store.state.student.id,
+      studentId: this.$store.state.student.studentId,
+      name: this.$store.state.student.name,
       page: 1,
       pageCount: 1,
-      source1: this.$store.state.room.ExamPaper.url,
+      source1: '',
       currentPage: 0,
       image: '',
       msg: '',
@@ -103,6 +108,8 @@ export default {
   },
 
   created() {
+    this.examId = this.$route.params.roomId;
+    this.agoraAppId = this.$store.state.room.agoraAppId;
     const examPayload = { roomId: this.examId };
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
@@ -115,6 +122,7 @@ export default {
       });
       this.socketRef.on('exitRoom', () => {
         this.isPlay = false;
+        alert('시험이 종료되었습니다.');
       });
       this.socketRef.emit('joinRoom', examPayload);
     });
@@ -125,6 +133,8 @@ export default {
       this.net = await posenet.load(); // es6 모듈 불러오기
       this.isPlay = true;
       requestAnimationFrame(this.draw);
+
+      this.source1 = this.$store.state.room.ExamPaper.url;
     },
     async draw() {
       this.pose = await this.net.estimateSinglePose(this.video, 0.5, false, 32);
@@ -135,10 +145,9 @@ export default {
         if (this.count > 30) {
           const payload = {
             roomId: this.examId,
-            msg: `${this.name}님의 부정행위가 감지되었습니다.`,
+            msg: `${this.studentId} ${this.name}님의 부정행위가 감지되었습니다.`,
             receiver: this.userId,
           };
-          console.log(payload);
           this.socketRef.emit('sengMsgToManager', payload);
           this.count = 0;
         }
