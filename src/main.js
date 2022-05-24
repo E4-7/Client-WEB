@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import axios from 'axios';
 import vuetify from './plugins/vuetify';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
 const apiBaseURL = 'https://api.e47app.click/api/';
 
 const instance = axios.create({
