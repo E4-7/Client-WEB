@@ -5,7 +5,7 @@
       <v-container fill-height fluid>
         <v-row dense>
           <v-col v-for="(classCard, id) in classCards" :key="id" cols="12" md="3" sm="6">
-            <v-card class="pa-3" outlined tile style="height: 300px;" color="#1F7087">
+            <v-card class="pa-3" outlined style="height: 300px;" color="#E2E2E2">
               <v-toolbar height="65" class="professor-page-class-toolbar" color="primary">
                 <v-toolbar-title>
                   <strong>{{ classCard.Exam.name }}</strong></v-toolbar-title
@@ -89,7 +89,7 @@
             </v-card>
           </v-col>
           <v-col v-if="roleType === 2" cols="12" md="3" sm="6">
-            <v-card outlined tile style="height: 300px;" color="#1F7087">
+            <v-card outlined style="height: 300px;" color="primary">
               <v-btn
                 @click="
                   what = 'A';
@@ -223,7 +223,7 @@
             @submit="submitDialog('Text')"
           >
             <template v-slot:body>
-              <v-icon style="margin-right:10px;" large color="#41B883">cloud_upload</v-icon>
+              <v-icon style="margin-right:10px;" large color="primary">cloud_upload</v-icon>
               <input type="file" accept="application/pdf" @change="getFile($event)" />
             </template>
           </base-dialog>
