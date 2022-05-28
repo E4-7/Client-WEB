@@ -58,6 +58,9 @@ export default new Vuex.Store({
         alert('로그아웃 되었음');
       }
     },
+    SET_USER_INFORMATION: function(state, payload) {
+      state.user = payload;
+    },
     SET_STUDENT_INFORMATION: function(state, payload) {
       state.student = payload;
     },

@@ -89,14 +89,12 @@
             </v-card>
           </v-col>
           <v-col v-if="roleType === 2" cols="12" md="3" sm="6">
-            <v-card outlined style="height: 300px;" color="primary">
+            <v-card color="#e2e2e">
               <v-btn
                 @click="
                   what = 'A';
                   showDialog('Text');
                 "
-                elevation="2"
-                outlined
                 height="300px"
                 width="100%"
               >
@@ -613,12 +611,21 @@ export default {
           console.log(Error.message);
         });
     },
+    getUserInformation() {
+      this.$http
+        .get('users/')
+        .then(Response => {
+          this.$store.commit('SET_USER_INFORMATION', Response.data.data); // 처음 roomList vuex 저장
+        })
+        .catch(Error => {
+          console.log(Error.message);
+        });
+    },
     getClassInformationAssistant() {
       this.$http
         .get('exams/')
         .then(Response => {
           this.classCards = Response.data.data;
-          //this.classCards[0].Exam.id
         })
         .catch(Error => {
           console.log(Error.message);
@@ -633,6 +640,7 @@ export default {
   created() {
     // 페이지 시작하면은 자동 함수 실행
     this.getClassInformation();
+    this.getUserInformation();
     this.roleType = this.$store.state.user.Role.type;
   },
 };
