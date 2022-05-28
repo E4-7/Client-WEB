@@ -134,8 +134,8 @@ export default {
 
         if (data.success) {
           alert('성공', data);
-          this.$store.commit('SET_STUDENT_INFORMATION', data.data.student);
-          this.$store.commit('SET_STUDENT_ROOM', data.data.room);
+          await this.$store.commit('SET_STUDENT_INFORMATION', data.data.student);
+          await this.$store.commit('SET_STUDENT_ROOM', data.data.room);
           this.goTestPage();
         }
       } catch (err) {
