@@ -132,7 +132,7 @@ export default {
         });
     },
     enterStudentSettingPage: function() {
-      alert('Hello !22');
+      alert('어서오세요. ' + this.enterName + '님');
       let p = '/set/' + this.enterCode;
       this.$router.push({ path: p, query: { id: this.enterStudentId, name: this.enterName } }); // ,
       // vuex로 바꾸기
