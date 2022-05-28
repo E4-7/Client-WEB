@@ -45,7 +45,7 @@
               <h4 class="display-2 font-weight-bold mb-3">42:44</h4>
             </v-row>
             <v-row justify="center" style="padding:10px;">
-              <h2>: 진행 중(오픈북)</h2>
+              <h2>[{{ examStatus }}] 오픈북 여부 : {{ this.$store.state.room.is_openbook }}</h2>
             </v-row>
             <v-row justify="center" style="padding:40px;">
               <v-file-input label="File input" @change="selectFile"></v-file-input>
@@ -93,6 +93,7 @@ export default {
       name: this.$store.state.student.name,
       page: 1,
       pageCount: 1,
+      examStatus: '시험 대기중',
       source1: '',
       currentPage: 0,
       image: '',
@@ -118,10 +119,12 @@ export default {
       this.socketRef = socket;
       this.socketRef.on('startRoom', () => {
         this.isPlay = true;
+        this.examStatus = '시험 중';
         this.play();
       });
       this.socketRef.on('exitRoom', () => {
         this.isPlay = false;
+        this.examStatus = '시험 종료';
         alert('시험이 종료되었습니다.');
       });
       this.socketRef.emit('joinRoom', examPayload);
@@ -135,6 +138,8 @@ export default {
       requestAnimationFrame(this.draw);
 
       this.source1 = this.$store.state.room.ExamPaper.url;
+      console.log('this.source1');
+      console.log(this.source1);
     },
     async draw() {
       this.pose = await this.net.estimateSinglePose(this.video, 0.5, false, 32);
