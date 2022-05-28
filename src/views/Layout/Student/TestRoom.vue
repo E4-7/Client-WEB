@@ -14,8 +14,8 @@
                     <agora-audio-receiver />
                     <agora-video-sender />
                   </agora>
-                  <v-btn @click="this.mic = !this.mic">
-                    <v-img max-height="25" max-width="25" :src="this.mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
+                  <v-btn @click="mic = !mic">
+                    <v-img max-height="25" max-width="25" :src="mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
                   </v-btn>
                 </div>
               </v-card>
