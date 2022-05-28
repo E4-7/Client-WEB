@@ -3,7 +3,8 @@
     <v-main>
       <v-container fill-height>
         <v-row>
-          {{ preInformation }}
+          <v-col>{{ preInformation }}</v-col>
+          <v-col v-if="!isIdentityStudentIDCard"><img src="@/assets/images/examPicture.png"/></v-col>
         </v-row>
         <v-row justify="center">
           <v-col col="2">
@@ -52,7 +53,7 @@ export default {
       약 5초 뒤에 신원인증이 완료된다면, 시험장 화면으로 넘어갑니다. \
       만일, 학생증이 없거나 인식이 안된다면, "신원확인하기" 버튼 \
       아래의 "혹시 학생증이 없거나 인식이 안되나요?" 버튼을 클릭해주세요.',
-      identityInformationMessage: '[안내] 카메라에 신분증을 얼굴 옆에 들고 신원확인하기 버튼을 눌러주세요. 아래와 같이 사진을 찍어주세요 (예시사진)',
+      identityInformationMessage: '[안내] 카메라에 신분증을 얼굴 옆에 들고 신원확인하기 버튼을 눌러주세요. 오른쪽 예시 사진 처럼 찍어주세요.',
       StudentIdCardButtonMessage: '혹시 학생증이 없거나 인식이 안되나요?',
       IdentityButtonMessage: '학생증으로 인증하고 싶어요!',
     };
