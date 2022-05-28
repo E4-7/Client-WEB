@@ -1,6 +1,6 @@
 <template>
   <v-app v-if="this.$store.state.room">
-    {{ this.$store.state }}
+    {{ this.$store.state.student }}
     새로 고침 하지마세요.
     <v-content>
       <v-container>
@@ -30,7 +30,6 @@
               </v-card>
             </v-row>
           </v-col>
-          source1 [{{ this.source1 }}]
           <v-col v-if="source1">
             <v-card min-height="900" min-width="800">
               시험지
@@ -89,7 +88,7 @@ export default {
       socketRef: null,
       examId: this.$route.params.roomId,
       userId: this.$store.state.student.id,
-      studentId: this.$store.state.student.studentId,
+      studentId: this.$store.state.student.studentID,
       name: this.$store.state.student.name,
       page: 1,
       pageCount: 1,
@@ -109,6 +108,10 @@ export default {
   },
 
   created() {
+    console.log(this.$store.state.student);
+    if (this.$store.state.student == null) {
+      console.log('null');
+    }
     this.examId = this.$route.params.roomId;
     this.agoraAppId = this.$store.state.room.agoraAppId;
     const examPayload = { roomId: this.examId };
@@ -126,6 +129,7 @@ export default {
         this.isPlay = false;
         this.examStatus = '시험 종료';
         alert('시험이 종료되었습니다.');
+        alert('이제 시험지 제출을 하실 수 없습니다.');
       });
       this.socketRef.emit('joinRoom', examPayload);
     });
@@ -138,8 +142,6 @@ export default {
       requestAnimationFrame(this.draw);
 
       this.source1 = this.$store.state.room.ExamPaper.url;
-      console.log('this.source1');
-      console.log(this.source1);
     },
     async draw() {
       this.pose = await this.net.estimateSinglePose(this.video, 0.5, false, 32);
@@ -147,10 +149,10 @@ export default {
       console.log(returnedValue);
       if (!returnedValue) {
         this.count++;
-        if (this.count > 30) {
+        if (this.count > 1000) {
           const payload = {
             roomId: this.examId,
-            msg: `${this.studentId} ${this.name}님의 부정행위가 감지되었습니다.`,
+            msg: `${this.$store.state.student.studentID} ${this.name}님의 부정행위가 감지되었습니다.`,
             receiver: this.userId,
           };
           this.socketRef.emit('sengMsgToManager', payload);
@@ -180,22 +182,26 @@ export default {
       console.log(this.image);
     },
     async submit() {
-      const formData = new FormData();
-      formData.append('file', this.image);
-      formData.append('name', this.$store.state.student.name);
-      formData.append('studentID', this.$store.state.student.studentID);
+      if (this.isPlay == false) {
+        alert('시험이 종료되어 더이상 제출하실 수 없습니다.');
+      } else {
+        const formData = new FormData();
+        formData.append('file', this.image);
+        formData.append('name', this.$store.state.student.name);
+        formData.append('studentID', this.$store.state.student.studentID);
 
-      try {
-        const { data } = await this.$http.post(`exams/${this.$store.state.room.id}/students/upload/answer`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log(data);
-        alert('시험지 제출 완료');
-      } catch (err) {
-        console.log(err);
-        alert('시험지 제출 실패!!!');
+        try {
+          const { data } = await this.$http.post(`exams/${this.$store.state.room.id}/students/upload/answer`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          console.log(data);
+          alert('시험지 제출을 완료하셨습니다.');
+        } catch (err) {
+          console.log(err);
+          alert('시험지 제출 실패!!!');
+        }
       }
     },
   },
