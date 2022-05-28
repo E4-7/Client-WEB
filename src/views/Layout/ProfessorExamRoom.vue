@@ -41,9 +41,9 @@
                 <v-card class="pa-3" outlined tile style="height: 350px;" color="#385F73"> Student #{{ n }} </v-card>
               </v-col> -->
             </v-row>
-            <div class="text-center" style="padding: 20px;">
+            <!-- <div class="text-center" style="padding: 20px;">
               <v-pagination v-model="page" :length="6"></v-pagination>
-            </div>
+            </div> -->
           </v-col>
           <v-col cols="4">
             <v-row cols="12" justify="center" style="padding: 20px; padding-top: 70px;">
@@ -165,7 +165,6 @@ export default {
           roomId: this.examId,
         });
         this.examStatus = '시험 종료';
-
         this.$router.push('/score');
       }
     },
