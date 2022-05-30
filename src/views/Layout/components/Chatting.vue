@@ -2,14 +2,7 @@
   <div max-height="400">
     <v-card min-height="820" max-width="820" max-height="820">
       <v-card-text style="text-align:left" max-height="400">
-        <!-- <div ref="chatList" class="chat-list">
-          <ul class="list-box">
-            <li v-for="message in messages" :key="message.id">
-              {{ message }}
-            </li>
-          </ul>
-        </div> -->
-        <div ref="chatList" style="overflow-y:auto;" max-height="800">
+        <div ref="chatList" class="chat-list">
           <p v-for="message in messages" :key="message.id" class="text-h5 text--primary">
             {{ message }}
           </p>
@@ -65,7 +58,6 @@ export default {
   },
   methods: {
     submitMessage() {
-      console.log(this.$refs.chatList);
       const msg = this.message;
       if (msg === '') {
         alert('메시지를 입력해주세요');
@@ -78,12 +70,16 @@ export default {
           msg,
           roomId: this.examId,
         });
-        this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight;
-        this.$refs.chatList.scrollTo({ top: this.$refs.chatList.scrollHeight, behavior: 'smooth' });
+        this.$refs.chatList.scrollTo({ top: this.$refs.chatList.scrollHeight + 50, behavior: 'smooth' });
       }
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.chat-list {
+  height: 800px;
+  overflow-y: scroll;
+}
+</style>
