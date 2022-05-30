@@ -29,12 +29,12 @@
               <div>
                 <agora :appid="this.room.Exam.agoraAppId" :channel="this.room.Exam.id" :token="this.room.Exam.agoraToken" :clientConfig="{ codec: 'vp8' }">
                   <agora-audio-sender v-if="mic"></agora-audio-sender>
-                  <agora-video-sender />
+                  <agora-video-sender></agora-video-sender>
                   <v-btn @click="mic = !mic">
                     <v-img max-height="25" max-width="25" :src="mic ? require('@/assets/images/on_mic.png') : require('@/assets/images/off_mic.png')"></v-img>
                   </v-btn>
                   <agora-audio-receiver />
-                  <agora-video-receiver />
+                  <agora-video-receiver><div class="player"></div></agora-video-receiver>
                 </agora>
               </div>
               <!-- <v-col v-for="n in 9" :key="n" cols="12" md="4" sm="4">
@@ -54,7 +54,7 @@
               <v-col cols="3"><v-btn @click="startExam()">시험 시작</v-btn></v-col>
               <v-col cols="3"><v-btn @click="stopExam()">시험 종료</v-btn></v-col>
             </v-row>
-            <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId" manager="p"></Chatting>
+            <Chatting ref="ChatingBox" v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId" manager="p"></Chatting>
             <div v-if="socketRef == null">
               네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
               다시 시도해주세요.
@@ -185,4 +185,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.player {
+  width: 300px;
+  height: 300px;
+  border-radius: 100px;
+  overflow: hidden;
+  border: 5px solid red;
+  margin: 20px;
+}
+</style>
