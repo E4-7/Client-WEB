@@ -41,7 +41,6 @@ export default new Vuex.Store({
     },
     logout: function(state) {
       if (state.user) {
-        alert(state.user);
         state.user.id = '';
         state.user.email = '';
         state.user.name = '';
