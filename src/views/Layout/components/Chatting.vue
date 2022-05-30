@@ -1,10 +1,19 @@
 <template>
-  <div>
-    <v-card style="overflow-y:scroll" min-height="820" max-width="820" max-height="820" class="mx-auto">
-      <v-card-text style="text-align:right">
-        <p v-for="message in messages" :key="message.id" class="text-h5 text--primary">
-          {{ message }}
-        </p>
+  <div max-height="400">
+    <v-card min-height="820" max-width="820" max-height="820">
+      <v-card-text style="text-align:left" max-height="400">
+        <!-- <div ref="chatList" class="chat-list">
+          <ul class="list-box">
+            <li v-for="message in messages" :key="message.id">
+              {{ message }}
+            </li>
+          </ul>
+        </div> -->
+        <div ref="chatList" style="overflow-y:auto;" max-height="800">
+          <p v-for="message in messages" :key="message.id" class="text-h5 text--primary">
+            {{ message }}
+          </p>
+        </div>
         <v-spacer></v-spacer>
       </v-card-text>
     </v-card>
@@ -33,6 +42,7 @@
 export default {
   components: {},
   mounted() {
+    window.scrollTo = () => {};
     this.socket.on('sendMsgToAll', data => {
       this.messages.push(`${data.name}: ${data.msg}`);
     });
@@ -55,6 +65,7 @@ export default {
   },
   methods: {
     submitMessage() {
+      console.log(this.$refs.chatList);
       const msg = this.message;
       if (msg === '') {
         alert('메시지를 입력해주세요');
@@ -67,6 +78,8 @@ export default {
           msg,
           roomId: this.examId,
         });
+        this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight;
+        this.$refs.chatList.scrollTo({ top: this.$refs.chatList.scrollHeight, behavior: 'smooth' });
       }
     },
   },

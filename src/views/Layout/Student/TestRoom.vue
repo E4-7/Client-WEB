@@ -1,6 +1,5 @@
 <template>
   <v-app v-if="this.$store.state.room">
-    {{ this.$store.state.student }}
     새로 고침 하지마세요.
     <v-content>
       <v-container>
@@ -21,17 +20,32 @@
               </v-card>
             </v-row>
             <v-row justify="center">
-              <v-card min-height="450" min-width="400">
+              <v-col style="padding:10px;">
+                <v-row justify="center" style="padding:30px;">
+                  <!-- <h4 class="display-2 font-weight-bold mb-3">42:44</h4> -->
+                </v-row>
+                <v-row justify="center" style="padding:10px;">
+                  <h2>[{{ examStatus }}] 오픈북 여부 : {{ this.$store.state.room.is_openbook }}</h2>
+                </v-row>
+                <v-row justify="center" style="padding:40px;">
+                  <v-file-input label="File input" @change="selectFile"></v-file-input>
+                </v-row>
+                <v-spacer></v-spacer>
+                <v-row justify="center" style="padding-top:40px; justify-content: flex-end;">
+                  <v-btn text @click="submit()">파일 업로드</v-btn>
+                </v-row>
+              </v-col>
+              <!-- <v-card min-height="450" min-width="400">
                 <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId" manager="s"></Chatting>
                 <div v-else>
                   네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
                   다시 시도해주세요.
                 </div>
-              </v-card>
+              </v-card> -->
             </v-row>
           </v-col>
           <v-col v-if="source1">
-            <v-card min-height="900" min-width="800">
+            <v-card>
               시험지
               <button ref="pdfRef" :disabled="page <= 1" @click="page--">❮</button>
               {{ page }} / {{ pageCount }}
@@ -39,7 +53,15 @@
               <vue-pdf-embed ref="pdfRef" :page="page" @rendered="handleDocumentRender" :source="source1" />
             </v-card>
           </v-col>
-          <v-col style="padding:10px;">
+          <v-col>
+            <v-card min-width="300" max-width="300">
+              <Chatting v-if="socketRef" :userId="userId" :socket="socketRef" :name="name" :examId="examId" manager="s"></Chatting>
+              <div v-else>
+                네트워크에 문제가 있어 채팅을 사용할 수 없습니다. <br />
+                다시 시도해주세요.
+              </div>
+            </v-card>
+            <!-- <v-col style="padding:10px;">
             <v-row justify="center" style="padding:30px;">
               <h4 class="display-2 font-weight-bold mb-3">42:44</h4>
             </v-row>
@@ -53,9 +75,10 @@
             <v-row justify="center" style="padding-top:40px; justify-content: flex-end;">
               <v-btn text @click="submit()">파일 업로드</v-btn>
             </v-row>
-            <!-- <v-row justify="center" style="padding-top:40px;">
+            <v-row justify="center" style="padding-top:40px;">
               <v-btn text @click="submit">시험 종료</v-btn>
-            </v-row> -->
+            </v-row>
+          </v-col> -->
           </v-col>
         </v-row>
         <router-view></router-view>
