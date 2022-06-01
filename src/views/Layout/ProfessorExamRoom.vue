@@ -172,11 +172,12 @@ export default {
       const response = await this.$http.get(`exams/${this.$route.params.roomId}/students`);
       this.studentList = [];
       for (let i = 0; i < response.data.data.length; i++) {
+        console.log(response.data.data[i]);
         this.studentList.push({
-          AnswerId: response.data.data[i].AnswerId,
+          AnswerId: response.data.data[i].ExamAnswer?.url,
           studentID: response.data.data[i].studentID,
           name: response.data.data[i].name,
-          //CertificatedImage: response.data.data[i].CertificatedImage.url,
+          CertificatedImage: response.data.data[i].CertificatedImage?.url,
           is_certified: response.data.data[i].is_certified, //response.data.data[i].CertificatedImage ? true : false,
         });
       }
