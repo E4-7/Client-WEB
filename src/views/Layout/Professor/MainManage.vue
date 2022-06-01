@@ -63,24 +63,38 @@
                         >시험지 관리</v-btn
                       >
                       <v-btn
-                        class="professor-page-card-button"
-                        block
-                        color="primary"
-                        @click="
+                          block
+                          class="professor-page-card-button"
+                          color="primary"
+                          @click="
                           what = 'F';
                           showDialog('Text', id);
                         "
-                        >시험장 수정</v-btn
+                      >시험장 수정
+                      </v-btn
                       >
                       <v-btn
-                        v-if="roleType === 2"
-                        class="professor-page-card-button"
-                        block
-                        @click="
+                          block
+                          class="professor-page-card-button"
+
+                          @click="
+                          what = 'G';
+                          showDialog('Text', id);
+                        "
+                      >채점 결과 보기
+                      </v-btn
+                      >
+                      <v-btn
+                          v-if="roleType === 2"
+                          block
+                          class="professor-page-card-button"
+                          color="primary"
+                          @click="
                           what = 'E';
                           showDialog('Text', id);
                         "
-                        >삭제</v-btn
+                      >삭제
+                      </v-btn
                       >
                     </v-col>
                   </v-card-actions>
@@ -286,7 +300,18 @@
               </v-col>
             </template>
           </base-dialog>
-          <base-dialog v-else toolbar-header-title="삭제" header-title="" footer-submit-title="삭제하기" @hide="hideDialog('Text')" @submit="submitDialog('Text')">
+          <base-dialog
+              v-else-if="what === 'G'"
+              header-title="채점 결과를 다운로드 받으세요."
+              toolbar-header-title="채점 결과 다운로드"
+              @hide="hideDialog('Text')"
+              @submit="submitDialog('Text')">
+            <template v-slot:body>
+              <a :href="scoreUrl" target="_blank">채점 결과 다운로드</a>
+            </template>
+          </base-dialog>
+          <base-dialog v-else footer-submit-title="삭제하기" header-title="" toolbar-header-title="삭제"
+                       @hide="hideDialog('Text')" @submit="submitDialog('Text')">
             <template v-slot:body>
               <h2>정말로 시험장을 삭제하시겠습니까?</h2>
             </template>
@@ -308,6 +333,7 @@ export default {
   components: { MenuBar, BaseDialog },
   data() {
     return {
+      scoreUrl: '',
       inputForm: {
         name: '',
         email: '',
@@ -456,6 +482,9 @@ export default {
             });
           }
         }
+      } else if (this.what === 'G') {
+        const url = this.classCards[this.currentClassId].Exam.AnswerUrl;
+        this.scoreUrl = url;
       } else if (this.what === 'C') {
         const uuid = this.classCards[this.currentClassId].Exam.id;
         const response = await this.$http.get(`exams/${uuid}/students`);
@@ -476,9 +505,7 @@ export default {
       this[`base${type}Dialog`] = false;
     },
     async buttonClickCaseManage() {
-      console.log(this.input_class_name);
       if (this.what === 'A') {
-        console.log(this.input_class_name);
         // 시험장 추가
         await this.$http
           .post('exams', {
@@ -491,7 +518,6 @@ export default {
               Exam: res.data.data,
               created_at: res.data.data.created_at,
             });
-            console.log(res);
             alert('시험장 추가 완료');
           })
           .catch(error => {
