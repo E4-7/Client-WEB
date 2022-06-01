@@ -128,12 +128,16 @@ export default {
         }
         const { data } = await this.$http.post(`exams/${this.$route.params.roomId}/students/authentication` + this.urlappend, frm);
 
-        console.log('data');
-        console.log(data);
         //{"code":200,"success":true,"data":{"student":{"created_at":"2022-05-17T05:11:09.740Z","updated_at":"2022-05-17T09:26:30.465Z","id":"1a417272-9e90-4801-b50a-b7eac1bea967","ExamId":"29af7b00-321c-48ef-8d48-41798294b5aa","name":"조찬민","studentID":17011604,"is_certified":false,"lastLogin":null,"deleted_at":null,"ExamAnswer":null,"CertificatedImage":null},"data":{"url":"http://naver.com"}}}
 
         if (data.success) {
+          if (data.data.room.status === 3) {
+            alert('이미 종료된 시험입니다.');
+            this.$router.push('/');
+            return;
+          }
           alert('성공', data);
+
           await this.$store.commit('SET_STUDENT_INFORMATION', data.data.student);
           await this.$store.commit('SET_STUDENT_ROOM', data.data.room);
           this.goTestPage();

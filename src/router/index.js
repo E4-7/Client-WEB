@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Main from "@/views/Layout/MainPage.vue";
+import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -13,6 +14,13 @@ const routes = [
     path: "/base",
     name: "BaseMain",
     component: Main,
+    beforeEnter: (to, from) => {
+      if (store.state.user) {
+        router.push("/main");
+        return false;
+      }
+      return true;
+    },
   },
   {
     path: "/student",
