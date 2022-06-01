@@ -25,7 +25,7 @@
               </v-row>
               <v-spacer></v-spacer>
               <v-row justify="center" style="padding-top:40px; justify-content: flex-end;">
-                <v-btn @click="submit()">채점하기</v-btn>
+                <v-btn @click="submitAnswer()">채점하기</v-btn>
               </v-row>
             </v-col>
           </v-card>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 // import AlertTextDialog from '../components/AlertTextDialog.vue';
 //import Modal from '../components/Modal.vue';
 
@@ -83,20 +83,19 @@ export default {
       this.image = file;
       console.log(this.image);
     },
-    async submit() {
+    async submitAnswer() {
       const formData = new FormData();
       formData.append('file', this.image);
-      formData.append('name', this.$store.state.student.name);
-      formData.append('studentID', this.$store.state.student.studentID);
 
       try {
-        const { data } = await this.$http.post(`exams/${this.$store.state.room.id}/students/upload/answer`, formData, {
+        const {data} = await this.$http.post(`exams/${this.$route.params.roomId}/uploadAnswer`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log(data);
+        window.open(data.data.AnswerUrl);
         alert('시험지 제출 완료');
+        this.$router.push('/main');
       } catch (err) {
         console.log(err);
         alert('시험지 제출 실패!!!');
@@ -116,66 +115,6 @@ export default {
       this.user.email = '';
       this.user.password = '';
       this.user.name = '';
-    },
-    gosignup() {
-      this.onReset();
-      this.isloginpage = false;
-      this.information = '교수 회원가입';
-    },
-    gosignin() {
-      this.onReset();
-      this.isloginpage = true;
-      this.information = '관리자 로그인';
-    },
-    submit() {
-      this.$http
-        .post('users', {
-          email: this.user.email,
-          password: this.user.password,
-          name: this.user.name,
-        })
-        .then(res => {
-          if (res.data.success) {
-            alert('회원가입 되셨습니다. 반갑습니다.', res.data);
-            this.gosignin();
-          } else {
-            alert(res.data.data);
-          }
-        })
-        .catch(error => {
-          //console.error('There', error.response.data.data);
-          alert(error.response.data.data);
-        });
-    },
-    goManagePage() {
-      //this.user.email == 'a@e4.seven'
-      // 로그인,
-      console.log('check');
-      this.$http
-        .post('users/login', {
-          email: this.user.email,
-          password: this.user.password,
-        })
-        .then(res => {
-          if (res.data.data.Role.type == 2) {
-            // 교수
-            alert('로그인 되셨습니다. 교수님 반갑습니다.', res.data);
-            console.log(res.data);
-            console.log(res.data.data);
-            this.$store.commit('login', res.data.data);
-            this.$router.push('/main');
-          } else {
-            alert('로그인 되셨습니다. 조교님 반갑습니다.', res.data);
-            // 콘솔
-            this.$store.commit('login', res.data.data);
-            this.$router.push('/main');
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          console.error('error cat', error.response.data.data);
-          alert(error.response.data.data);
-        });
     },
   },
 };

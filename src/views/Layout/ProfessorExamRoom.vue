@@ -165,7 +165,7 @@ export default {
           roomId: this.examId,
         });
         this.examStatus = '시험 종료';
-        this.$router.push('/score');
+        this.$router.push(`/main/${this.$route.params.roomId}/score`);
       }
     },
     async getStudentTable() {
