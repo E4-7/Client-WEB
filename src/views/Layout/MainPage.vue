@@ -30,8 +30,6 @@
                   </v-col>
                 </v-card-actions>
               </v-row>
-              <br />
-              <v-btn text :to="{ name: 'About' }" exact>About Us >.0</v-btn>
             </v-col>
           </v-card>
         </v-row>
@@ -41,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import {mapState} from 'vuex';
 //import CardViewConponent from '@/components/CardViewComponent';
 
 export default {

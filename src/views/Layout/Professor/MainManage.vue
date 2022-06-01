@@ -626,36 +626,26 @@ export default {
       //console.log(this.reveal);
     },
     getClassInformation() {
-      this.$http
-        .get('exams/')
-        .then(Response => {
-          this.classCards = Response.data.data;
-          this.initClassList(this.classCards);
-          this.$store.commit('SET_ROOMLIST', this.classCards); // 처음 roomList vuex 저장
-        })
-        .catch(Error => {
-          console.log(Error.message);
-        });
+      return this.$http
+          .get('exams/')
+          .then(Response => {
+            this.classCards = Response.data.data;
+            this.initClassList(this.classCards);
+            this.$store.commit('SET_ROOMLIST', this.classCards); // 처음 roomList vuex 저장
+          })
+          .catch(Error => {
+            console.log(Error.message);
+          });
     },
     getUserInformation() {
-      this.$http
-        .get('users/')
-        .then(Response => {
-          this.$store.commit('SET_USER_INFORMATION', Response.data.data); // 처음 roomList vuex 저장
-        })
-        .catch(Error => {
-          console.log(Error.message);
-        });
-    },
-    getClassInformationAssistant() {
-      this.$http
-        .get('exams/')
-        .then(Response => {
-          this.classCards = Response.data.data;
-        })
-        .catch(Error => {
-          console.log(Error.message);
-        });
+      return this.$http
+          .get('users/')
+          .then(Response => {
+            this.$store.commit('SET_USER_INFORMATION', Response.data.data); // 처음 roomList vuex 저장
+          })
+          .catch(Error => {
+            console.log(Error.message);
+          });
     },
   },
   mounted() {
@@ -663,10 +653,10 @@ export default {
     //   this.currentTitle = this.$route.params.recrumentId;
     // });
   },
-  created() {
+  async created() {
     // 페이지 시작하면은 자동 함수 실행
-    this.getClassInformation();
-    this.getUserInformation();
+    await this.getClassInformation();
+    await this.getUserInformation();
     this.roleType = this.$store.state.user.Role.type;
   },
 };
