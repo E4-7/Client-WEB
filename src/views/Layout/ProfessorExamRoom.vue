@@ -76,15 +76,24 @@ import BaseDialog from './components/BaseDialog.vue';
 export default {
   components: { Chatting, BaseDialog },
   async created() {
-    this.getStudentTable();
-    if (this.$store.state.roomList.length !== 0) {
+
+
+    if (this.$store.state?.roomList?.length !== 0) {
       this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
+      if (this.room.Exam.status === 3) {
+        alert('이미 종료된 시험입니다.');
+        this.$router.push('/main');
+      }
     } else {
       // undefined
       const response = await this.$http.get(`exams/${this.$route.params.roomId}`);
       this.room = response.data.data;
-      console.log(this.room);
+      if (this.room.Exam.status === 3) {
+        alert('이미 종료된 시험입니다.');
+        this.$router.push('/main');
+      }
     }
+    await this.getStudentTable();
     const examPayload = { roomId: this.examId };
     const socket = io.connect(socketURL, {
       transports: ['websocket'],
@@ -140,7 +149,7 @@ export default {
   },
   methods: {
     async showDialog(type) {
-      this.getStudentTable();
+      await this.getStudentTable();
       this[`base${type}Dialog`] = true;
     },
     hideDialog(type) {
