@@ -1,81 +1,81 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Base from '@/views/Layout/Base.vue';
-import Main from '@/views/Layout/MainPage.vue';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Base from "@/views/Layout/Base.vue";
+import Main from "@/views/Layout/MainPage.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    redirect: '/base',
+    path: "/",
+    redirect: "/base",
   },
   {
-    path: '/base',
-    name: 'BaseMain',
+    path: "/base",
+    name: "BaseMain",
     component: Main,
   },
   {
-    path: '/student',
-    name: 'Student',
-    component: () => import('@/views/Layout/Student/VerifyIdentity.vue'),
+    path: "/student",
+    name: "Student",
+    component: () => import("@/views/Layout/Student/VerifyIdentity.vue"),
   },
   {
-    path: '/set/:roomId',
-    name: 'SetStudent',
-    component: () => import('@/views/Layout/Student/SetStudent.vue'),
+    path: "/set/:roomId",
+    name: "SetStudent",
+    component: () => import("@/views/Layout/Student/SetStudent.vue"),
     props: true,
   },
   {
-    path: '/test/:roomId',
-    name: 'StudentExam',
-    component: () => import('@/views/Layout/Student/TestRoom.vue'),
+    path: "/test/:roomId",
+    name: "StudentExam",
+    component: () => import("@/views/Layout/Student/TestRoom.vue"),
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/Layout/Professor/LoginProfessor.vue'),
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/Layout/Professor/LoginProfessor.vue"),
   },
   {
-    path: '/main',
-    name: 'Professor',
-    component: () => import('@/views/Layout/Professor/MainManage.vue'),
+    path: "/main",
+    name: "Professor",
+    component: () => import("@/views/Layout/Professor/MainManage.vue"),
   },
   {
-    path: '/main/:roomId',
-    name: 'ExamRoom',
-    component: () => import('@/views/Layout/ProfessorExamRoom.vue'),
+    path: "/main/:roomId",
+    name: "ExamRoom",
+    component: () => import("@/views/Layout/ProfessorExamRoom.vue"),
   },
   {
-    path: '/base',
+    path: "/main/:roomId/score",
+    name: "ScoreRoom",
+    component: () => import("@/views/Layout/Professor/AutomaticScoring.vue"),
+  },
+  {
+    path: "/base",
     component: Base,
     meta: { requiresAuth: true },
     children: [
       {
-        path: '/',
-        name: 'Home',
-        component: () => import('@/views/Home.vue'),
+        path: "/",
+        name: "Home",
+        component: () => import("@/views/Home.vue"),
       },
       {
-        path: '/about',
-        name: 'About',
-        component: () => import('@/views/About.vue'),
+        path: "/about",
+        name: "About",
+        component: () => import("@/views/About.vue"),
       },
     ],
   },
   {
-    path: '/score',
-    name: 'ScoreRoom',
-    component: () => import('@/views/Layout/Professor/AutomaticScoring.vue'),
-  },
-  {
-    path: '*',
-    component: () => import('@/views/NotFoundPage.vue'),
+    path: "*",
+    component: () => import("@/views/NotFoundPage.vue"),
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: import.meta.env.Base,
   routes,
 });
