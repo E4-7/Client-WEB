@@ -88,7 +88,7 @@
 </template>
 
 <script>
-const socketURL = 'http://34.64.196.237:3000';
+const socketURL = 'https://chat.e47app.click';
 import io from 'socket.io-client';
 import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
 import Chatting from '../components/Chatting.vue';
@@ -205,7 +205,7 @@ export default {
       console.log(this.image);
     },
     async submit() {
-      if (this.examStatus === "시험 종료") {
+      if (this.examStatus === '시험 종료') {
         alert('시험이 종료되어 더이상 제출하실 수 없습니다.');
       } else {
         const formData = new FormData();
@@ -214,7 +214,7 @@ export default {
         formData.append('studentID', this.$store.state.student.studentID);
 
         try {
-          const {data} = await this.$http.post(`exams/${this.$store.state.room.id}/students/upload/answer`, formData, {
+          const { data } = await this.$http.post(`exams/${this.$store.state.room.id}/students/upload/answer`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },

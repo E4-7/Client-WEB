@@ -68,7 +68,7 @@
 </template>
 
 <script>
-const socketURL = 'http://34.64.196.237:3000';
+const socketURL = 'https://chat.e47app.click';
 import io from 'socket.io-client';
 import Chatting from './components/Chatting.vue';
 import BaseDialog from './components/BaseDialog.vue';
@@ -76,8 +76,6 @@ import BaseDialog from './components/BaseDialog.vue';
 export default {
   components: { Chatting, BaseDialog },
   async created() {
-
-
     if (this.$store.state?.roomList?.length !== 0) {
       this.room = this.$store.getters.getRoomId(this.$route.params.roomId);
       if (this.room.Exam.status === 3) {
